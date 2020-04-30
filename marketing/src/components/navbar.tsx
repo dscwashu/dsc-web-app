@@ -15,16 +15,19 @@ import {
 } from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import MenuIcon from "@material-ui/icons/Menu"
+import { Link } from "react-scroll"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.paper,
     },
+    logoWrapper: {
+      marginRight: "auto",
+    },
     logoButton: {
       ...theme.mixins.toolbar,
       width: "50px",
-      marginRight: "auto",
       "&:hover": {
         backgroundColor: "transparent",
       },
@@ -57,7 +60,7 @@ function Navbar() {
   const classes = useStyles()
   const [state, setState] = React.useState({ open: false })
   const data = useStaticQuery(graphql`
-    query MyQuery {
+    query NavbarQuery {
       file(name: { eq: "dsc-icon" }) {
         childImageSharp {
           fluid {
@@ -77,28 +80,27 @@ function Navbar() {
     "Team",
     "FAQ",
     "Contact",
-    "FAQ",
   ]
   return (
     <React.Fragment>
-      <AppBar position="sticky" color="transparent" className={classes.root}>
+      <AppBar position="fixed" color="transparent" className={classes.root}>
         <Toolbar>
-          <Button disableRipple={true} className={classes.logoButton}>
-            <Image
-              className={classes.logo}
-              fluid={data.file.childImageSharp.fluid}
-              imgStyle={{ objectFit: "contain" }}
-            />
-          </Button>
+          <Link to="home" smooth={true} className={classes.logoWrapper}>
+            <Button disableRipple={true} className={classes.logoButton}>
+              <Image
+                className={classes.logo}
+                fluid={data.file.childImageSharp.fluid}
+                imgStyle={{ objectFit: "contain" }}
+              />
+            </Button>
+          </Link>
           <Hidden smDown>
             {sections.map((section, index) => (
-              <Button
-                disableRipple={true}
-                className={classes.tabButton}
-                key={index}
-              >
-                {section}
-              </Button>
+              <Link key={index} to={section.toLowerCase()} smooth={true}>
+                <Button disableRipple={true} className={classes.tabButton}>
+                  {section}
+                </Button>
+              </Link>
             ))}
             <Button
               color="primary"
@@ -128,9 +130,11 @@ function Navbar() {
           <Drawer anchor="right" open={state.open} onClose={toggleDrawer}>
             <List className={classes.list}>
               {sections.map((section, index) => (
-                <ListItem button key={index}>
-                  <ListItemText primary={section} />
-                </ListItem>
+                <Link key={index} to={section.toLowerCase()} smooth={true}>
+                  <ListItem button onClick={toggleDrawer}>
+                    <ListItemText primary={section} />
+                  </ListItem>
+                </Link>
               ))}
               <Divider />
               <ListItem button>
@@ -143,6 +147,7 @@ function Navbar() {
           </Drawer>
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </React.Fragment>
   )
 }

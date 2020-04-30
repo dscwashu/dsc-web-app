@@ -29,11 +29,11 @@ const useStyles = makeStyles((theme: Theme) =>
 function Section(props: SectionProps) {
   const classes = useStyles(props)
   return (
-    <div className={classes.root}>
+    <section className={classes.root}>
       <Container maxWidth="lg">
         <div className={classes.wrapper}>{props.children}</div>
       </Container>
-    </div>
+    </section>
   )
 }
 
