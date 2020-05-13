@@ -138,7 +138,7 @@ function IndexPage() {
   return (
     <React.Fragment>
       <SEO title="Home" />
-      <a id="home"></a>
+      <div id="home" />
       <Navbar />
       <Jumbotron>
         <Typography variant="h2" className={classes.jumbotronHeader}>
@@ -178,6 +178,8 @@ function IndexPage() {
                 community.
               </Typography>
               <a
+                target="_blank"
+                rel="noopener noreferrer"
                 href="https://developers.google.com/community/dsc"
                 className={classes.externalLink}
               >

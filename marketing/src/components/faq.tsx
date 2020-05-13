@@ -36,7 +36,11 @@ function FAQ() {
         <ExpansionPanelDetails>
           <Typography>
             Here is the{" "}
-            <a href="https://docs.google.com/presentation/d/1c7g4xwzgZU0WW5VDO7ALsYb7lXxBrP_o6oxkYAFEAAU/edit">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://docs.google.com/presentation/d/1c7g4xwzgZU0WW5VDO7ALsYb7lXxBrP_o6oxkYAFEAAU/edit"
+            >
               project lookbook
             </a>
             .
@@ -57,7 +61,11 @@ function FAQ() {
         <ExpansionPanelDetails>
           <Typography>
             Apply{" "}
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc2m18B19BnRsEEioH64hekNmdRL-0BDqsneRxOpPAuyp64aQ/viewform">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSc2m18B19BnRsEEioH64hekNmdRL-0BDqsneRxOpPAuyp64aQ/viewform"
+            >
               here
             </a>
             .
@@ -77,7 +85,11 @@ function FAQ() {
         <ExpansionPanelDetails>
           <Typography>
             Apply{" "}
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfm_WwiUslNts3dyJl6qH26_lhym_e8X2GOqk47hSPItZeztg/viewform">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfm_WwiUslNts3dyJl6qH26_lhym_e8X2GOqk47hSPItZeztg/viewform"
+            >
               here
             </a>
             .
@@ -97,7 +109,11 @@ function FAQ() {
         <ExpansionPanelDetails>
           <Typography>
             Apply{" "}
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeOvIXC-6SqPbeWAuxb_sIGVLq7GQXIXg7-DYK3cbO9Ole_Sg/viewform">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSeOvIXC-6SqPbeWAuxb_sIGVLq7GQXIXg7-DYK3cbO9Ole_Sg/viewform"
+            >
               here
             </a>
             .
@@ -117,7 +133,11 @@ function FAQ() {
         <ExpansionPanelDetails>
           <Typography>
             Sign up{" "}
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLScQ0PeauARnEg4316eoIhZby08kddHnY6oJj-muXDM1YCPwQQ/viewform">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScQ0PeauARnEg4316eoIhZby08kddHnY6oJj-muXDM1YCPwQQ/viewform"
+            >
               here
             </a>
             .
