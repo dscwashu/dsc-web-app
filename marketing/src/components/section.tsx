@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
         : theme.palette.background.default,
     }),
     wrapper: {
+      overflowX: "hidden",
       padding: theme.spacing(5, 0),
       [theme.breakpoints.up("sm")]: {
         padding: theme.spacing(10, 0),

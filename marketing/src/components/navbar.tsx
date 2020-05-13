@@ -84,7 +84,7 @@ function Navbar() {
   ]
   return (
     <React.Fragment>
-      <AppBar position="fixed" color="transparent" className={classes.root}>
+      <AppBar position="sticky" color="transparent" className={classes.root}>
         <Toolbar>
           <Link to="home" smooth={true} className={classes.logoWrapper}>
             <Button disableRipple={true} className={classes.logoButton}>

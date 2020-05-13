@@ -44,9 +44,9 @@ module.exports = {
           storageBucket: "dsc-wash-u-website-202005111.appspot.com",
           messagingSenderId: "861657588532",
           appId: "1:861657588532:web:78d2361c6a7a9731fdbb61",
-          measurementId: "G-7L1RHDWZDD"
-        }
-      }
-    }
+          measurementId: "G-7L1RHDWZDD",
+        },
+      },
+    },
   ],
 }
