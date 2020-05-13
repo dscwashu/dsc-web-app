@@ -30,13 +30,16 @@ function FAQ() {
           id="panel1a-header"
         >
           <Typography className={classes.heading}>
-            How can I apply to become a project manager?
+            What projects are available?
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            Here is the{" "}
+            <a href="https://docs.google.com/presentation/d/1c7g4xwzgZU0WW5VDO7ALsYb7lXxBrP_o6oxkYAFEAAU/edit">
+              project lookbook
+            </a>
+            .
           </Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
@@ -47,13 +50,17 @@ function FAQ() {
           id="panel1a-header"
         >
           <Typography className={classes.heading}>
-            Can graduate students get involved?
+            I am a business and I am interesting in working with DS C WashU.
+            Where can I submit a project application?
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            Apply{" "}
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc2m18B19BnRsEEioH64hekNmdRL-0BDqsneRxOpPAuyp64aQ/viewform">
+              here
+            </a>
+            .
           </Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
@@ -64,28 +71,16 @@ function FAQ() {
           id="panel1a-header"
         >
           <Typography className={classes.heading}>
-            I am a business who wants to submit a project to DSC
+            How can I apply to be part of the Core Team?
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            Apply{" "}
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfm_WwiUslNts3dyJl6qH26_lhym_e8X2GOqk47hSPItZeztg/viewform">
+              here
+            </a>
+            .
           </Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
@@ -95,12 +90,17 @@ function FAQ() {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
+          <Typography className={classes.heading}>
+            How can I apply to a specific project?
+          </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            Apply{" "}
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeOvIXC-6SqPbeWAuxb_sIGVLq7GQXIXg7-DYK3cbO9Ole_Sg/viewform">
+              here
+            </a>
+            .
           </Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
@@ -110,42 +110,17 @@ function FAQ() {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+          <Typography className={classes.heading}>
+            How can I join DSC WashU as a general body memeber?
           </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            Sign up{" "}
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScQ0PeauARnEg4316eoIhZby08kddHnY6oJj-muXDM1YCPwQQ/viewform">
+              here
+            </a>
+            .
           </Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
