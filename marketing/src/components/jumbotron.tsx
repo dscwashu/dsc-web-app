@@ -134,6 +134,7 @@ function Jumbotron(props: JumbotronProps) {
       <Container
         maxWidth="lg"
         className={classes.root}
+        touch-action="pan-y"
         onPointerMove={calculateCameraAngle}
         onPointerEnter={initClientX}
       >
