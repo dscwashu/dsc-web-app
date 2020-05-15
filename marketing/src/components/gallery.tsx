@@ -112,7 +112,7 @@ function Gallery() {
     setOpen(false)
   }
   return (
-    <GridList cellHeight={200} className={classes.gridList} cols={3}>
+    <GridList cellHeight={250} className={classes.gridList} cols={3}>
       <GridListTile
         cols={1}
         rows={1}
