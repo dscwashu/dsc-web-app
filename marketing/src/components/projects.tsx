@@ -134,10 +134,9 @@ const useProjectModalStyles = makeStyles((theme: Theme) =>
       "& > *": {
         margin: theme.spacing(0.5),
       },
-      marginBottom: theme.spacing(2),
     },
-    projectInfo: {
-      marginBottom: theme.spacing(1),
+    projectDescription: {
+      marginTop: theme.spacing(2),
     },
   })
 )
@@ -272,6 +271,19 @@ function ProjectModal(props: ProjectModalProps) {
         </Typography>
       </DialogTitle>
       <DialogContent dividers={true}>
+        <Typography variant="body1">January 10, 2019</Typography>
+        <Typography variant="body1">
+          Tech &middot; Student Club &middot; Web
+        </Typography>
+        <DialogContentText className={classes.projectDescription}>
+          Learn the basics of the Google Cloud Computing platform at this
+          workshop. There will be free food and prizes!Learn the basics of the
+          Google Cloud Computing platform at this workshop. There will be free
+          food and prizes! Learn the basics of the Google Cloud Computing
+          platform at this workshop. There will be free food and prizes!Learn
+          the basics of the Google Cloud Computing platform at this workshop.
+          There will be free food and prizes!
+        </DialogContentText>
         <div className={classes.chips}>
           <Chip label="React.js" />
           <Chip label="Gatsby.js" />
@@ -282,18 +294,6 @@ function ProjectModal(props: ProjectModalProps) {
           <Chip label="Firebase" />
           <Chip label="Contentful" />
         </div>
-        <Typography variant="body1" className={classes.projectInfo}>
-          Tech &middot; Student Club &middot; Web
-        </Typography>
-        <DialogContentText>
-          Learn the basics of the Google Cloud Computing platform at this
-          workshop. There will be free food and prizes!Learn the basics of the
-          Google Cloud Computing platform at this workshop. There will be free
-          food and prizes! Learn the basics of the Google Cloud Computing
-          platform at this workshop. There will be free food and prizes!Learn
-          the basics of the Google Cloud Computing platform at this workshop.
-          There will be free food and prizes!
-        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button color="primary" variant="contained">
