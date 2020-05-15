@@ -9,14 +9,13 @@ import {
   makeStyles,
   createStyles,
   useMediaQuery,
-  Theme,
 } from "@material-ui/core"
 import { useStaticQuery, graphql } from "gatsby"
 import Image from "gatsby-image"
 import MailIcon from "@material-ui/icons/Mail"
 import LinkedInIcon from "@material-ui/icons/LinkedIn"
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     cardContent: {
       paddingBottom: 0,

@@ -7,10 +7,9 @@ import {
   DialogTitle,
   DialogActions,
   Typography,
-  DialogContent,
   Button,
 } from "@material-ui/core"
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
+import { createStyles, makeStyles } from "@material-ui/core/styles"
 import Image from "gatsby-image"
 import { useStaticQuery, graphql } from "gatsby"
 
@@ -20,7 +19,7 @@ interface ModalProps {
   data: Record<string, any>
 }
 
-const useGalleryStyles = makeStyles((theme: Theme) =>
+const useGalleryStyles = makeStyles(() =>
   createStyles({
     gridList: {
       height: 500,
@@ -49,7 +48,7 @@ const useGalleryStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const useModalStyles = makeStyles((theme: Theme) =>
+const useModalStyles = makeStyles(() =>
   createStyles({
     subtitle: {
       fontWeight: 300,

@@ -31,10 +31,6 @@ import MailIcon from "@material-ui/icons/Mail"
 import LinkedInIcon from "@material-ui/icons/LinkedIn"
 import { Link } from "react-scroll"
 
-interface IndexPageProps {
-  data: Record<string, any>
-}
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     jumbotronHeader: {
@@ -117,7 +113,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function IndexPage({ data }: IndexPageProps) {
+function IndexPage() {
   const betweenSmMd = useMediaQuery("(max-width:749px)")
   const classes = useStyles()
   return (
