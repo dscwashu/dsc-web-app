@@ -31,7 +31,7 @@ import {
 import { createStyles, makeStyles } from "@material-ui/core/styles"
 import Pagination from "@material-ui/lab/Pagination"
 import InfoIcon from "@material-ui/icons/Info"
-import GithubIcon from "@material-ui/icons/Github"
+import GithubIcon from "@material-ui/icons/GitHub"
 import ClampLines from "react-clamp-lines"
 import Autocomplete from "@material-ui/lab/Autocomplete"
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date"
