@@ -5,7 +5,7 @@ import React, {
   useCallback,
   MutableRefObject,
 } from "react"
-import { Container, Box } from "@material-ui/core"
+import { Container, Box, useTheme, useMediaQuery } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/core/styles"
 import { Canvas, useThree, useFrame } from "react-three-fiber"
 import {
@@ -104,23 +104,31 @@ function Jumbotron(props: JumbotronProps) {
   const cameraRef = useRef<PerspectiveCamera>()
   const theta = useRef(0)
   const clientX = useRef(0)
+  const theme = useTheme()
+  const isNotMobile = useMediaQuery(theme.breakpoints.up("sm"))
   const initClientX = useCallback((e: React.PointerEvent) => {
     clientX.current = e.clientX
   }, [])
-  const calculateCameraAngle = useCallback((e: React.PointerEvent) => {
-    const delta = e.clientX - clientX.current
-    const newTheta = theta.current + delta * 0.0005
-    if (newTheta > -(Math.PI / 10) && newTheta < Math.PI / 10) {
-      const x = 10 * Math.sin(newTheta)
-      const z = 10 * Math.cos(newTheta)
-      if (cameraRef.current) {
-        cameraRef.current.position.set(x, 3, z)
-        cameraRef.current.lookAt(0, 0, 0)
+  const calculateCameraAngle = useCallback(
+    (e: React.PointerEvent) => {
+      let delta = e.clientX - clientX.current
+      if (!isNotMobile) {
+        delta = delta * 5
       }
-      theta.current = newTheta
-    }
-    clientX.current = e.clientX
-  }, [])
+      const newTheta = theta.current + delta * 0.0005
+      if (newTheta > -(Math.PI / 10) && newTheta < Math.PI / 10) {
+        const x = 10 * Math.sin(newTheta)
+        const z = 10 * Math.cos(newTheta)
+        if (cameraRef.current) {
+          cameraRef.current.position.set(x, 3, z)
+          cameraRef.current.lookAt(0, 0, 0)
+        }
+        theta.current = newTheta
+      }
+      clientX.current = e.clientX
+    },
+    [isNotMobile]
+  )
   return (
     <React.Fragment>
       <div className={classes.canvas}>

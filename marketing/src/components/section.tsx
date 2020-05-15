@@ -16,12 +16,12 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
     wrapper: {
       overflowX: "hidden",
-      padding: theme.spacing(5, 0),
+      padding: theme.spacing(5, 0.5),
       [theme.breakpoints.up("sm")]: {
-        padding: theme.spacing(10, 0),
+        padding: theme.spacing(10, 0.5),
       },
       [theme.breakpoints.up("md")]: {
-        padding: theme.spacing(15, 0),
+        padding: theme.spacing(15, 0.5),
       },
     },
   })

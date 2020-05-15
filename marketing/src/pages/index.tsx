@@ -4,6 +4,9 @@ import SEO from "../components/seo"
 import Navbar from "../components/navbar"
 import Jumbotron from "../components/jumbotron"
 import Section from "../components/section"
+import Gallery from "../components/gallery"
+import Events from "../components/events"
+import Projects from "../components/projects"
 import FAQ from "../components/faq"
 import Team from "../components/team"
 import Lottie from "../components/lottie"
@@ -13,17 +16,10 @@ import {
   Button,
   Theme,
   Grid,
-  Tabs,
-  Tab,
   Box,
   IconButton,
   SvgIcon,
-  FormControl,
-  FormLabel,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  FormHelperText,
+  useMediaQuery,
 } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/core/styles"
 import PeopleIcon from "@material-ui/icons/People"
@@ -34,6 +30,10 @@ import FacebookIcon from "@material-ui/icons/Facebook"
 import MailIcon from "@material-ui/icons/Mail"
 import LinkedInIcon from "@material-ui/icons/LinkedIn"
 import { Link } from "react-scroll"
+
+interface IndexPageProps {
+  data: Record<string, any>
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -90,9 +90,10 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
     },
     socialMediaWrapper: {
-      fontSize: "50px",
-      height: "80px",
-      width: "80px",
+      [theme.breakpoints.up("sm")]: {
+        fontSize: "50px",
+      },
+      fontSize: "35px",
     },
     aboutContainer: {
       display: "flex",
@@ -116,24 +117,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function IndexPage() {
-  const [value, setValue] = React.useState(2)
-  const [state, setState] = React.useState({
-    gilad: true,
-    jason: false,
-    antoine: false,
-  })
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked })
-  }
-
-  const { gilad, jason, antoine } = state
-  const error = [gilad, jason, antoine].filter(v => v).length !== 2
-
-  const handleChange2 = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue)
-  }
+function IndexPage({ data }: IndexPageProps) {
+  const betweenSmMd = useMediaQuery("(max-width:749px)")
   const classes = useStyles()
   return (
     <React.Fragment>
@@ -158,8 +143,13 @@ function IndexPage() {
       </Jumbotron>
       <div className={classes.anchor} id="about" />
       <Section white>
-        <Grid container spacing={8} className={classes.swap}>
-          <Grid item xs={12} md={6} className={classes.aboutContainer}>
+        <Grid container spacing={4}>
+          <Grid
+            item
+            xs={12}
+            sm={betweenSmMd ? 12 : 6}
+            className={classes.aboutContainer}
+          >
             <div>
               <Typography variant="overline">About Us</Typography>
               <Typography variant="h3" className={classes.sectionHeader}>
@@ -189,12 +179,12 @@ function IndexPage() {
               </a>
             </div>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={betweenSmMd ? 12 : 6}>
             <Lottie />
           </Grid>
         </Grid>
         <Divider variant="middle" className={classes.divider} />
-        <Grid container spacing={10} className={classes.icons}>
+        <Grid container spacing={8} className={classes.icons}>
           <Grid item xs={12} sm={6} md={4} className={classes.iconContainer}>
             <div className={classes.iconWrapper}>
               <PeopleIcon fontSize="inherit" />
@@ -229,12 +219,34 @@ function IndexPage() {
             </Typography>
           </Grid>
         </Grid>
+        <Divider variant="middle" className={classes.divider} />
+        <Grid container spacing={4} className={classes.swap}>
+          <Grid item xs={12} md={4} className={classes.aboutContainer}>
+            <div>
+              <Typography variant="overline">Our Gallery</Typography>
+              <Typography variant="h3" className={classes.sectionHeader}>
+                DSC in Action
+              </Typography>
+              <Typography
+                variant="body1"
+                className={classes.sectionDescription}
+              >
+                Check out some of the photos we&apos;ve gathered over the past
+                couple semesters. We host many different events for WashU
+                students to get involved in the CS community here.
+              </Typography>
+            </div>
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Gallery />
+          </Grid>
+        </Grid>
       </Section>
       <div className={classes.anchor} id="projects" />
       <Section>
-        <Grid container spacing={8}>
+        <Grid container spacing={4}>
           <Grid item xs={12} md={5}>
-            <Typography variant="overline">Our Projects</Typography>
+            <Typography variant="overline">Project Showcase</Typography>
             <Typography variant="h3" className={classes.sectionHeader}>
               Developing for the Community
             </Typography>
@@ -244,125 +256,29 @@ function IndexPage() {
               businesses, and NGO&apos;s with Google Developer technologies so
               we can submit it to Google&apos;s Annual Solution Challenge.
             </Typography>
-            <FormControl>
-              <FormLabel component="legend">Technologies</FormLabel>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={gilad}
-                      onChange={handleChange}
-                      name="gilad"
-                    />
-                  }
-                  label="Gilad Gray"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={jason}
-                      onChange={handleChange}
-                      name="jason"
-                    />
-                  }
-                  label="Jason Killian"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={antoine}
-                      onChange={handleChange}
-                      name="antoine"
-                    />
-                  }
-                  label="Antoine Llorca"
-                />
-              </FormGroup>
-              <FormHelperText>Be careful</FormHelperText>
-            </FormControl>
-            <FormControl>
-              <FormLabel component="legend">Technologies</FormLabel>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={gilad}
-                      onChange={handleChange}
-                      name="gilad"
-                    />
-                  }
-                  label="Gilad Gray"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={jason}
-                      onChange={handleChange}
-                      name="jason"
-                    />
-                  }
-                  label="Jason Killian"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={antoine}
-                      onChange={handleChange}
-                      name="antoine"
-                    />
-                  }
-                  label="Antoine Llorca"
-                />
-              </FormGroup>
-              <FormHelperText>Be careful</FormHelperText>
-            </FormControl>
           </Grid>
           <Grid item xs={12} md={7}>
-            <Tabs
-              value={value}
-              indicatorColor="primary"
-              textColor="primary"
-              onChange={handleChange2}
-              aria-label="disabled tabs example"
-            >
-              <Tab label="Active" />
-              <Tab label="Disabled" disabled />
-              <Tab label="Active" />
-            </Tabs>
+            <Projects />
           </Grid>
         </Grid>
       </Section>
       <div className={classes.anchor} id="events" />
       <Section white>
-        <Grid container spacing={8} className={classes.swap}>
+        <Grid container spacing={4} className={classes.swap}>
           <Grid item xs={12} md={5}>
-            <Typography variant="overline">
-              Frequently Asked Questions
-            </Typography>
+            <Typography variant="overline">Our Events</Typography>
             <Typography variant="h3" className={classes.sectionHeader}>
-              Where do I start?
+              Workshops, Networking, &amp; More
             </Typography>
             <Typography variant="body1" className={classes.sectionDescription}>
-              Here&apos;s a list of commonly asked questions to get you started.
-              If these don&apos;t answer your questions, feel free to contact
-              us!
+              There are plenty of ways to get involved at DSC WashU even if you
+              are not a project manager or a core team member. Throughout the
+              school year, we host various workshops for Google technologies and
+              events to foster a strong CS community here in St. Louis.
             </Typography>
-            <Button color="primary" variant="outlined" size="large">
-              Contact Us
-            </Button>
           </Grid>
           <Grid item xs={12} md={7}>
-            <Tabs
-              value={value}
-              indicatorColor="primary"
-              textColor="primary"
-              onChange={handleChange2}
-              aria-label="disabled tabs example"
-            >
-              <Tab label="Active" />
-              <Tab label="Disabled" disabled />
-              <Tab label="Active" />
-            </Tabs>
+            <Events />
           </Grid>
         </Grid>
       </Section>
@@ -383,7 +299,7 @@ function IndexPage() {
       </Section>
       <div className={classes.anchor} id="faq" />
       <Section white>
-        <Grid container spacing={8} className={classes.swap}>
+        <Grid container spacing={4} className={classes.swap}>
           <Grid item xs={12} md={5}>
             <Typography variant="overline">
               Frequently Asked Questions
@@ -410,7 +326,7 @@ function IndexPage() {
       <div className={classes.anchor} id="contact" />
       <Section>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={6}>
             <Typography variant="overline">Contact Us</Typography>
             <Typography variant="h3" className={classes.sectionHeader}>
               Available 24/7
@@ -420,7 +336,7 @@ function IndexPage() {
               We&apos;ll try to get back to you as soon as possible.
             </Typography>
           </Grid>
-          <Grid item xs={12} md={7} className={classes.socialMedia}>
+          <Grid item xs={12} md={6} className={classes.socialMedia}>
             <IconButton className={classes.socialMediaWrapper}>
               <MailIcon fontSize="inherit" />
             </IconButton>
