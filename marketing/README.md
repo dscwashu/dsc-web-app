@@ -2,7 +2,7 @@
 
 ##  Demo
 
-[Here is a website hosted on netlify](https://5eab2d671027897e5485f8ab--silly-pare-495ace.netlify.app)
+[Here is a website hosted on netlify](https://www.dscwashu.com)
 
 ##  How to Run Website
 
