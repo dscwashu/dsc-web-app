@@ -68,11 +68,7 @@ const useModalStyles = makeStyles((theme: Theme) =>
       lineHeight: "normal",
     },
     image: {
-      height: "100%",
-    },
-    background: {
-      height: "100vh",
-      maxHeight: "calc(100vh - 200px)",
+      height: "calc(100vh - 200px)",
       backgroundColor: theme.palette.grey["900"],
     },
   })
@@ -95,14 +91,12 @@ function Modal({ open, onClose, data }: ModalProps) {
           {data?.subtitle}
         </Typography>
       </DialogTitle>
-      <DialogContent className={classes.background}>
-        <Image
-          className={classes.image}
-          imgStyle={{ objectFit: "contain" }}
-          alt={classes.subtitle}
-          fluid={data?.fluid}
-        />
-      </DialogContent>
+      <Image
+        className={classes.image}
+        imgStyle={{ objectFit: "contain" }}
+        alt={classes.subtitle}
+        fluid={data?.fluid}
+      />
       <DialogActions>
         <Button color="primary" variant="outlined" onClick={onClose}>
           Ok

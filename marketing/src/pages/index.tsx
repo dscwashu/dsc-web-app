@@ -317,7 +317,7 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
           </Grid>
           <Grid item xs={12} md={6} className={classes.socialMedia}>
             <a
-              href={"mailto: " + content.mail}
+              href={"mailto: " + content.email}
               className={classes.externalLink}
             >
               <IconButton
