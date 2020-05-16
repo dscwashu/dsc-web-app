@@ -412,7 +412,7 @@ function Projects() {
         </div>
         <ClampLines
           text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-          id="really-unique-id"
+          id="project1"
           buttons={false}
           innerElement="div"
           className="MuiTypography-body2 MuiTypography-root"
@@ -441,7 +441,7 @@ function Projects() {
         </div>
         <ClampLines
           text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-          id="really-unique-id"
+          id="project2"
           buttons={false}
           innerElement="div"
           className="MuiTypography-body2 MuiTypography-root"
@@ -470,7 +470,7 @@ function Projects() {
         </div>
         <ClampLines
           text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-          id="really-unique-id"
+          id="project3"
           buttons={false}
           innerElement="div"
           className="MuiTypography-body2 MuiTypography-root"

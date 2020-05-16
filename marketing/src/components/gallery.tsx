@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
-  DialogContent,
   Typography,
   Button,
   Theme,

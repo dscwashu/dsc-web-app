@@ -258,13 +258,13 @@ function Events() {
               </div>
               <ClampLines
                 text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-                id="really-unique-id"
+                id="event1"
                 buttons={false}
                 innerElement="div"
                 className="MuiTypography-body2 MuiTypography-root"
               />
             </div>
-          </Card>{" "}
+          </Card>
           <Card className={classes.event}>
             <div className={classes.eventDate}>
               <Typography variant="overline" className={classes.overline}>
@@ -299,13 +299,13 @@ function Events() {
               </div>
               <ClampLines
                 text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-                id="really-unique-id"
+                id="event2"
                 buttons={false}
                 innerElement="div"
                 className="MuiTypography-body2 MuiTypography-root"
               />
             </div>
-          </Card>{" "}
+          </Card>
           <Card className={classes.event}>
             <div className={classes.eventDate}>
               <Typography variant="overline" className={classes.overline}>
@@ -340,7 +340,7 @@ function Events() {
               </div>
               <ClampLines
                 text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-                id="really-unique-id"
+                id="event3"
                 buttons={false}
                 innerElement="div"
                 className="MuiTypography-body2 MuiTypography-root"
@@ -393,7 +393,7 @@ function Events() {
               </div>
               <ClampLines
                 text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-                id="really-unique-id"
+                id="event4"
                 buttons={false}
                 innerElement="div"
                 className="MuiTypography-body2 MuiTypography-root"
@@ -434,7 +434,7 @@ function Events() {
               </div>
               <ClampLines
                 text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-                id="really-unique-id"
+                id="event5"
                 buttons={false}
                 innerElement="div"
                 className="MuiTypography-body2 MuiTypography-root"
@@ -475,7 +475,7 @@ function Events() {
               </div>
               <ClampLines
                 text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-                id="really-unique-id"
+                id="event6"
                 buttons={false}
                 innerElement="div"
                 className="MuiTypography-body2 MuiTypography-root"
