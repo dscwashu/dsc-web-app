@@ -20,6 +20,7 @@ import {
   IconButton,
   SvgIcon,
   useMediaQuery,
+  Container,
 } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/core/styles"
 import PeopleIcon from "@material-ui/icons/People"
@@ -387,6 +388,13 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
           </Grid>
         </Grid>
       </Section>
+      <Container>
+        Made with ❤️ by Zach Young.{" "}
+        <a target="_blank" rel="noopener noreferrer" href="">
+          Github
+        </a>
+        .
+      </Container>
     </React.Fragment>
   )
 }
