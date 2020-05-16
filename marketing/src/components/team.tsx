@@ -94,7 +94,7 @@ function Team() {
                 disableSpacing={true}
               >
                 <a href={"mailto: " + email} className={classes.externalLink}>
-                  <IconButton size="small">
+                  <IconButton size="small" aria-label="email">
                     <MailIcon />
                   </IconButton>
                 </a>
@@ -105,7 +105,7 @@ function Team() {
                     href={linkedIn}
                     className={classes.externalLink}
                   >
-                    <IconButton size="small">
+                    <IconButton size="small" aria-label="linkedin">
                       <LinkedInIcon />
                     </IconButton>
                   </a>

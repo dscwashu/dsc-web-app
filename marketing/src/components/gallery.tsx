@@ -86,8 +86,9 @@ function Modal({ open, onClose, data }: ModalProps) {
       scroll="paper"
       maxWidth="lg"
       fullWidth={true}
+      aria-labelledby="gallery-modal-title"
     >
-      <DialogTitle>
+      <DialogTitle id="gallery-modal-title">
         {data?.title}
         <Typography variant="subtitle1" className={classes.subtitle}>
           {data?.subtitle}
@@ -97,6 +98,7 @@ function Modal({ open, onClose, data }: ModalProps) {
         <Image
           className={classes.image}
           imgStyle={{ objectFit: "contain" }}
+          alt={classes.subtitle}
           fluid={data?.fluid}
         />
       </DialogContent>
@@ -167,6 +169,7 @@ function Gallery() {
             rows={1}
             className={classes.gridTile}
             onClick={handleOpen}
+            role="button"
           >
             <div
               className={classes.gridImageWrapper}

@@ -320,7 +320,10 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
               href={"mailto: " + content.mail}
               className={classes.externalLink}
             >
-              <IconButton className={classes.socialMediaWrapper}>
+              <IconButton
+                className={classes.socialMediaWrapper}
+                aria-label="mail"
+              >
                 <MailIcon fontSize="inherit" />
               </IconButton>
             </a>
@@ -330,7 +333,10 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
               href={content.slack}
               className={classes.externalLink}
             >
-              <IconButton className={classes.socialMediaWrapper}>
+              <IconButton
+                className={classes.socialMediaWrapper}
+                aria-label="slack"
+              >
                 <SvgIcon fontSize="inherit" viewBox="0 0 448 512">
                   <path
                     fill="currentColor"
@@ -345,7 +351,10 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
               href={content.instagram}
               className={classes.externalLink}
             >
-              <IconButton className={classes.socialMediaWrapper}>
+              <IconButton
+                className={classes.socialMediaWrapper}
+                aria-label="instagram"
+              >
                 <InstagramIcon fontSize="inherit" />
               </IconButton>
             </a>
@@ -355,7 +364,10 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
               href={content.facebook}
               className={classes.externalLink}
             >
-              <IconButton className={classes.socialMediaWrapper}>
+              <IconButton
+                className={classes.socialMediaWrapper}
+                aria-label="facebook"
+              >
                 <FacebookIcon fontSize="inherit" />
               </IconButton>
             </a>
@@ -365,7 +377,10 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
               href={content.linkedIn}
               className={classes.externalLink}
             >
-              <IconButton className={classes.socialMediaWrapper}>
+              <IconButton
+                className={classes.socialMediaWrapper}
+                aria-label="linkedin"
+              >
                 <LinkedInIcon fontSize="inherit" />
               </IconButton>
             </a>

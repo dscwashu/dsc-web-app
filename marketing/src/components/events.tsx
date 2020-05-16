@@ -108,8 +108,9 @@ function EventModal(props: EventModalProps) {
       scroll="paper"
       maxWidth="sm"
       fullWidth={true}
+      aria-labelledby="event-modal-title"
     >
-      <DialogTitle>
+      <DialogTitle id="event-modal-title">
         GCP Essentials
         <Typography variant="subtitle1" className={classes.subtitle}>
           January 16, 2019, 7:00 PM - 9:00 PM, Hillman Hall 70
@@ -146,8 +147,9 @@ function RSVPModal(props: RSVPModalProps) {
       scroll="paper"
       maxWidth="sm"
       fullWidth={true}
+      aria-labelledby="rsvp-modal-title"
     >
-      <DialogTitle>Add to Calendar</DialogTitle>
+      <DialogTitle id="rsvp-modal-title">Add to Calendar</DialogTitle>
       <DialogContent>
         <DialogContentText>
           Please login to RSVP to this Event
@@ -200,12 +202,28 @@ function Events() {
         variant={isNotXs ? "standard" : "fullWidth"}
         centered
         className={classes.tabs}
+        aria-label="events tabs"
       >
-        <Tab disableRipple={true} label="Future" />
-        <Tab disableRipple={true} label="Past" />
+        <Tab
+          disableRipple={true}
+          label="Future"
+          id="tab-future"
+          aria-controls="tabpanel-future"
+        />
+        <Tab
+          disableRipple={true}
+          label="Past"
+          id="tab-past"
+          aria-controls="tabpanel-past"
+        />
       </Tabs>
       <SwipeableViews index={index} onChangeIndex={handleSwipe}>
-        <div className={classes.tabPanel}>
+        <div
+          className={classes.tabPanel}
+          role="tabpanel"
+          aria-labelledby="tab-past"
+          id="tabpanel-past"
+        >
           <Card className={classes.event}>
             <div className={classes.eventDate}>
               <Typography variant="overline" className={classes.overline}>
@@ -311,7 +329,12 @@ function Events() {
             count={10}
           />
         </div>
-        <div className={classes.tabPanel}>
+        <div
+          className={classes.tabPanel}
+          role="tabpanel"
+          aria-labelledby="tab-future"
+          id="tabpanel-future"
+        >
           <Card className={classes.event}>
             <div className={classes.eventDate}>
               <Typography variant="overline" className={classes.overline}>
@@ -328,76 +351,18 @@ function Events() {
                   </Typography>
                 </div>
                 <div className={classes.eventButtons}>
-                  <IconButton size="small" onClick={handleRSVPModalOpen}>
+                  <IconButton
+                    size="small"
+                    onClick={handleRSVPModalOpen}
+                    aria-label="rsvp"
+                  >
                     <EventIcon />
                   </IconButton>
-                  <IconButton size="small" onClick={handleEventModalOpen}>
-                    <InfoIcon />
-                  </IconButton>
-                </div>
-              </div>
-              <ClampLines
-                text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-                id="really-unique-id"
-                buttons={false}
-                innerElement="div"
-                className="MuiTypography-body2 MuiTypography-root"
-              />
-            </div>
-          </Card>
-          <Card className={classes.event}>
-            <div className={classes.eventDate}>
-              <Typography variant="overline" className={classes.overline}>
-                January
-              </Typography>
-              <Typography variant="h2">16</Typography>
-            </div>
-            <div className={classes.eventDetails}>
-              <div className={classes.eventDetailsHeader}>
-                <div>
-                  <Typography variant="h6">GCP Essentials</Typography>
-                  <Typography variant="subtitle2" className={classes.subtitle}>
-                    7:00 PM - 9:00 PM, Hillman Hall 70
-                  </Typography>
-                </div>
-                <div className={classes.eventButtons}>
-                  <IconButton size="small" onClick={handleRSVPModalOpen}>
-                    <EventIcon />
-                  </IconButton>
-                  <IconButton size="small" onClick={handleEventModalOpen}>
-                    <InfoIcon />
-                  </IconButton>
-                </div>
-              </div>
-              <ClampLines
-                text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
-                id="really-unique-id"
-                buttons={false}
-                innerElement="div"
-                className="MuiTypography-body2 MuiTypography-root"
-              />
-            </div>
-          </Card>
-          <Card className={classes.event}>
-            <div className={classes.eventDate}>
-              <Typography variant="overline" className={classes.overline}>
-                January
-              </Typography>
-              <Typography variant="h2">16</Typography>
-            </div>
-            <div className={classes.eventDetails}>
-              <div className={classes.eventDetailsHeader}>
-                <div>
-                  <Typography variant="h6">GCP Essentials</Typography>
-                  <Typography variant="subtitle2" className={classes.subtitle}>
-                    7:00 PM - 9:00 PM, Hillman Hall 70
-                  </Typography>
-                </div>
-                <div className={classes.eventButtons}>
-                  <IconButton size="small" onClick={handleRSVPModalOpen}>
-                    <EventIcon />
-                  </IconButton>
-                  <IconButton size="small" onClick={handleEventModalOpen}>
+                  <IconButton
+                    size="small"
+                    onClick={handleEventModalOpen}
+                    aria-label="info"
+                  >
                     <InfoIcon />
                   </IconButton>
                 </div>

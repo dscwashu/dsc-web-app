@@ -66,8 +66,8 @@ function FAQ() {
             <ExpansionPanel key={index}>
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+                aria-controls={"panel" + index + "-content"}
+                id={"panel" + index + "-header"}
               >
                 <Typography className={classes.heading}>{question}</Typography>
               </ExpansionPanelSummary>

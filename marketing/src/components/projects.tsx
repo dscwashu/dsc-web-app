@@ -163,13 +163,16 @@ function FilterModal(props: FilterModalProps) {
       scroll="paper"
       maxWidth="xs"
       fullWidth={true}
+      aria-labelledby="filter-modal-title"
     >
-      <DialogTitle>Filter</DialogTitle>
+      <DialogTitle id="filter-modal-title">Filter</DialogTitle>
       <DialogContent>
         <div className={classes.filterInputs}>
           <FormControl>
-            <InputLabel>Industry</InputLabel>
+            <InputLabel id="industry-select-label">Industry</InputLabel>
             <Select
+              labelId="industry-select-label"
+              id="industry-select"
               multiple
               value={activeIndustry}
               onChange={handleIndustryChange}
@@ -186,8 +189,10 @@ function FilterModal(props: FilterModalProps) {
             </Select>
           </FormControl>
           <FormControl>
-            <InputLabel>Organization</InputLabel>
+            <InputLabel id="industry-select-label">Organization</InputLabel>
             <Select
+              labelId="organization-select-label"
+              id="organization-select"
               multiple
               value={activeIndustry}
               onChange={handleIndustryChange}
@@ -204,8 +209,10 @@ function FilterModal(props: FilterModalProps) {
             </Select>
           </FormControl>
           <FormControl>
-            <InputLabel>Platform</InputLabel>
+            <InputLabel id="platform-select-label">Platform</InputLabel>
             <Select
+              labelId="platform-select-label"
+              id="platform-select"
               multiple
               value={activeIndustry}
               onChange={handleIndustryChange}
@@ -227,6 +234,7 @@ function FilterModal(props: FilterModalProps) {
                 className={classes.startDate}
                 clearable
                 value={selectedDate}
+                label="Start Date"
                 placeholder="10/10/2018"
                 onChange={(date: MaterialUiPickersDate) =>
                   handleDateChange(date)
@@ -237,6 +245,7 @@ function FilterModal(props: FilterModalProps) {
                 clearable
                 value={selectedDate}
                 placeholder="10/10/2018"
+                label="End Date"
                 onChange={(date: MaterialUiPickersDate) =>
                   handleDateChange(date)
                 }
@@ -267,8 +276,9 @@ function ProjectModal(props: ProjectModalProps) {
       scroll="paper"
       maxWidth="sm"
       fullWidth={true}
+      aria-labelledby="project-modal-title"
     >
-      <DialogTitle>
+      <DialogTitle id="project-modal-title">
         DSC Website
         <Typography variant="subtitle1" className={classes.subtitle}>
           Zachary Young, Olly Cohen
@@ -388,10 +398,14 @@ function Projects() {
             </Typography>
           </div>
           <div className={classes.projectButtons}>
-            <IconButton size="small">
+            <IconButton size="small" aria-label="github">
               <GithubIcon />
             </IconButton>
-            <IconButton size="small" onClick={handleProjectModalOpen}>
+            <IconButton
+              size="small"
+              onClick={handleProjectModalOpen}
+              aria-label="info"
+            >
               <InfoIcon />
             </IconButton>
           </div>
@@ -413,10 +427,14 @@ function Projects() {
             </Typography>
           </div>
           <div className={classes.projectButtons}>
-            <IconButton size="small">
+            <IconButton size="small" aria-label="github">
               <GithubIcon />
             </IconButton>
-            <IconButton size="small" onClick={handleProjectModalOpen}>
+            <IconButton
+              size="small"
+              onClick={handleProjectModalOpen}
+              aria-label="info"
+            >
               <InfoIcon />
             </IconButton>
           </div>
@@ -438,10 +456,14 @@ function Projects() {
             </Typography>
           </div>
           <div className={classes.projectButtons}>
-            <IconButton size="small">
+            <IconButton size="small" aria-label="github">
               <GithubIcon />
             </IconButton>
-            <IconButton size="small" onClick={handleProjectModalOpen}>
+            <IconButton
+              size="small"
+              onClick={handleProjectModalOpen}
+              aria-label="info"
+            >
               <InfoIcon />
             </IconButton>
           </div>

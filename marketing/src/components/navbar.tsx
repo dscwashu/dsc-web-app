@@ -87,11 +87,16 @@ function Navbar() {
       <AppBar position="sticky" color="transparent" className={classes.root}>
         <Toolbar>
           <Link to="home" smooth={true} className={classes.logoWrapper}>
-            <Button disableRipple={true} className={classes.logoButton}>
+            <Button
+              disableRipple={true}
+              className={classes.logoButton}
+              aria-label="home"
+            >
               <Image
                 className={classes.logo}
                 fluid={data.file.childImageSharp.fluid}
                 imgStyle={{ objectFit: "contain" }}
+                alt="DSC Logo"
               />
             </Button>
           </Link>
