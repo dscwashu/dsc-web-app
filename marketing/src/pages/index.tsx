@@ -30,6 +30,7 @@ import FacebookIcon from "@material-ui/icons/Facebook"
 import MailIcon from "@material-ui/icons/Mail"
 import LinkedInIcon from "@material-ui/icons/LinkedIn"
 import { Link } from "react-scroll"
+import { graphql } from "gatsby"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -113,9 +114,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-function IndexPage() {
+function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
   const betweenSmMd = useMediaQuery("(max-width:749px)")
   const classes = useStyles()
+  const content = contentfulSiteContent
   return (
     <React.Fragment>
       <SEO title="Home" />
@@ -123,13 +125,10 @@ function IndexPage() {
       <Navbar />
       <Jumbotron>
         <Typography variant="h2" className={classes.jumbotronHeader}>
-          Bridging the gap between theory and practice.
+          {content.jumbotronTitle}
         </Typography>
         <Typography variant="subtitle1" className={classes.jumbotronSubtitle}>
-          Developer Student Club at Washington University in St. Louis is a
-          university-based community group powered by Google Developers. By
-          joining DSC WashU, students gain experience working in a team
-          environment and building solutions for their community.
+          {content.jumbotronSubtitle.jumbotronSubtitle}
         </Typography>
         <Link to="about" smooth={true}>
           <Button color="primary" variant="outlined" size="large">
@@ -147,26 +146,22 @@ function IndexPage() {
             className={classes.aboutContainer}
           >
             <div>
-              <Typography variant="overline">About Us</Typography>
+              <Typography variant="overline">
+                {content.aboutOverline}
+              </Typography>
               <Typography variant="h3" className={classes.sectionHeader}>
-                What is DSC WashU?
+                {content.aboutTitle}
               </Typography>
               <Typography
                 variant="body1"
                 className={classes.sectionDescription}
               >
-                Developer Student Clubs are university based community groups
-                for students interested in Google developer technologies.
-                Students from all undergraduate or graduate programs with an
-                interest in growing as a developer are welcome. By joining a
-                DSC, students grow their knowledge in a peer-to-peer learning
-                environment and build solutions for local businesses and their
-                community.
+                {content.aboutText.aboutText}
               </Typography>
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href="https://developers.google.com/community/dsc"
+                href={content.aboutLink}
                 className={classes.externalLink}
               >
                 <Button color="primary" variant="outlined" size="large">
@@ -185,33 +180,27 @@ function IndexPage() {
             <div className={classes.iconWrapper}>
               <PeopleIcon fontSize="inherit" />
             </div>
-            <Typography variant="h6">Connect</Typography>
+            <Typography variant="h6">{content.firstPillarTitle}</Typography>
             <Typography variant="subtitle1">
-              Meet other students on campus interested in developer
-              technologies. All are welcome, including those with diverse
-              backgrounds and different majors.
+              {content.firstPillarText.firstPillarText}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={4} className={classes.iconContainer}>
             <div className={classes.iconWrapper}>
               <EditIcon fontSize="inherit" />
             </div>
-            <Typography variant="h6">Learn</Typography>
+            <Typography variant="h6">{content.secondPillarTitle}</Typography>
             <Typography variant="subtitle1">
-              Learn about a wide range of technical topics where new skills are
-              gained through hands-on workshops, in-person training and project
-              building activities.
+              {content.thirdPillarText.thirdPillarText}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={4} className={classes.iconContainer}>
             <div className={classes.iconWrapper}>
               <ComputerIcon fontSize="inherit" />
             </div>
-            <Typography variant="h6">Build</Typography>
+            <Typography variant="h6">{content.thirdPillarTitle}</Typography>
             <Typography variant="subtitle1">
-              Apply your new learnings and connections to build great solutions
-              for local problems. Advance your skills, career and network. Give
-              back to your community by helping others learn as well.
+              {content.secondPillarText.secondPillarText}
             </Typography>
           </Grid>
         </Grid>
@@ -219,17 +208,17 @@ function IndexPage() {
         <Grid container spacing={4} className={classes.swap}>
           <Grid item xs={12} md={4} className={classes.aboutContainer}>
             <div>
-              <Typography variant="overline">Our Gallery</Typography>
+              <Typography variant="overline">
+                {content.galleryOverline}
+              </Typography>
               <Typography variant="h3" className={classes.sectionHeader}>
-                DSC in Action
+                {content.galleryTitle}
               </Typography>
               <Typography
                 variant="body1"
                 className={classes.sectionDescription}
               >
-                Check out some of the photos we&apos;ve gathered over the past
-                couple semesters. We host many different events for WashU
-                students to get involved in the CS community here.
+                {content.galleryText.galleryText}
               </Typography>
             </div>
           </Grid>
@@ -242,16 +231,18 @@ function IndexPage() {
       <Section>
         <Grid container spacing={4}>
           <Grid item xs={12} md={5}>
-            <Typography variant="overline">Project Showcase</Typography>
+            <Typography variant="overline">
+              {content.projectsOverline}
+            </Typography>
             <Typography variant="h3" className={classes.sectionHeader}>
-              Developing for the Community
+              {content.projectsTitle}
             </Typography>
             <Typography variant="body1" className={classes.sectionDescription}>
-              Check out some of the projects that we have done over the past
-              couple semesters. Our projects focus on helping local nonprofits,
-              businesses, and NGO&apos;s with Google Developer technologies so
-              we can submit it to Google&apos;s Annual Solution Challenge.
+              {content.projectsText.projectsText}
             </Typography>
+            <Button color="primary" variant="outlined" size="large">
+              Get Started
+            </Button>
           </Grid>
           <Grid item xs={12} md={7}>
             <Projects />
@@ -262,15 +253,12 @@ function IndexPage() {
       <Section white>
         <Grid container spacing={4} className={classes.swap}>
           <Grid item xs={12} md={5}>
-            <Typography variant="overline">Our Events</Typography>
+            <Typography variant="overline">{content.eventsOverline}</Typography>
             <Typography variant="h3" className={classes.sectionHeader}>
-              Workshops, Networking, &amp; More
+              {content.eventsTitle}
             </Typography>
             <Typography variant="body1" className={classes.sectionDescription}>
-              There are plenty of ways to get involved at DSC WashU even if you
-              are not a project manager or a core team member. Throughout the
-              school year, we host various workshops for Google technologies and
-              events to foster a strong CS community here in St. Louis.
+              {content.eventsText.eventsText}
             </Typography>
           </Grid>
           <Grid item xs={12} md={7}>
@@ -281,14 +269,12 @@ function IndexPage() {
       <div className={classes.anchor} id="team" />
       <Section>
         <Box maxWidth={700}>
-          <Typography variant="overline">The Core Team</Typography>
+          <Typography variant="overline"> {content.teamOverline}</Typography>
           <Typography variant="h3" className={classes.sectionHeader}>
-            Meet the Developers
+            {content.teamTitle}
           </Typography>
           <Typography variant="body1" className={classes.sectionDescription}>
-            The core team works behind the scenes to host all of the events for
-            DSC WashU. Our core team is composed of Technical Leads, Event
-            Planning Leads, Marketing Leads, and the DSC Lead.
+            {content.teamText.teamText}
           </Typography>
         </Box>
         <Team />
@@ -297,16 +283,12 @@ function IndexPage() {
       <Section white>
         <Grid container spacing={4} className={classes.swap}>
           <Grid item xs={12} md={5}>
-            <Typography variant="overline">
-              Frequently Asked Questions
-            </Typography>
+            <Typography variant="overline">{content.faqOverline}</Typography>
             <Typography variant="h3" className={classes.sectionHeader}>
-              Where do I start?
+              {content.faqTitle}
             </Typography>
             <Typography variant="body1" className={classes.sectionDescription}>
-              Here&apos;s a list of commonly asked questions to get you started.
-              If these don&apos;t answer your questions, feel free to contact
-              us!
+              {content.faqText.faqText}
             </Typography>
             <Link to="contact" smooth={true}>
               <Button color="primary" variant="outlined" size="large">
@@ -323,41 +305,139 @@ function IndexPage() {
       <Section>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
-            <Typography variant="overline">Contact Us</Typography>
+            <Typography variant="overline">
+              {content.contactOverline}
+            </Typography>
             <Typography variant="h3" className={classes.sectionHeader}>
-              Available 24/7
+              {content.contactTitle}
             </Typography>
             <Typography variant="body1" className={classes.sectionDescription}>
-              Don&apos;t hesitate to reach out to us via email or social media.
-              We&apos;ll try to get back to you as soon as possible.
+              {content.contactText.contactText}
             </Typography>
           </Grid>
           <Grid item xs={12} md={6} className={classes.socialMedia}>
-            <IconButton className={classes.socialMediaWrapper}>
-              <MailIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton className={classes.socialMediaWrapper}>
-              <SvgIcon fontSize="inherit" viewBox="0 0 448 512">
-                <path
-                  fill="currentColor"
-                  d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"
-                ></path>
-              </SvgIcon>
-            </IconButton>
-            <IconButton className={classes.socialMediaWrapper}>
-              <InstagramIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton className={classes.socialMediaWrapper}>
-              <FacebookIcon fontSize="inherit" />
-            </IconButton>
-            <IconButton className={classes.socialMediaWrapper}>
-              <LinkedInIcon fontSize="inherit" />
-            </IconButton>
+            <a
+              href={"mailto: " + content.mail}
+              className={classes.externalLink}
+            >
+              <IconButton className={classes.socialMediaWrapper}>
+                <MailIcon fontSize="inherit" />
+              </IconButton>
+            </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={content.slack}
+              className={classes.externalLink}
+            >
+              <IconButton className={classes.socialMediaWrapper}>
+                <SvgIcon fontSize="inherit" viewBox="0 0 448 512">
+                  <path
+                    fill="currentColor"
+                    d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"
+                  ></path>
+                </SvgIcon>
+              </IconButton>
+            </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={content.instagram}
+              className={classes.externalLink}
+            >
+              <IconButton className={classes.socialMediaWrapper}>
+                <InstagramIcon fontSize="inherit" />
+              </IconButton>
+            </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={content.facebook}
+              className={classes.externalLink}
+            >
+              <IconButton className={classes.socialMediaWrapper}>
+                <FacebookIcon fontSize="inherit" />
+              </IconButton>
+            </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={content.linkedIn}
+              className={classes.externalLink}
+            >
+              <IconButton className={classes.socialMediaWrapper}>
+                <LinkedInIcon fontSize="inherit" />
+              </IconButton>
+            </a>
           </Grid>
         </Grid>
       </Section>
     </React.Fragment>
   )
 }
+
+export const query = graphql`
+  query IndexPageQuery {
+    contentfulSiteContent {
+      jumbotronTitle
+      jumbotronSubtitle {
+        jumbotronSubtitle
+      }
+      aboutOverline
+      aboutTitle
+      aboutText {
+        aboutText
+      }
+      aboutLink
+      firstPillarTitle
+      firstPillarText {
+        firstPillarText
+      }
+      secondPillarTitle
+      secondPillarText {
+        secondPillarText
+      }
+      thirdPillarTitle
+      thirdPillarText {
+        thirdPillarText
+      }
+      galleryOverline
+      galleryText {
+        galleryText
+      }
+      galleryTitle
+      projectsOverline
+      projectsTitle
+      projectsText {
+        projectsText
+      }
+      eventsOverline
+      eventsTitle
+      eventsText {
+        eventsText
+      }
+      teamOverline
+      teamTitle
+      teamText {
+        teamText
+      }
+      faqOverline
+      faqTitle
+      faqText {
+        faqText
+      }
+      contactTitle
+      contactOverline
+      contactText {
+        contactText
+      }
+      email
+      slack
+      instagram
+      facebook
+      linkedIn
+    }
+  }
+`
 
 export default IndexPage

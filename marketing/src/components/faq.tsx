@@ -7,6 +7,9 @@ import {
 } from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import { useStaticQuery, graphql } from "gatsby"
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
+import { BLOCKS } from "@contentful/rich-text-types"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,132 +23,62 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 function FAQ() {
+  const data = useStaticQuery(graphql`
+    query FAQQuery {
+      allContentfulFaq {
+        edges {
+          node {
+            question
+            answer {
+              json
+            }
+          }
+        }
+      }
+    }
+  `)
+  const faq = data.allContentfulFaq.edges.sort(
+    (a: Record<string, any>, b: Record<string, any>) =>
+      a.node.order - b.node.order
+  )
   const classes = useStyles()
+  const options = {
+    renderNode: {
+      // eslint-disable-next-line react/display-name
+      [BLOCKS.PARAGRAPH]: (node: any, children: React.ReactNode) => (
+        <Typography>{children}</Typography>
+      ),
+    },
+  }
   return (
-    <div>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>
-            What projects are available?
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Here is the{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.google.com/presentation/d/1c7g4xwzgZU0WW5VDO7ALsYb7lXxBrP_o6oxkYAFEAAU/edit"
-            >
-              project lookbook
-            </a>
-            .
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>
-            I am a business and I am interesting in working with DS C WashU.
-            Where can I submit a project application?
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Apply{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSc2m18B19BnRsEEioH64hekNmdRL-0BDqsneRxOpPAuyp64aQ/viewform"
-            >
-              here
-            </a>
-            .
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>
-            How can I apply to be part of the Core Team?
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Apply{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfm_WwiUslNts3dyJl6qH26_lhym_e8X2GOqk47hSPItZeztg/viewform"
-            >
-              here
-            </a>
-            .
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>
-            How can I apply to a specific project?
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Apply{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSeOvIXC-6SqPbeWAuxb_sIGVLq7GQXIXg7-DYK3cbO9Ole_Sg/viewform"
-            >
-              here
-            </a>
-            .
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography className={classes.heading}>
-            How can I join DSC WashU as a general body memeber?
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Sign up{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.google.com/forms/d/e/1FAIpQLScQ0PeauARnEg4316eoIhZby08kddHnY6oJj-muXDM1YCPwQQ/viewform"
-            >
-              here
-            </a>
-            .
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-    </div>
+    <React.Fragment>
+      {faq.map(
+        (
+          {
+            node: {
+              question,
+              answer: { json },
+            },
+          }: Record<string, any>,
+          index: number
+        ) => {
+          return (
+            <ExpansionPanel key={index}>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={classes.heading}>{question}</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                {documentToReactComponents(json, options)}
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          )
+        }
+      )}
+    </React.Fragment>
   )
 }
-
 export default FAQ

@@ -6,23 +6,36 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  DialogContent,
   Typography,
   Button,
+  Theme,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/core/styles"
-import Image from "gatsby-image"
+import Image, { FluidObject } from "gatsby-image"
 import { useStaticQuery, graphql } from "gatsby"
 
 interface ModalProps {
   open: boolean
   onClose: () => void
-  data: Record<string, any>
+  data: ModalData | undefined
 }
 
-const useGalleryStyles = makeStyles(() =>
+interface ModalData {
+  title: string
+  subtitle: string
+  fluid: FluidObject
+}
+
+const useGalleryStyles = makeStyles((theme: Theme) =>
   createStyles({
     gridList: {
-      height: 500,
+      height: 280,
+      [theme.breakpoints.up("sm")]: {
+        height: 500,
+      },
     },
     gridImage: {
       height: "100%",
@@ -48,40 +61,47 @@ const useGalleryStyles = makeStyles(() =>
   })
 )
 
-const useModalStyles = makeStyles(() =>
+const useModalStyles = makeStyles((theme: Theme) =>
   createStyles({
     subtitle: {
       fontWeight: 300,
+      lineHeight: "normal",
     },
     image: {
+      height: "100%",
+    },
+    background: {
       height: "100vh",
+      backgroundColor: theme.palette.grey["900"],
     },
   })
 )
 
-function Modal(props: ModalProps) {
+function Modal({ open, onClose, data }: ModalProps) {
   const classes = useModalStyles()
   return (
     <Dialog
-      onClose={props.onClose}
-      open={props.open}
+      onClose={onClose}
+      open={open}
       scroll="paper"
       maxWidth="lg"
       fullWidth={true}
     >
       <DialogTitle>
-        GCP Essentials Workshop
+        {data?.title}
         <Typography variant="subtitle1" className={classes.subtitle}>
-          Workshop hosted to teach basic Google Cloud Computing
+          {data?.subtitle}
         </Typography>
       </DialogTitle>
-      <Image
-        className={classes.image}
-        fluid={props.data.file.childImageSharp.fluid}
-        imgStyle={{ objectFit: "contain" }}
-      />
+      <DialogContent className={classes.background}>
+        <Image
+          className={classes.image}
+          imgStyle={{ objectFit: "contain" }}
+          fluid={data?.fluid}
+        />
+      </DialogContent>
       <DialogActions>
-        <Button color="primary" variant="outlined" onClick={props.onClose}>
+        <Button color="primary" variant="outlined" onClick={onClose}>
           Ok
         </Button>
       </DialogActions>
@@ -91,20 +111,33 @@ function Modal(props: ModalProps) {
 
 function Gallery() {
   const classes = useGalleryStyles()
+  const theme = useTheme()
+  const isNotMobile = useMediaQuery(theme.breakpoints.up("sm"))
   const data = useStaticQuery(graphql`
     query GalleryQuery {
-      file(name: { eq: "panda" }) {
-        childImageSharp {
-          fluid {
-            aspectRatio
-            ...GatsbyImageSharpFluid_withWebp
+      allContentfulGallery {
+        edges {
+          node {
+            image {
+              fluid {
+                ...GatsbyContentfulFluid_withWebp
+              }
+            }
+            title
+            subtitle
+            order
           }
         }
       }
     }
   `)
+  const gallery = data.allContentfulGallery.edges.sort(
+    (a: Record<string, any>, b: Record<string, any>) =>
+      a.node.order - b.node.order
+  )
   const [hover, setHover] = useState<number | null>(null)
   const [open, setOpen] = React.useState(false)
+  const [modalData, setModalData] = React.useState<ModalData>()
   const handleOpen = () => {
     setOpen(true)
   }
@@ -112,100 +145,50 @@ function Gallery() {
     setOpen(false)
   }
   return (
-    <GridList cellHeight={250} className={classes.gridList} cols={3}>
-      <GridListTile
-        cols={1}
-        rows={1}
-        className={classes.gridTile}
-        onClick={handleOpen}
-      >
-        <div
-          className={classes.gridImageWrapper}
-          onPointerEnter={() => setHover(1)}
-          onPointerLeave={() => setHover(null)}
-        >
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.gridImage}
-          />
-          {hover === 1 && (
-            <GridListTileBar
-              title="GCP Essentials Workshop"
-              subtitle="Workshop hosted to teach basic Google Cloud Computing"
-            />
-          )}
-        </div>
-      </GridListTile>
-      <GridListTile
-        cols={2}
-        rows={1}
-        className={classes.gridTile}
-        onClick={handleOpen}
-      >
-        <div
-          className={classes.gridImageWrapper}
-          onPointerEnter={() => setHover(2)}
-          onPointerLeave={() => setHover(null)}
-        >
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.gridImage}
-          />
-          {hover === 2 && (
-            <GridListTileBar
-              title="GCP Essentials Workshop"
-              subtitle="Workshop hosted to teach basic Google Cloud Computing"
-            />
-          )}
-        </div>
-      </GridListTile>
-      <GridListTile
-        cols={2}
-        rows={2}
-        className={classes.gridTile}
-        onClick={handleOpen}
-      >
-        <div
-          className={classes.gridImageWrapper}
-          onPointerEnter={() => setHover(3)}
-          onPointerLeave={() => setHover(null)}
-        >
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.gridImage}
-          />
-          {hover === 3 && (
-            <GridListTileBar
-              title="GCP Essentials Workshop"
-              subtitle="Workshop hosted to teach basic Google Cloud Computing"
-            />
-          )}
-        </div>
-      </GridListTile>
-      <GridListTile
-        cols={1}
-        rows={2}
-        className={classes.gridTile}
-        onClick={handleOpen}
-      >
-        <div
-          className={classes.gridImageWrapper}
-          onPointerEnter={() => setHover(4)}
-          onPointerLeave={() => setHover(null)}
-        >
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.gridImage}
-          />
-          {hover === 4 && (
-            <GridListTileBar
-              title="GCP Essentials Workshop"
-              subtitle="Workshop hosted to teach basic Google Cloud Computing"
-            />
-          )}
-        </div>
-      </GridListTile>
-      <Modal open={open} onClose={handleClose} data={data} />
+    <GridList
+      cellHeight={isNotMobile ? 250 : 150}
+      className={classes.gridList}
+      cols={3}
+    >
+      {gallery.map(
+        (
+          {
+            node: {
+              image: { fluid },
+              title,
+              subtitle,
+            },
+          }: Record<string, any>,
+          index: number
+        ) => (
+          <GridListTile
+            key={index}
+            cols={(index + 1) % 4 === 0 || (index + 1) % 4 === 1 ? 2 : 1}
+            rows={1}
+            className={classes.gridTile}
+            onClick={handleOpen}
+          >
+            <div
+              className={classes.gridImageWrapper}
+              onPointerEnter={() => {
+                setHover(index)
+                setModalData({
+                  title: title,
+                  subtitle: subtitle,
+                  fluid: fluid,
+                })
+              }}
+              onPointerLeave={() => setHover(null)}
+            >
+              <Image fluid={fluid} className={classes.gridImage} />
+              {hover === index && (
+                <GridListTileBar title={title} subtitle={subtitle} />
+              )}
+            </div>
+          </GridListTile>
+        )
+      )}
+      <Modal open={open} onClose={handleClose} data={modalData} />
     </GridList>
   )
 }

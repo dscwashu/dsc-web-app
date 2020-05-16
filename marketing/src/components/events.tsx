@@ -48,6 +48,7 @@ const useEventStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       alignItems: "stretch",
+      margin: theme.spacing(0, 0.5),
     },
     pagination: {
       alignSelf: "center",
@@ -93,6 +94,7 @@ const useEventModalStyles = makeStyles(() =>
   createStyles({
     subtitle: {
       fontWeight: 300,
+      lineHeight: "normal",
     },
   })
 )

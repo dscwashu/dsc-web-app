@@ -29,6 +29,10 @@ const useStyles = makeStyles(() =>
       height: 0,
       paddingTop: "120%",
     },
+    externalLink: {
+      color: "inherit",
+      textDecoration: "none",
+    },
   })
 )
 
@@ -37,161 +41,80 @@ function Team() {
   const betweenXsSm = useMediaQuery("(max-width:400px)")
   const data = useStaticQuery(graphql`
     query TeamQuery {
-      file(name: { eq: "panda" }) {
-        childImageSharp {
-          fluid {
-            ...GatsbyImageSharpFluid_withWebp
+      allContentfulCoreTeam {
+        edges {
+          node {
+            email
+            linkedIn
+            name
+            title
+            order
+            headshot {
+              fluid {
+                ...GatsbyContentfulFluid_withWebp
+              }
+            }
           }
         }
       }
     }
   `)
+  const team = data.allContentfulCoreTeam.edges.sort(
+    (a: Record<string, any>, b: Record<string, any>) =>
+      a.node.order - b.node.order
+  )
   return (
     <Grid container spacing={2}>
-      <Grid item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
-        <Card>
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.cardPhoto}
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5">
-              Zach Young
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Technical Lead
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.cardActions} disableSpacing={true}>
-            <IconButton size="small">
-              <MailIcon />
-            </IconButton>
-            <IconButton size="small">
-              <LinkedInIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
-      <Grid item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
-        <Card>
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.cardPhoto}
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5">
-              Zach Young
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Technical Lead
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.cardActions} disableSpacing={true}>
-            <IconButton size="small">
-              <MailIcon />
-            </IconButton>
-            <IconButton size="small">
-              <LinkedInIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
-      <Grid item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
-        <Card>
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.cardPhoto}
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5">
-              Zach Young
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Technical Lead
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.cardActions} disableSpacing={true}>
-            <IconButton size="small">
-              <MailIcon />
-            </IconButton>
-            <IconButton size="small">
-              <LinkedInIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
-      <Grid item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
-        <Card>
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.cardPhoto}
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5">
-              Zach Young
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Technical Lead
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.cardActions} disableSpacing={true}>
-            <IconButton size="small">
-              <MailIcon />
-            </IconButton>
-            <IconButton size="small">
-              <LinkedInIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
-      <Grid item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
-        <Card>
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.cardPhoto}
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5">
-              Zach Young
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Technical Lead
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.cardActions} disableSpacing={true}>
-            <IconButton size="small">
-              <MailIcon />
-            </IconButton>
-            <IconButton size="small">
-              <LinkedInIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
-      <Grid item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
-        <Card>
-          <Image
-            fluid={data.file.childImageSharp.fluid}
-            className={classes.cardPhoto}
-          />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5">
-              Zach Young
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Technical Lead
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.cardActions} disableSpacing={true}>
-            <IconButton size="small">
-              <MailIcon />
-            </IconButton>
-            <IconButton size="small">
-              <LinkedInIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
+      {team.map(
+        (
+          {
+            node: {
+              email,
+              linkedIn,
+              name,
+              title,
+              headshot: { fluid },
+            },
+          }: Record<string, any>,
+          index: number
+        ) => (
+          <Grid key={index} item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
+            <Card>
+              <Image fluid={fluid} className={classes.cardPhoto} />
+              <CardContent className={classes.cardContent}>
+                <Typography gutterBottom variant="h5">
+                  {name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {title}
+                </Typography>
+              </CardContent>
+              <CardActions
+                className={classes.cardActions}
+                disableSpacing={true}
+              >
+                <a href={"mailto: " + email} className={classes.externalLink}>
+                  <IconButton size="small">
+                    <MailIcon />
+                  </IconButton>
+                </a>
+                {linkedIn && (
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={linkedIn}
+                    className={classes.externalLink}
+                  >
+                    <IconButton size="small">
+                      <LinkedInIcon />
+                    </IconButton>
+                  </a>
+                )}
+              </CardActions>
+            </Card>
+          </Grid>
+        )
+      )}
     </Grid>
   )
 }

@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
+
+require("dotenv").config()
+
 module.exports = {
   siteMetadata: {
     title: `DSC WashU`,
@@ -46,6 +49,13 @@ module.exports = {
           appId: "1:861657588532:web:78d2361c6a7a9731fdbb61",
           measurementId: "G-7L1RHDWZDD",
         },
+      },
+    },
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: `im1fxa9kl994`,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
       },
     },
   ],

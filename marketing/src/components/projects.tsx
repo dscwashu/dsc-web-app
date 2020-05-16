@@ -92,6 +92,9 @@ const useStyles = makeStyles((theme: Theme) =>
     searchWrapper: {
       flexGrow: 1,
     },
+    filterWrapper: {
+      flexGrow: 0,
+    },
     [theme.breakpoints.up("sm")]: {
       filterWrapper: {
         order: 3,
@@ -127,6 +130,7 @@ const useProjectModalStyles = makeStyles((theme: Theme) =>
   createStyles({
     subtitle: {
       fontWeight: 300,
+      lineHeight: "normal",
     },
     chips: {
       display: "flex",
@@ -328,14 +332,14 @@ function Projects() {
   return (
     <div className={classes.root}>
       <Grid container spacing={2} className={classes.inputs}>
-        <Grid item className={classes.searchWrapper}>
+        <Grid item className={classes.searchWrapper} xs>
           <TextField
             label="Search Project Titles"
             type="search"
             className={classes.search}
           />
         </Grid>
-        <Grid item className={classes.filterWrapper}>
+        <Grid item className={classes.filterWrapper} xs>
           <Button
             endIcon={<FilterListIcon />}
             variant="contained"
@@ -348,7 +352,7 @@ function Projects() {
             onClose={handleFilterModalClose}
           />
         </Grid>
-        <Grid item xs={12} sm={5} className={classes.tagsWrapper}>
+        <Grid item xs={12} sm={6} className={classes.tagsWrapper}>
           <Autocomplete
             multiple
             options={[
