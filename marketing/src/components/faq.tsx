@@ -9,7 +9,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import { useStaticQuery, graphql } from "gatsby"
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
-import { BLOCKS } from "@contentful/rich-text-types"
+import { BLOCKS, INLINES } from "@contentful/rich-text-types"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,6 +47,12 @@ function FAQ() {
       // eslint-disable-next-line react/display-name
       [BLOCKS.PARAGRAPH]: (node: any, children: React.ReactNode) => (
         <Typography>{children}</Typography>
+      ),
+      // eslint-disable-next-line react/display-name
+      [INLINES.HYPERLINK]: (node: any, children: React.ReactNode) => (
+        <a target="_blank" rel="noopener noreferrer" href={node.data.uri}>
+          {children}
+        </a>
       ),
     },
   }
