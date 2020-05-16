@@ -80,7 +80,7 @@ function Team() {
         ) => (
           <Grid key={index} item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
             <Card>
-              <Image fluid={fluid} className={classes.cardPhoto} />
+              <Image fluid={fluid} className={classes.cardPhoto} alt={name} />
               <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5">
                   {name}

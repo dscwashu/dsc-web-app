@@ -72,6 +72,7 @@ const useModalStyles = makeStyles((theme: Theme) =>
     },
     background: {
       height: "100vh",
+      maxHeight: "calc(100vh - 200px)",
       backgroundColor: theme.palette.grey["900"],
     },
   })
@@ -183,7 +184,11 @@ function Gallery() {
               }}
               onPointerLeave={() => setHover(null)}
             >
-              <Image fluid={fluid} className={classes.gridImage} />
+              <Image
+                fluid={fluid}
+                className={classes.gridImage}
+                alt={subtitle}
+              />
               {hover === index && (
                 <GridListTileBar title={title} subtitle={subtitle} />
               )}
