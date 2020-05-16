@@ -68,7 +68,7 @@ const useModalStyles = makeStyles((theme: Theme) =>
       lineHeight: "normal",
     },
     image: {
-      height: "calc(100vh - 250px)",
+      height: "calc(100vh - 200px)",
       backgroundColor: theme.palette.grey["900"],
     },
   })
@@ -80,7 +80,6 @@ function Modal({ open, onClose, data }: ModalProps) {
     <Dialog
       onClose={onClose}
       open={open}
-      scroll="paper"
       maxWidth="lg"
       fullWidth={true}
       aria-labelledby="gallery-modal-title"
