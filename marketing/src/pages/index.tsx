@@ -20,7 +20,6 @@ import {
   IconButton,
   SvgIcon,
   useMediaQuery,
-  Container,
 } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/core/styles"
 import PeopleIcon from "@material-ui/icons/People"
@@ -111,6 +110,17 @@ const useStyles = makeStyles((theme: Theme) =>
     externalLink: {
       color: "inherit",
       textDecoration: "none",
+    },
+    githubLink: {
+      color: "inherit",
+    },
+    footer: {
+      height: "50px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: theme.palette.grey["A400"],
+      color: "#fff",
     },
   })
 )
@@ -388,13 +398,20 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
           </Grid>
         </Grid>
       </Section>
-      <Container>
-        Made with ❤️ by Zach Young.{" "}
-        <a target="_blank" rel="noopener noreferrer" href="">
-          Github
-        </a>
-        .
-      </Container>
+      <div className={classes.footer}>
+        <Typography variant="body1">
+          Made with ❤️ by Zach Young.&nbsp;
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/dscwashu/dsc-web-app"
+            className={classes.githubLink}
+          >
+            Github
+          </a>
+          .
+        </Typography>
+      </div>
     </React.Fragment>
   )
 }

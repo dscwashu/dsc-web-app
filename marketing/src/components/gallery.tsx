@@ -68,7 +68,7 @@ const useModalStyles = makeStyles((theme: Theme) =>
       lineHeight: "normal",
     },
     image: {
-      height: "calc(100vh - 200px)",
+      height: "calc(100vh - 250px)",
       backgroundColor: theme.palette.grey["900"],
     },
   })
