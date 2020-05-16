@@ -240,10 +240,18 @@ function Events() {
                   </Typography>
                 </div>
                 <div className={classes.eventButtons}>
-                  <IconButton size="small" onClick={handleRSVPModalOpen}>
+                  <IconButton
+                    size="small"
+                    onClick={handleRSVPModalOpen}
+                    aria-label="rsvp"
+                  >
                     <EventIcon />
                   </IconButton>
-                  <IconButton size="small" onClick={handleEventModalOpen}>
+                  <IconButton
+                    size="small"
+                    onClick={handleEventModalOpen}
+                    aria-label="info"
+                  >
                     <InfoIcon />
                   </IconButton>
                 </div>
@@ -256,7 +264,7 @@ function Events() {
                 className="MuiTypography-body2 MuiTypography-root"
               />
             </div>
-          </Card>
+          </Card>{" "}
           <Card className={classes.event}>
             <div className={classes.eventDate}>
               <Typography variant="overline" className={classes.overline}>
@@ -273,10 +281,18 @@ function Events() {
                   </Typography>
                 </div>
                 <div className={classes.eventButtons}>
-                  <IconButton size="small" onClick={handleRSVPModalOpen}>
+                  <IconButton
+                    size="small"
+                    onClick={handleRSVPModalOpen}
+                    aria-label="rsvp"
+                  >
                     <EventIcon />
                   </IconButton>
-                  <IconButton size="small" onClick={handleEventModalOpen}>
+                  <IconButton
+                    size="small"
+                    onClick={handleEventModalOpen}
+                    aria-label="info"
+                  >
                     <InfoIcon />
                   </IconButton>
                 </div>
@@ -289,7 +305,7 @@ function Events() {
                 className="MuiTypography-body2 MuiTypography-root"
               />
             </div>
-          </Card>
+          </Card>{" "}
           <Card className={classes.event}>
             <div className={classes.eventDate}>
               <Typography variant="overline" className={classes.overline}>
@@ -306,10 +322,18 @@ function Events() {
                   </Typography>
                 </div>
                 <div className={classes.eventButtons}>
-                  <IconButton size="small" onClick={handleRSVPModalOpen}>
+                  <IconButton
+                    size="small"
+                    onClick={handleRSVPModalOpen}
+                    aria-label="rsvp"
+                  >
                     <EventIcon />
                   </IconButton>
-                  <IconButton size="small" onClick={handleEventModalOpen}>
+                  <IconButton
+                    size="small"
+                    onClick={handleEventModalOpen}
+                    aria-label="info"
+                  >
                     <InfoIcon />
                   </IconButton>
                 </div>
@@ -335,6 +359,88 @@ function Events() {
           aria-labelledby="tab-future"
           id="tabpanel-future"
         >
+          <Card className={classes.event}>
+            <div className={classes.eventDate}>
+              <Typography variant="overline" className={classes.overline}>
+                January
+              </Typography>
+              <Typography variant="h2">16</Typography>
+            </div>
+            <div className={classes.eventDetails}>
+              <div className={classes.eventDetailsHeader}>
+                <div>
+                  <Typography variant="h6">GCP Essentials</Typography>
+                  <Typography variant="subtitle2" className={classes.subtitle}>
+                    7:00 PM - 9:00 PM, Hillman Hall 70
+                  </Typography>
+                </div>
+                <div className={classes.eventButtons}>
+                  <IconButton
+                    size="small"
+                    onClick={handleRSVPModalOpen}
+                    aria-label="rsvp"
+                  >
+                    <EventIcon />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={handleEventModalOpen}
+                    aria-label="info"
+                  >
+                    <InfoIcon />
+                  </IconButton>
+                </div>
+              </div>
+              <ClampLines
+                text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
+                id="really-unique-id"
+                buttons={false}
+                innerElement="div"
+                className="MuiTypography-body2 MuiTypography-root"
+              />
+            </div>
+          </Card>
+          <Card className={classes.event}>
+            <div className={classes.eventDate}>
+              <Typography variant="overline" className={classes.overline}>
+                January
+              </Typography>
+              <Typography variant="h2">16</Typography>
+            </div>
+            <div className={classes.eventDetails}>
+              <div className={classes.eventDetailsHeader}>
+                <div>
+                  <Typography variant="h6">GCP Essentials</Typography>
+                  <Typography variant="subtitle2" className={classes.subtitle}>
+                    7:00 PM - 9:00 PM, Hillman Hall 70
+                  </Typography>
+                </div>
+                <div className={classes.eventButtons}>
+                  <IconButton
+                    size="small"
+                    onClick={handleRSVPModalOpen}
+                    aria-label="rsvp"
+                  >
+                    <EventIcon />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={handleEventModalOpen}
+                    aria-label="info"
+                  >
+                    <InfoIcon />
+                  </IconButton>
+                </div>
+              </div>
+              <ClampLines
+                text="Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes! Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!Learn the basics of the Google Cloud Computing platform at this workshop. There will be free food and prizes!"
+                id="really-unique-id"
+                buttons={false}
+                innerElement="div"
+                className="MuiTypography-body2 MuiTypography-root"
+              />
+            </div>
+          </Card>
           <Card className={classes.event}>
             <div className={classes.eventDate}>
               <Typography variant="overline" className={classes.overline}>
