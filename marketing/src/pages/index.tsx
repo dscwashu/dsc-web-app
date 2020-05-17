@@ -30,7 +30,8 @@ import FacebookIcon from "@material-ui/icons/Facebook"
 import MailIcon from "@material-ui/icons/Mail"
 import LinkedInIcon from "@material-ui/icons/LinkedIn"
 import { Link } from "react-scroll"
-import { graphql } from "gatsby"
+import { graphql, Link as InternalLink } from "gatsby"
+import Image from "gatsby-image"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -111,21 +112,28 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "inherit",
       textDecoration: "none",
     },
-    githubLink: {
+    whiteLink: {
       color: "inherit",
     },
     footer: {
-      height: "50px",
+      height: "150px",
       display: "flex",
+      flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: theme.palette.grey["A400"],
       color: "#fff",
     },
+    grid: {
+      marginBottom: theme.spacing(4),
+    },
   })
 )
 
-function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
+function IndexPage({
+  data,
+  data: { contentfulSiteContent },
+}: Record<string, any>) {
   const betweenSmMd = useMediaQuery("(max-width:749px)")
   const classes = useStyles()
   const content = contentfulSiteContent
@@ -169,6 +177,44 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
               >
                 {content.aboutText.aboutText}
               </Typography>
+              <Grid container spacing={2} className={classes.grid}>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="h6">{content.coreTeamTitle}</Typography>
+                  <Typography variant="body1">
+                    {content.coreTeamText.coreTeamText}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="h6">{content.clientsTitle}</Typography>
+                  <Typography variant="body1">
+                    {content.clientsText.clientsText}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="h6">
+                    {content.projectManagersTitle}
+                  </Typography>
+                  <Typography variant="body1">
+                    {content.projectManagersText.projectManagersText}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="h6">
+                    {content.projectMembersTitle}
+                  </Typography>
+                  <Typography variant="body1">
+                    {content.projectMembersText.projectMembersText}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="h6">
+                    {content.generalBodyMembersTitle}
+                  </Typography>
+                  <Typography variant="body1">
+                    {content.generalBodyMembersText.generalBodyMembersText}
+                  </Typography>
+                </Grid>
+              </Grid>
               <a
                 target="_blank"
                 rel="noopener noreferrer"
@@ -315,6 +361,36 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
       <div className={classes.anchor} id="contact" />
       <Section>
         <Grid container spacing={3}>
+          <Grid item xs={12} md={6} className={classes.aboutContainer}>
+            <div>
+              <Typography variant="overline">
+                {content.businessOverline}
+              </Typography>
+              <Typography variant="h3" className={classes.sectionHeader}>
+                {content.businessTitle}
+              </Typography>
+              <Typography
+                variant="body1"
+                className={classes.sectionDescription}
+              >
+                {content.businessText.businessText}
+              </Typography>
+              <Button color="primary" variant="outlined" size="large">
+                Submit Project
+              </Button>
+            </div>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Image
+              fluid={data.file.childImageSharp.fluid}
+              alt="Vector art of development"
+            />
+          </Grid>
+        </Grid>
+      </Section>
+      <div className={classes.anchor} id="contact" />
+      <Section white>
+        <Grid container spacing={3} className={classes.swap}>
           <Grid item xs={12} md={6}>
             <Typography variant="overline">
               {content.contactOverline}
@@ -400,16 +476,19 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
       </Section>
       <div className={classes.footer}>
         <Typography variant="body1">
+          &copy;&nbsp;DSC WashU. All rights reserved.
+        </Typography>
+        <Typography variant="body1">
           Made with ❤️ by Zach Young.&nbsp;
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://github.com/dscwashu/dsc-web-app"
-            className={classes.githubLink}
-          >
-            Github
-          </a>
-          .
+        </Typography>
+        <Typography variant="body1">
+          <InternalLink to="/privacy" className={classes.whiteLink}>
+            Privacy
+          </InternalLink>
+          &nbsp;and&nbsp;
+          <InternalLink to="/termsandconditions" className={classes.whiteLink}>
+            Terms and Conditions
+          </InternalLink>
         </Typography>
       </div>
     </React.Fragment>
@@ -418,6 +497,13 @@ function IndexPage({ data: { contentfulSiteContent } }: Record<string, any>) {
 
 export const query = graphql`
   query IndexPageQuery {
+    file(name: { eq: "development" }) {
+      childImageSharp {
+        fluid {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
     contentfulSiteContent {
       jumbotronTitle
       jumbotronSubtitle {
@@ -427,6 +513,26 @@ export const query = graphql`
       aboutTitle
       aboutText {
         aboutText
+      }
+      coreTeamTitle
+      coreTeamText {
+        coreTeamText
+      }
+      clientsTitle
+      clientsText {
+        clientsText
+      }
+      projectManagersTitle
+      projectManagersText {
+        projectManagersText
+      }
+      projectMembersTitle
+      projectMembersText {
+        projectMembersText
+      }
+      generalBodyMembersTitle
+      generalBodyMembersText {
+        generalBodyMembersText
       }
       aboutLink
       firstPillarTitle
@@ -465,6 +571,11 @@ export const query = graphql`
       faqTitle
       faqText {
         faqText
+      }
+      businessOverline
+      businessTitle
+      businessText {
+        businessText
       }
       contactTitle
       contactOverline

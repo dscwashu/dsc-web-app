@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "dsc-web-app",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Website for Developer Student Club WashU",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Zach Young <zachary.young@wustl.edu>",
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^13.4.0",
     "@contentful/rich-text-types": "^14.1.0",
@@ -12,9 +12,6 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.53",
     "@material-ui/pickers": "^3.2.10",
-    "@types/react-helmet": "^5.0.15",
-    "@types/react-scroll": "^1.5.4",
-    "@types/react-swipeable-views": "^0.13.0",
     "date-fns": "^2.13.0",
     "dotenv": "^8.2.0",
     "firebase": "^7.14.3",
@@ -43,6 +40,9 @@
     "three": "^0.115.0"
   },
   "devDependencies": {
+    "@types/react-helmet": "^6.0.0",
+    "@types/react-scroll": "^1.5.5",
+    "@types/react-swipeable-views": "^0.13.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "eslint": "^6.8.0",
@@ -72,9 +72,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/dscwashu/dsc-web-app"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/dscwashu/dsc-web-app/issues"
   }
 }

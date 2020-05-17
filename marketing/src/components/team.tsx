@@ -17,12 +17,19 @@ import LinkedInIcon from "@material-ui/icons/LinkedIn"
 
 const useStyles = makeStyles(() =>
   createStyles({
+    card: {
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+    },
     cardContent: {
       paddingBottom: 0,
     },
     cardActions: {
       paddingTop: 0,
       justifyContent: "flex-end",
+      alignItems: "flex-end",
+      flexGrow: 1,
     },
     cardPhoto: {
       width: "100%",
@@ -79,7 +86,7 @@ function Team() {
           index: number
         ) => (
           <Grid key={index} item xs={betweenXsSm ? 12 : 6} sm={4} md={3}>
-            <Card>
+            <Card className={classes.card}>
               <Image fluid={fluid} className={classes.cardPhoto} alt={name} />
               <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5">
