@@ -80,7 +80,7 @@ function Navbar() {
     "Events",
     "Team",
     "FAQ",
-    "Business",
+    "Clients",
     "Contact",
   ]
   return (
