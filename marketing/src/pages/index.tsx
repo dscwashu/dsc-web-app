@@ -19,7 +19,6 @@ import {
   Box,
   IconButton,
   SvgIcon,
-  useMediaQuery,
 } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/core/styles"
 import PeopleIcon from "@material-ui/icons/People"
@@ -134,7 +133,6 @@ function IndexPage({
   data,
   data: { contentfulSiteContent },
 }: Record<string, any>) {
-  const betweenSmMd = useMediaQuery("(max-width:749px)")
   const classes = useStyles()
   const content = contentfulSiteContent
   return (
@@ -158,12 +156,7 @@ function IndexPage({
       <div className={classes.anchor} id="about" />
       <Section white>
         <Grid container spacing={4}>
-          <Grid
-            item
-            xs={12}
-            sm={betweenSmMd ? 12 : 6}
-            className={classes.aboutContainer}
-          >
+          <Grid item xs={12} sm={6} className={classes.aboutContainer}>
             <div>
               <Typography variant="overline">
                 {content.aboutOverline}
@@ -227,7 +220,7 @@ function IndexPage({
               </a>
             </div>
           </Grid>
-          <Grid item xs={12} sm={betweenSmMd ? 12 : 6}>
+          <Grid item xs={12} sm={6}>
             <Lottie />
           </Grid>
         </Grid>
