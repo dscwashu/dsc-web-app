@@ -469,7 +469,7 @@ function IndexPage({
       </Section>
       <div className={classes.footer}>
         <Typography variant="body1">
-          &copy;&nbsp;2020 DSC WashU. All rights reserved.
+          &copy;2020 DSC WashU. All rights reserved.
         </Typography>
         <Typography variant="body1">
           Made with ❤️ by Zach Young.&nbsp;
