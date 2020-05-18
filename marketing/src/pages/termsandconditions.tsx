@@ -10,7 +10,7 @@ const TermsAndConditions = ({
   data: { contentfulSiteContent },
 }: Record<string, any>) => (
   <div className="page-wrapper">
-    <SEO title="Privacy Policy" />
+    <SEO title="Terms and Conditions" />
     <Link to="/">
       <button className="return-button">RETURN HOME</button>
     </Link>
