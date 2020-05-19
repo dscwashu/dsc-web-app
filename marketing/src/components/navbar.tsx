@@ -1,6 +1,5 @@
 import React from "react"
 import Image from "gatsby-image"
-import firebase from "gatsby-plugin-firebase"
 import { useStaticQuery, graphql } from "gatsby"
 import {
   AppBar,
