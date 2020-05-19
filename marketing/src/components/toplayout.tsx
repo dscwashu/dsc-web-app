@@ -12,6 +12,10 @@ export default function TopLayout(props: Props) {
   return (
     <React.Fragment>
       <Helmet>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=UA-167141103-1"
+        ></script>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
