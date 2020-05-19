@@ -37,21 +37,6 @@ module.exports = {
     `gatsby-plugin-material-ui`,
     `gatsby-plugin-typescript`,
     {
-      resolve: "gatsby-plugin-firebase",
-      options: {
-        credentials: {
-          apiKey: "AIzaSyAsFnfs4CmAAVr_Ci4142P7iHBQcVrGCP4",
-          authDomain: "dsc-wash-u-website-202005111.firebaseapp.com",
-          databaseURL: "https://dsc-wash-u-website-202005111.firebaseio.com",
-          projectId: "dsc-wash-u-website-202005111",
-          storageBucket: "dsc-wash-u-website-202005111.appspot.com",
-          messagingSenderId: "861657588532",
-          appId: "1:861657588532:web:78d2361c6a7a9731fdbb61",
-          measurementId: "G-7L1RHDWZDD",
-        },
-      },
-    },
-    {
       resolve: `gatsby-source-contentful`,
       options: {
         spaceId: `im1fxa9kl994`,
