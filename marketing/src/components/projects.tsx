@@ -344,6 +344,7 @@ function Projects() {
       <Grid container spacing={2} className={classes.inputs}>
         <Grid item className={classes.searchWrapper} xs>
           <TextField
+            id="search-projects"
             label="Search Project Titles"
             type="search"
             className={classes.search}

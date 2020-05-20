@@ -194,6 +194,7 @@ function Gallery() {
       cellHeight={isNotMobile ? 250 : 150}
       className={classes.gridList}
       cols={3}
+      component="div"
     >
       {gallery.map(
         (

@@ -156,7 +156,7 @@ function IndexPage({
       <div className={classes.anchor} id="about" />
       <Section white>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} className={classes.aboutContainer}>
+          <Grid item xs={12} md={6} className={classes.aboutContainer}>
             <div>
               <Typography variant="overline">
                 {content.aboutOverline}
@@ -215,12 +215,12 @@ function IndexPage({
                 className={classes.externalLink}
               >
                 <Button color="primary" variant="outlined" size="large">
-                  Learn More
+                  Official Website
                 </Button>
               </a>
             </div>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} md={6}>
             <Lottie />
           </Grid>
         </Grid>
