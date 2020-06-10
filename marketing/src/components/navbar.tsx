@@ -75,8 +75,8 @@ function Navbar() {
   }
   const sections: string[] = [
     "About",
-    "Projects",
-    "Events",
+    // "Projects",
+    // "Events",
     "Team",
     "FAQ",
     "Community",
@@ -100,7 +100,7 @@ function Navbar() {
               />
             </Button>
           </Link>
-          <Hidden smDown>
+          {/* <Hidden smDown>
             {sections.map((section, index) => (
               <Link key={index} to={section.toLowerCase()} smooth={true}>
                 <Button disableRipple={true} className={classes.tabButton}>
@@ -122,7 +122,7 @@ function Navbar() {
             >
               Register
             </Button>
-          </Hidden>
+          </Hidden> */}
           <Hidden mdUp>
             <IconButton
               edge="start"
@@ -142,13 +142,13 @@ function Navbar() {
                   </ListItem>
                 </Link>
               ))}
-              <Divider />
+              {/* <Divider />
               <ListItem button>
                 <ListItemText primary="Login" />
               </ListItem>
               <ListItem button>
                 <ListItemText primary="Register" />
-              </ListItem>
+              </ListItem> */}
             </List>
           </Drawer>
         </Toolbar>

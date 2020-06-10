@@ -351,7 +351,7 @@ function IndexPage({
           </Grid>
         </Grid>
       </Section>
-      <div className={classes.anchor} id="clients" />
+      <div className={classes.anchor} id="community" />
       <Section>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} className={classes.aboutContainer}>
