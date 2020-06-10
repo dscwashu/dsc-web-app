@@ -215,7 +215,7 @@ function IndexPage({
                 className={classes.externalLink}
               >
                 <Button color="primary" variant="outlined" size="large">
-                  Official Website
+                  Parent Organization
                 </Button>
               </a>
             </div>
@@ -277,7 +277,7 @@ function IndexPage({
           </Grid>
         </Grid>
       </Section>
-      <div className={classes.anchor} id="projects" />
+      {/* <div className={classes.anchor} id="projects" />
       <Section>
         <Grid container spacing={4}>
           <Grid item xs={12} md={5}>
@@ -315,7 +315,7 @@ function IndexPage({
             <Events />
           </Grid>
         </Grid>
-      </Section>
+      </Section> */}
       <div className={classes.anchor} id="team" />
       <Section>
         <Box maxWidth={700}>
@@ -368,9 +368,16 @@ function IndexPage({
               >
                 {content.businessText.businessText}
               </Typography>
-              <Button color="primary" variant="outlined" size="large">
-                Submit Project
-              </Button>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSc2m18B19BnRsEEioH64hekNmdRL-0BDqsneRxOpPAuyp64aQ/viewform"
+                className={classes.externalLink}
+              >
+                <Button color="primary" variant="outlined" size="large">
+                  Submit Your Project
+                </Button>
+              </a>
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
