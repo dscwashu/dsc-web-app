@@ -364,7 +364,7 @@ function IndexPage({
             {content.teamTitle}
           </Typography>
           <Typography variant="body1" className={classes.sectionDescription}>
-            {content.teamText.teamText}
+            {renderAst(content.teamText.childMarkdownRemark.htmlAst)}
           </Typography>
         </Box>
         <Team />
@@ -378,7 +378,7 @@ function IndexPage({
               {content.faqTitle}
             </Typography>
             <Typography variant="body1" className={classes.sectionDescription}>
-              {content.faqText.faqText}
+              {renderAst(content.faqText.childMarkdownRemark.htmlAst)}
             </Typography>
             <Link to="contact" smooth={true}>
               <Button color="primary" variant="outlined" size="large">
