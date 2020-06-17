@@ -31,6 +31,38 @@ import LinkedInIcon from "@material-ui/icons/LinkedIn"
 import { Link } from "react-scroll"
 import { graphql, Link as InternalLink } from "gatsby"
 import Image from "gatsby-image"
+import rehypeReact from "rehype-react"
+
+interface BlankProps {
+  children?: React.ReactNode
+}
+
+interface LinkWrapperProps {
+  children?: React.ReactNode
+  href?: string
+}
+
+function LinkWrapper({ href, children }: LinkWrapperProps) {
+  return (
+    <a target="_blank" rel="noopener noreferrer" href={href}>
+      {children}
+    </a>
+  )
+}
+
+function Blank({ children }: BlankProps) {
+  return <React.Fragment>{children}</React.Fragment>
+}
+
+const renderAst = new (rehypeReact as any)({
+  createElement: React.createElement,
+  components: {
+    div: Blank,
+    p: Blank,
+    a: LinkWrapper,
+  },
+  Fragment: React.Fragment,
+}).Compiler
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -145,7 +177,7 @@ function IndexPage({
           {content.jumbotronTitle}
         </Typography>
         <Typography variant="subtitle1" className={classes.jumbotronSubtitle}>
-          {content.jumbotronSubtitle.jumbotronSubtitle}
+          {renderAst(content.jumbotronSubtitle.childMarkdownRemark.htmlAst)}
         </Typography>
         <Link to="about" smooth={true}>
           <Button color="primary" variant="outlined" size="large">
@@ -168,19 +200,21 @@ function IndexPage({
                 variant="body1"
                 className={classes.sectionDescription}
               >
-                {content.aboutText.aboutText}
+                {renderAst(content.aboutText.childMarkdownRemark.htmlAst)}
               </Typography>
               <Grid container spacing={2} className={classes.grid}>
                 <Grid item xs={12} sm={6}>
                   <Typography variant="h6">{content.coreTeamTitle}</Typography>
                   <Typography variant="body1">
-                    {content.coreTeamText.coreTeamText}
+                    {renderAst(
+                      content.coreTeamText.childMarkdownRemark.htmlAst
+                    )}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Typography variant="h6">{content.clientsTitle}</Typography>
                   <Typography variant="body1">
-                    {content.clientsText.clientsText}
+                    {renderAst(content.clientsText.childMarkdownRemark.htmlAst)}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -188,7 +222,9 @@ function IndexPage({
                     {content.projectManagersTitle}
                   </Typography>
                   <Typography variant="body1">
-                    {content.projectManagersText.projectManagersText}
+                    {renderAst(
+                      content.projectManagersText.childMarkdownRemark.htmlAst
+                    )}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -196,7 +232,9 @@ function IndexPage({
                     {content.projectMembersTitle}
                   </Typography>
                   <Typography variant="body1">
-                    {content.projectMembersText.projectMembersText}
+                    {renderAst(
+                      content.projectMembersText.childMarkdownRemark.htmlAst
+                    )}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -204,7 +242,9 @@ function IndexPage({
                     {content.generalBodyMembersTitle}
                   </Typography>
                   <Typography variant="body1">
-                    {content.generalBodyMembersText.generalBodyMembersText}
+                    {renderAst(
+                      content.generalBodyMembersText.childMarkdownRemark.htmlAst
+                    )}
                   </Typography>
                 </Grid>
               </Grid>
@@ -231,8 +271,8 @@ function IndexPage({
               <PeopleIcon fontSize="inherit" />
             </div>
             <Typography variant="h6">{content.firstPillarTitle}</Typography>
-            <Typography variant="subtitle1">
-              {content.firstPillarText.firstPillarText}
+            <Typography variant="body1">
+              {renderAst(content.firstPillarText.childMarkdownRemark.htmlAst)}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={4} className={classes.iconContainer}>
@@ -240,8 +280,8 @@ function IndexPage({
               <EditIcon fontSize="inherit" />
             </div>
             <Typography variant="h6">{content.secondPillarTitle}</Typography>
-            <Typography variant="subtitle1">
-              {content.thirdPillarText.thirdPillarText}
+            <Typography variant="body1">
+              {renderAst(content.secondPillarText.childMarkdownRemark.htmlAst)}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={4} className={classes.iconContainer}>
@@ -249,8 +289,8 @@ function IndexPage({
               <ComputerIcon fontSize="inherit" />
             </div>
             <Typography variant="h6">{content.thirdPillarTitle}</Typography>
-            <Typography variant="subtitle1">
-              {content.secondPillarText.secondPillarText}
+            <Typography variant="body1">
+              {renderAst(content.thirdPillarText.childMarkdownRemark.htmlAst)}
             </Typography>
           </Grid>
         </Grid>
@@ -268,7 +308,7 @@ function IndexPage({
                 variant="body1"
                 className={classes.sectionDescription}
               >
-                {content.galleryText.galleryText}
+                {renderAst(content.galleryText.childMarkdownRemark.htmlAst)}
               </Typography>
             </div>
           </Grid>
@@ -366,7 +406,7 @@ function IndexPage({
                 variant="body1"
                 className={classes.sectionDescription}
               >
-                {content.businessText.businessText}
+                {renderAst(content.businessText.childMarkdownRemark.htmlAst)}
               </Typography>
               <a
                 target="_blank"
@@ -399,7 +439,7 @@ function IndexPage({
               {content.contactTitle}
             </Typography>
             <Typography variant="body1" className={classes.sectionDescription}>
-              {content.contactText.contactText}
+              {renderAst(content.contactText.childMarkdownRemark.htmlAst)}
             </Typography>
           </Grid>
           <Grid item xs={12} md={6} className={classes.socialMedia}>
@@ -507,80 +547,114 @@ export const query = graphql`
     contentfulSiteContent {
       jumbotronTitle
       jumbotronSubtitle {
-        jumbotronSubtitle
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       aboutOverline
       aboutTitle
       aboutText {
-        aboutText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       coreTeamTitle
       coreTeamText {
-        coreTeamText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       clientsTitle
       clientsText {
-        clientsText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       projectManagersTitle
       projectManagersText {
-        projectManagersText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       projectMembersTitle
       projectMembersText {
-        projectMembersText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       generalBodyMembersTitle
       generalBodyMembersText {
-        generalBodyMembersText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       aboutLink
       firstPillarTitle
       firstPillarText {
-        firstPillarText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       secondPillarTitle
       secondPillarText {
-        secondPillarText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       thirdPillarTitle
       thirdPillarText {
-        thirdPillarText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       galleryOverline
       galleryText {
-        galleryText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       galleryTitle
       projectsOverline
       projectsTitle
       projectsText {
-        projectsText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       eventsOverline
       eventsTitle
       eventsText {
-        eventsText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       teamOverline
       teamTitle
       teamText {
-        teamText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       faqOverline
       faqTitle
       faqText {
-        faqText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       businessOverline
       businessTitle
       businessText {
-        businessText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       contactTitle
       contactOverline
       contactText {
-        contactText
+        childMarkdownRemark {
+          htmlAst
+        }
       }
       email
       slack

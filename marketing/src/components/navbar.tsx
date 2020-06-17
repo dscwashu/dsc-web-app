@@ -100,7 +100,7 @@ function Navbar() {
               />
             </Button>
           </Link>
-          {/* <Hidden smDown>
+          <Hidden smDown>
             {sections.map((section, index) => (
               <Link key={index} to={section.toLowerCase()} smooth={true}>
                 <Button disableRipple={true} className={classes.tabButton}>
@@ -108,7 +108,7 @@ function Navbar() {
                 </Button>
               </Link>
             ))}
-            <Button
+            {/* <Button
               color="primary"
               variant="outlined"
               className={classes.loginButton}
@@ -121,8 +121,8 @@ function Navbar() {
               className={classes.registerButton}
             >
               Register
-            </Button>
-          </Hidden> */}
+            </Button> */}
+          </Hidden>
           <Hidden mdUp>
             <IconButton
               edge="start"
