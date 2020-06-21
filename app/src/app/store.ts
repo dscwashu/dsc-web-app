@@ -1,16 +1,22 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import counterReducer from "../features/counter/counterSlice";
+import rootReducer, { RootState } from "./rootReducer";
 
-export const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-  },
+const store = configureStore({
+  reducer: rootReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+if (process.env.NODE_ENV === "development" && module.hot) {
+  module.hot.accept("./rootReducer", () => {
+    const newRootReducer = require("./rootReducer").default;
+    store.replaceReducer(newRootReducer);
+  });
+}
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
   Action<string>
 >;
+
+export default store;

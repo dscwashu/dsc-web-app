@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.10.1",
+    "@material-ui/icons": "^4.9.1",
     "@reduxjs/toolkit": "^1.3.6",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -13,6 +14,7 @@
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.5",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "cypress": "^4.7.0",
@@ -23,11 +25,15 @@
     "eslint-plugin-react": "^7.20.0",
     "firebase": "^7.15.0",
     "husky": "^4.2.5",
+    "install": "^0.13.0",
     "lint-staged": "^10.2.7",
+    "npm": "^6.14.5",
     "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
+    "react-redux-firebase": "^3.6.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "redux-thunk": "^2.3.0",
     "typescript": "^3.8.3"
@@ -37,6 +43,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "type-check": "tsc --noEmit --skipLibCheck",
     "lint": "eslint --ignore-path .gitignore . --ext ts --ext tsx --ext js --ext jsx",
     "lint:fix": "eslint --fix --ignore-path .gitignore . --ext ts --ext tsx --ext js --ext jsx",
     "cypress:open": "cypress open"
@@ -56,10 +63,14 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/webpack-env": "^1.15.2"
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": [
+        "npm run type-check && lint-staged"
+      ]
     }
   },
   "lint-staged": {
