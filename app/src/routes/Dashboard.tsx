@@ -8,9 +8,12 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import Button from "@material-ui/core/Button";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import { useFirebase } from "react-redux-firebase";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -22,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
     appBar: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
+    },
+    title: {
+      flexGrow: 1,
     },
     drawer: {
       width: drawerWidth,
@@ -40,16 +46,24 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Dashboard: React.FC = function () {
+const Dashboard: React.FC<RouteComponentProps> = function (props) {
   const classes = useStyles();
+  const firebase = useFirebase();
+  const signOut = (): void => {
+    firebase.logout();
+    props.history.push("/login");
+  };
 
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap className={classes.title}>
             Permanent drawer
           </Typography>
+          <Button color="inherit" onClick={signOut}>
+            Sign Out
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -120,4 +134,4 @@ const Dashboard: React.FC = function () {
   );
 };
 
-export default Dashboard;
+export default withRouter(Dashboard);

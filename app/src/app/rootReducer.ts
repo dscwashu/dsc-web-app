@@ -1,9 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit";
-
-import userReducer from "../features/user/userSlice";
+import { firebaseReducer } from "react-redux-firebase";
+import { firestoreReducer } from "redux-firestore";
 
 const rootReducer = combineReducers({
-  user: userReducer,
+  firebase: firebaseReducer,
+  firestore: firestoreReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,8 +1,16 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  ThunkAction,
+  Action,
+  getDefaultMiddleware,
+} from "@reduxjs/toolkit";
 import rootReducer, { RootState } from "./rootReducer";
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 });
 
 if (process.env.NODE_ENV === "development" && module.hot) {
