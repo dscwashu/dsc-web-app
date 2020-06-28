@@ -2,27 +2,35 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
   Redirect,
+  Route,
 } from "react-router-dom";
 import Dashboard from "../routes/Dashboard";
 import Login from "../routes/Login";
 import Register from "../routes/Register";
-import PrivateRoute from "../components/PrivateRoute";
+import ForgotPassword from "../routes/ForgotPassword";
+import Handler from "../routes/Handler";
+import ExclusiveRoute from "../components/ExclusiveRoute";
 
 const App: React.FC = function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/login">
+        <ExclusiveRoute type="public" path="/login">
           <Login />
-        </Route>
-        <Route path="/register">
+        </ExclusiveRoute>
+        <ExclusiveRoute type="public" path="/register">
           <Register />
-        </Route>
-        <PrivateRoute path="/dashboard">
+        </ExclusiveRoute>
+        <ExclusiveRoute type="public" path="/forgot">
+          <ForgotPassword />
+        </ExclusiveRoute>
+        <ExclusiveRoute type="private" path="/dashboard">
           <Dashboard />
-        </PrivateRoute>
+        </ExclusiveRoute>
+        <Route path="/handler">
+          <Handler />
+        </Route>
         <Redirect to="/dashboard" />
       </Switch>
     </Router>

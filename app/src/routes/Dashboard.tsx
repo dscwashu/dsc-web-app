@@ -1,4 +1,7 @@
 import React from "react";
+
+import { useFirebase } from "react-redux-firebase";
+
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -12,8 +15,6 @@ import Button from "@material-ui/core/Button";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import { useFirebase } from "react-redux-firebase";
-import { withRouter, RouteComponentProps } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -46,12 +47,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Dashboard: React.FC<RouteComponentProps> = function (props) {
+const Dashboard: React.FC = function () {
   const classes = useStyles();
   const firebase = useFirebase();
   const signOut = (): void => {
     firebase.logout();
-    props.history.push("/login");
   };
 
   return (
@@ -134,4 +134,4 @@ const Dashboard: React.FC<RouteComponentProps> = function (props) {
   );
 };
 
-export default withRouter(Dashboard);
+export default Dashboard;

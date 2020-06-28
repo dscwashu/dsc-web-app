@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useFirebase, Credentials } from "react-redux-firebase";
+
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -6,12 +9,10 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import MaterialLink from "@material-ui/core/Link";
 import GitHubIcon from "@material-ui/icons/GitHub";
-import { Link, withRouter, Redirect } from "react-router-dom";
+
 import AuthLayout from "../components/AuthLayout";
 import GoogleIcon from "../components/GoogleIcon";
-import { useFirebase, Credentials } from "react-redux-firebase";
-import { useSelector } from "react-redux";
-import { RootState } from "../app/rootReducer";
+import { validateEmail } from "../utils/stringUtils";
 
 enum AuthMethod {
   Email = "EMAIL",
@@ -56,16 +57,17 @@ const useStyles = makeStyles((theme: Theme) =>
     dividerText: {
       margin: theme.spacing(0, 1),
     },
-    username: {
+    email: {
       marginBottom: theme.spacing(2),
     },
     password: {
       marginBottom: theme.spacing(1),
     },
     forgot: {
-      marginBottom: theme.spacing(5),
+      marginBottom: theme.spacing(2),
     },
     buttonWrapper: {
+      marginTop: theme.spacing(3),
       display: "flex",
       justifyContent: "space-between",
     },
@@ -85,43 +87,59 @@ const Login: React.FC = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState(false);
-
-  const auth = useSelector((state: RootState) => state.firebase.auth);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [error, setError] = useState("");
 
   const authenticate = (method: AuthMethod): void => {
-    let credentials: Credentials;
-    switch (method) {
-      case AuthMethod.Email:
-        credentials = {
-          email: email,
-          password: password,
-        };
-        break;
-      case AuthMethod.Google:
-        credentials = {
-          provider: "google",
-          type: "popup",
-        };
-        break;
-      case AuthMethod.Github:
-        credentials = {
-          provider: "facebook",
-          type: "popup",
-        };
-        break;
+    let login = true;
+    if (!email) {
+      setEmailError("Please enter an email");
+      login = false;
     }
-    firebase.login(credentials).then(() => {
-      firebase.reloadAuth().then(() => {
-        setRedirect(true);
+    if (!password) {
+      setPasswordError("Please enter a password");
+      login = false;
+    }
+    if (!validateEmail(email) && email) {
+      setEmailError("Invalid email");
+      login = false;
+    }
+    if (login) {
+      let credentials: Credentials;
+      switch (method) {
+        case AuthMethod.Email:
+          credentials = {
+            email: email,
+            password: password,
+          };
+          break;
+        case AuthMethod.Google:
+          credentials = {
+            provider: "google",
+            type: "popup",
+          };
+          break;
+        case AuthMethod.Github:
+          credentials = {
+            provider: "facebook",
+            type: "popup",
+          };
+          break;
+        default:
+          setError("Invalid authenticatin method");
+          return;
+      }
+      firebase.login(credentials).catch(() => {
+        setPassword("");
+        setError("Invalid email or password");
       });
-    });
+    }
   };
 
   return (
     <AuthLayout maxWidth={400}>
-      {redirect && <Redirect to="/dashboard" />}
-      <form className={classes.root} noValidate autoComplete="off">
+      <form className={classes.root} noValidate>
         <Typography variant="h5" className={classes.title}>
           Sign in to DSC Web App
         </Typography>
@@ -153,7 +171,7 @@ const Login: React.FC = () => {
         </Button>
         <div className={classes.dividerWrapper}>
           <Divider className={classes.divider} />
-          <Typography variant="caption" className={classes.dividerText}>
+          <Typography variant="body2" className={classes.dividerText}>
             or
           </Typography>
           <Divider className={classes.divider} />
@@ -162,34 +180,56 @@ const Login: React.FC = () => {
           id="email"
           autoComplete="email"
           label="Email"
+          type="email"
           variant="outlined"
           autoFocus={true}
-          className={classes.username}
+          className={classes.email}
           value={email}
+          error={!!emailError}
+          helperText={emailError}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
+            setEmailError("");
+            setError("");
+            if (e.keyCode === 13) {
+              e.preventDefault();
+              authenticate(AuthMethod.Email);
+            }
+          }}
           onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             setEmail(e.target.value)
           }
+          onBlur={(): void => {
+            if (!validateEmail(email) && email) setEmailError("Invalid email");
+          }}
         />
         <TextField
           id="password"
           autoComplete="current-password"
           label="Password"
-          variant="outlined"
           type="password"
+          variant="outlined"
           className={classes.password}
           value={password}
+          error={!!passwordError}
+          helperText={passwordError}
           onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
             setPassword(e.target.value)
           }
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
+            setPasswordError("");
+            setError("");
             if (e.keyCode === 13) {
+              e.preventDefault();
               authenticate(AuthMethod.Email);
             }
           }}
         />
-        <MaterialLink href="#" className={classes.forgot}>
+        <MaterialLink component={Link} to="/forgot" className={classes.forgot}>
           Forgot your password?
         </MaterialLink>
+        <Typography variant="body1" color="error" align="center">
+          {error}
+        </Typography>
         <div className={classes.buttonWrapper}>
           <Button
             component={Link}
@@ -219,4 +259,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default withRouter(Login);
+export default Login;
