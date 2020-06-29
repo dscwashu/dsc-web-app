@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import SwipeableViews from "react-swipeable-views";
 
 import StudentLogin from "../components/loginTabs/StudentLogin";
 import OrgLogin from "../components/loginTabs/OrgLogin";
@@ -102,20 +101,12 @@ const Login: React.FC = () => {
           aria-controls="full-width-tabpanel-1"
         />
       </Tabs>
-      <SwipeableViews
-        index={tabIndex}
-        onChangeIndex={(index: number): void => {
-          console.log(index);
-          setTabIndex(index);
-        }}
-      >
-        <TabPanel value={tabIndex} index={0}>
-          <StudentLogin />
-        </TabPanel>
-        <TabPanel value={tabIndex} index={1}>
-          <OrgLogin />
-        </TabPanel>
-      </SwipeableViews>
+      <TabPanel value={tabIndex} index={0}>
+        <StudentLogin />
+      </TabPanel>
+      <TabPanel value={tabIndex} index={1}>
+        <OrgLogin />
+      </TabPanel>
     </AuthLayout>
   );
 };

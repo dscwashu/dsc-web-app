@@ -202,8 +202,7 @@ const OrgLogin: React.FC = () => {
         label="Email"
         type="email"
         variant="outlined"
-        // TODO: Causes error if set to true. Need to look into this. Seems like a bug with Material-UI.
-        autoFocus={false}
+        autoFocus={true}
         className={classes.email}
         value={email}
         error={!!emailError}
