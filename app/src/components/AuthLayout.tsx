@@ -19,13 +19,13 @@ const useStyles = makeStyles((theme: Theme) =>
       background: theme.palette.background.default,
       height: "100vh",
       display: "flex",
-      alignItems: "center",
       justifyContent: "center",
+      padding: theme.spacing(2),
     },
     logo: {
       position: "absolute",
-      left: theme.spacing(3),
-      top: theme.spacing(3),
+      left: theme.spacing(2),
+      top: theme.spacing(2),
       width: 250,
       height: "auto",
     },
@@ -36,8 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
     }),
     paper: {
-      padding: theme.spacing(5, 5),
+      marginTop: 100,
+      padding: theme.spacing(5, 2),
       marginBottom: theme.spacing(3),
+      [theme.breakpoints.up(450)]: {
+        padding: theme.spacing(5, 5),
+      },
     },
     links: {
       alignSelf: "stretch",
@@ -77,7 +81,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = function (props) {
           <MaterialLink
             color="textSecondary"
             variant="caption"
-            href="https://www.dscwashu.com/privacy"
+            href="https://www.dscwashu.com/termsandconditions"
             className={classes.terms}
           >
             Terms

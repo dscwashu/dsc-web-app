@@ -1,78 +1,138 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useFirebase } from "react-redux-firebase";
 
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-
-import AuthLayout from "../components/AuthLayout";
-import VerifyEmail from "../components/VerifyEmail";
-import ResetPassword from "../components/ResetPassword";
+import DialogLayout from "../components/DialogLayout";
+import ResetInput from "../components/handlers/ResetInput";
+import LoadingHandler from "../components/handlers/LoadingHandler";
 import { getParams } from "../utils/stringUtils";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-      flexDirection: "column",
-    },
-    title: {
-      marginBottom: theme.spacing(3),
-    },
-    body: {
-      marginBottom: theme.spacing(2),
-    },
-    backButton: {
-      alignSelf: "flex-start",
-    },
-  })
-);
+export enum ParamState {
+  Invalid,
+  Done,
+}
+
+export enum ResetState {
+  Loading,
+  Input,
+  Done,
+  Error,
+}
+
+export enum VerifyState {
+  Loading,
+  Done,
+  Error,
+}
+
+export enum Mode {
+  Reset = "resetPassword",
+  VerifyEmail = "verifyEmail",
+}
 
 const Handler: React.FC = () => {
-  const classes = useStyles();
-
   const location = useLocation();
+
+  const firebase = useFirebase();
 
   const [mode, setMode] = useState("");
   const [oobCode, setOobCode] = useState("");
+  const [paramState, setParamState] = useState<ParamState>();
+  const [resetState, setResetState] = useState<ResetState>(ResetState.Loading);
+  const [verifyState, setVerifyState] = useState<VerifyState>(
+    VerifyState.Loading
+  );
 
   useEffect(() => {
     const params = getParams(location.search);
-    setMode(params.mode);
-    setOobCode(params.oobCode);
+    if (
+      !params.mode ||
+      !params.oobCode ||
+      (params.mode !== Mode.Reset && params.mode !== Mode.VerifyEmail)
+    ) {
+      setParamState(ParamState.Invalid);
+    } else {
+      setMode(params.mode);
+      setOobCode(params.oobCode);
+      setParamState(ParamState.Done);
+    }
   }, [location]);
 
-  if (oobCode) {
-    switch (mode) {
-      case "resetPassword":
-        return <ResetPassword oobCode={oobCode} />;
-      case "verifyEmail":
-        return <VerifyEmail oobCode={oobCode} />;
-      default:
-        break;
-    }
+  switch (paramState) {
+    case ParamState.Invalid:
+      return (
+        <DialogLayout
+          title="Invalid Link"
+          body="The link is invalid or broken."
+        />
+      );
+    case ParamState.Done:
+      switch (mode) {
+        case Mode.Reset:
+          switch (resetState) {
+            case ResetState.Loading:
+              firebase
+                .verifyPasswordResetCode(oobCode)
+                .then(() => {
+                  setResetState(ResetState.Input);
+                })
+                .catch(() => {
+                  setResetState(ResetState.Error);
+                });
+              break;
+            case ResetState.Input:
+              return (
+                <ResetInput oobCode={oobCode} setResetState={setResetState} />
+              );
+            case ResetState.Done:
+              return (
+                <DialogLayout
+                  title="Password Succesfully Reset"
+                  body="You have successfuly reset your password. Please return to the login screen."
+                />
+              );
+            case ResetState.Error:
+              return (
+                <DialogLayout
+                  title="Expired Link"
+                  body="Your request to reset your password has expired or the link has already been used."
+                />
+              );
+          }
+          break;
+        case Mode.VerifyEmail:
+          switch (verifyState) {
+            case VerifyState.Loading:
+              firebase
+                .auth()
+                .applyActionCode(oobCode)
+                .then(() => {
+                  setVerifyState(VerifyState.Done);
+                })
+                .catch(() => {
+                  setVerifyState(VerifyState.Error);
+                });
+              break;
+            case VerifyState.Done:
+              return (
+                <DialogLayout
+                  title="Verification Successful"
+                  body="Your email has been verified. Please return to the application."
+                />
+              );
+            case VerifyState.Error:
+              return (
+                <DialogLayout
+                  title="Expired Link"
+                  body="Your request to verify your email has expired or the link has already been used."
+                />
+              );
+          }
+          break;
+      }
+      break;
   }
-
-  return (
-    <AuthLayout maxWidth={400}>
-      <Typography variant="h5" className={classes.title}>
-        Invalid Link
-      </Typography>
-      <Typography variant="body1" className={classes.body}>
-        The link is invalid or broken.
-      </Typography>
-      <Button
-        component={Link}
-        to="/login"
-        variant="outlined"
-        color="primary"
-        size="large"
-        className={classes.backButton}
-      >
-        Go Back
-      </Button>
-    </AuthLayout>
-  );
+  return <LoadingHandler />;
 };
 
 export default Handler;

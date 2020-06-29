@@ -1,5 +1,13 @@
 export const validateEmail = function (email: string): boolean {
-  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const regex = /\S+@\S+\.\S+/;
+  return regex.test(String(email).toLowerCase());
+};
+
+export const validateEmailDomain = function (
+  email: string,
+  domain: string
+): boolean {
+  const regex = new RegExp("^\\S+@" + domain + "$");
   return regex.test(String(email).toLowerCase());
 };
 

@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
+import DialogLayout from "../components/DialogLayout";
 import AuthLayout from "../components/AuthLayout";
 import { validateEmail } from "../utils/stringUtils";
 
@@ -61,26 +62,10 @@ const ForgotPassword: React.FC = () => {
 
   if (reset) {
     return (
-      <AuthLayout maxWidth={400} className={classes.root}>
-        <React.Fragment>
-          <Typography variant="h5" className={classes.title}>
-            Check Your Email
-          </Typography>
-          <Typography variant="body1" className={classes.body}>
-            Check {email} for instructions on how to reset your password.
-          </Typography>
-          <Button
-            component={Link}
-            to="/login"
-            variant="outlined"
-            color="primary"
-            size="large"
-            className={classes.backButton}
-          >
-            Go Back
-          </Button>
-        </React.Fragment>
-      </AuthLayout>
+      <DialogLayout
+        title="Check Your Email"
+        body={`Check ${email} for instructions on how to reset your password.`}
+      />
     );
   }
 
