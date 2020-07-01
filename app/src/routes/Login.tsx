@@ -11,15 +11,19 @@ import Button from "@material-ui/core/Button";
 import AuthLayout from "../components/AuthLayout";
 import { validateEmail } from "../utils/stringUtils";
 
+import verticallockup from "../images/verticallockup.png";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    logo: {
+      alignSelf: "center",
+      maxWidth: 400,
+      height: "auto",
+      margin: theme.spacing(3, 0, 6),
+    },
     root: {
       display: "flex",
       flexDirection: "column",
-    },
-    title: {
-      alignSelf: "center",
-      marginBottom: theme.spacing(3),
     },
     email: {
       marginBottom: theme.spacing(2),
@@ -81,9 +85,11 @@ const Login: React.FC = () => {
   return (
     <AuthLayout maxWidth={400}>
       <form className={classes.root} noValidate>
-        <Typography variant="h5" className={classes.title} align="center">
-          Sign in to DSC Web App
-        </Typography>
+        <img
+          src={verticallockup}
+          className={classes.logo}
+          alt="DSC WashU Logo"
+        />
         <TextField
           id="email"
           autoComplete="email"
