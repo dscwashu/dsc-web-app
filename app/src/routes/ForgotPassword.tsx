@@ -72,7 +72,7 @@ const ForgotPassword: React.FC = () => {
   return (
     <AuthLayout maxWidth={400}>
       <form noValidate className={classes.root}>
-        <Typography variant="h5" className={classes.title}>
+        <Typography variant="h5" className={classes.title} align="center">
           Forgot Password?
         </Typography>
         <Typography variant="body1" className={classes.title}>

@@ -19,9 +19,9 @@ const App: React.FC = function App() {
         <ExclusiveRoute type="public" path="/login">
           <Login />
         </ExclusiveRoute>
-        <ExclusiveRoute type="public" path="/register">
+        <Route path="/register">
           <Register />
-        </ExclusiveRoute>
+        </Route>
         <ExclusiveRoute type="public" path="/forgot">
           <ForgotPassword />
         </ExclusiveRoute>

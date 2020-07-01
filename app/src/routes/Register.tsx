@@ -1,24 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useFirebase, Credentials } from "react-redux-firebase";
-import rawFirebase from "firebase/app";
+import { useSelector } from "react-redux";
+import { isLoaded, isEmpty } from "react-redux-firebase";
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import GitHubIcon from "@material-ui/icons/GitHub";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
 
+import { RootState } from "../app/rootReducer";
+import AccountType from "../components/register/AccountType";
+import CreateAccount from "../components/register/CreateAccount";
+import EditProfile from "../components/register/EditProfile";
 import AuthLayout from "../components/AuthLayout";
-import GoogleIcon from "../components/GoogleIcon";
-import { validateEmail } from "../utils/stringUtils";
-
-enum AuthMethod {
-  Email = "EMAIL",
-  Google = "GOOGLE",
-  Github = "GITHUB",
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,255 +19,62 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
     },
-    title: {
-      alignSelf: "center",
+    stepper: {
       marginBottom: theme.spacing(3),
-    },
-    googleOAuth: {
-      marginBottom: theme.spacing(1),
-      backgroundColor: theme.palette.common.white,
-      color: theme.palette.getContrastText(theme.palette.common.white),
-      "&:hover": {
-        backgroundColor: theme.palette.grey[200],
-      },
-    },
-    githubOAuth: {
-      marginBottom: theme.spacing(2),
-      backgroundColor: theme.palette.grey[900],
-      color: theme.palette.getContrastText(theme.palette.grey[900]),
-      "&:hover": {
-        backgroundColor: theme.palette.grey[700],
-      },
-    },
-    dividerWrapper: {
-      display: "flex",
-      alignItems: "center",
-      marginBottom: theme.spacing(2),
-    },
-    divider: {
-      flexGrow: 1,
-    },
-    dividerText: {
-      margin: theme.spacing(0, 1),
-    },
-    email: {
-      marginBottom: theme.spacing(2),
-    },
-    password: {
-      marginBottom: theme.spacing(1),
-    },
-    buttonWrapper: {
-      marginTop: theme.spacing(3),
-      display: "flex",
-      justifyContent: "space-between",
-    },
-    registerButton: {
-      alignSelf: "flex-start",
-    },
-    loginButton: {
-      alignSelf: "flex-end",
     },
   })
 );
 
 const Register: React.FC = () => {
   const classes = useStyles();
+  const [activeStep, setActiveStep] = useState(0);
+  const [role, setRole] = useState("student");
+  const [isCreated, setCreated] = useState(false);
 
-  const firebase = useFirebase();
+  const auth = useSelector((state: RootState) => state.firebase.auth);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [error, setError] = useState("");
-
-  const authenticate = (method: AuthMethod): void => {
-    let login = true;
-    if (!email) {
-      setEmailError("Please enter an email");
-      login = false;
-    }
-    if (!password) {
-      setPasswordError("Please enter a password");
-      login = false;
-    }
-    if (!validateEmail(email) && email) {
-      setEmailError("Invalid email");
-      login = false;
-    }
-    if (login) {
-      let credentials: Credentials;
-      let provider: rawFirebase.auth.GithubAuthProvider;
-      switch (method) {
-        case AuthMethod.Email:
-          credentials = {
-            email: email,
-            password: password,
-          };
-          firebase.login(credentials).catch(() => {
-            setError("Invalid username or password");
-          });
-          break;
-        case AuthMethod.Google:
-          credentials = {
-            provider: "google",
-            type: "popup",
-          };
-          firebase.login(credentials).catch((error) => {
-            if (
-              error.code === "auth/account-exists-with-different-credential"
-            ) {
-              setError(
-                "An account already exists with the same email address. Sign in using a provider associated with this email address."
-              );
-            } else {
-              setError(
-                "Error signing in with provider. Please try again later."
-              );
-            }
-          });
-          break;
-        case AuthMethod.Github:
-          // react-redux-firebase does not provide github option :(
-          provider = new rawFirebase.auth.GithubAuthProvider();
-          firebase
-            .auth()
-            .signInWithPopup(provider)
-            .catch((error) => {
-              if (
-                error.code === "auth/account-exists-with-different-credential"
-              ) {
-                setError(
-                  "An account already exists with the same email address. Sign in using a provider associated with this email address."
-                );
-              } else {
-                setError(
-                  "Error signing in with provider. Please try again later."
-                );
-              }
-            });
-          return;
-        default:
-          setError("Invalid authentication method");
-          return;
-      }
-    }
+  const handleNext = (): void => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
+  const handleBack = (): void => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  if (isLoaded(auth) && !isEmpty(auth) && isCreated) {
+    setCreated(false);
+    handleNext();
+  }
+
   return (
-    <AuthLayout maxWidth={400}>
+    <AuthLayout maxWidth={600}>
       <form className={classes.root} noValidate>
-        <Typography variant="h5" className={classes.title} align="center">
-          Create a New Account
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          className={classes.googleOAuth}
-          startIcon={<GoogleIcon />}
-          onClick={(e: React.MouseEvent<HTMLElement>): void => {
-            e.preventDefault();
-            authenticate(AuthMethod.Google);
-          }}
+        <Stepper
+          activeStep={activeStep}
+          alternativeLabel
+          className={classes.stepper}
         >
-          Google
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          className={classes.githubOAuth}
-          startIcon={<GitHubIcon />}
-          onClick={(e: React.MouseEvent<HTMLElement>): void => {
-            e.preventDefault();
-            authenticate(AuthMethod.Github);
-          }}
-        >
-          Github
-        </Button>
-        <div className={classes.dividerWrapper}>
-          <Divider className={classes.divider} />
-          <Typography variant="body2" className={classes.dividerText}>
-            or
-          </Typography>
-          <Divider className={classes.divider} />
-        </div>
-        <TextField
-          id="email"
-          autoComplete="email"
-          label="Email"
-          type="email"
-          variant="outlined"
-          autoFocus={true}
-          className={classes.email}
-          value={email}
-          error={!!emailError}
-          helperText={emailError}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
-            setEmailError("");
-            setError("");
-            if (e.keyCode === 13) {
-              e.preventDefault();
-              authenticate(AuthMethod.Email);
-            }
-          }}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-            setEmail(e.target.value)
-          }
-          onBlur={(): void => {
-            if (!validateEmail(email) && email) setEmailError("Invalid email");
-          }}
-        />
-        <TextField
-          id="password"
-          autoComplete="current-password"
-          label="Password"
-          type="password"
-          variant="outlined"
-          className={classes.password}
-          value={password}
-          error={!!passwordError}
-          helperText={passwordError}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-            setPassword(e.target.value)
-          }
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
-            setPasswordError("");
-            setError("");
-            if (e.keyCode === 13) {
-              e.preventDefault();
-              authenticate(AuthMethod.Email);
-            }
-          }}
-        />
-        <Typography variant="body1" color="error" align="center">
-          {error}
-        </Typography>
-        <div className={classes.buttonWrapper}>
-          <Button
-            component={Link}
-            to="/register"
-            className={classes.registerButton}
-            variant="text"
-            color="primary"
-            size="large"
-          >
-            Sign In Instead
-          </Button>
-          <Button
-            className={classes.loginButton}
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={(e: React.MouseEvent<HTMLElement>): void => {
-              e.preventDefault();
-              authenticate(AuthMethod.Email);
-            }}
-          >
-            Next
-          </Button>
-        </div>
+          <Step>
+            <StepLabel>Account Type</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Create Account</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Edit Profile</StepLabel>
+          </Step>
+        </Stepper>
+        {activeStep === 0 ? (
+          <AccountType handleNext={handleNext} role={role} setRole={setRole} />
+        ) : null}
+        {activeStep === 1 ? (
+          <CreateAccount
+            handleBack={handleBack}
+            setCreated={setCreated}
+            role={role}
+          />
+        ) : null}
+        {activeStep === 2 ? <EditProfile role={role} /> : null}
       </form>
     </AuthLayout>
   );

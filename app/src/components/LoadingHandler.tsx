@@ -3,7 +3,7 @@ import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Skeleton from "@material-ui/lab/Skeleton";
 
-import AuthLayout from "../AuthLayout";
+import AuthLayout from "./AuthLayout";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

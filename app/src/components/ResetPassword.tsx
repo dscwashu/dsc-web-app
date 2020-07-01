@@ -5,8 +5,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
-import AuthLayout from "../AuthLayout";
-import { ResetState } from "../../routes/Handler";
+import AuthLayout from "./AuthLayout";
+import { ResetState } from "../routes/Handler";
 import { useFirebase } from "react-redux-firebase";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -51,34 +51,35 @@ const ResetInput: React.FC<ResetInputProps> = ({ oobCode, setResetState }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const resetPassword = function (): void {
-    let reset = true;
     if (!password) {
       setPasswordError("Please enter a password");
-      reset = false;
+      return;
     }
     if (!confirmPassword) {
       setConfirmError("Please confirm your password");
-      reset = false;
+      return;
     }
-    if (password !== confirmPassword && reset) {
+    if (password.length < 6) {
+      setPasswordError("Password is less than 6 characters");
+      return;
+    }
+    if (password !== confirmPassword) {
       setConfirmError("Passwords do not match");
-      reset = false;
+      return;
     }
-    if (reset) {
-      firebase
-        .confirmPasswordReset(oobCode, password)
-        .then(() => {
-          setResetState(ResetState.Done);
-        })
-        .catch(() => {
-          setError("Error resetting password. Please try again later");
-        });
-    }
+    firebase
+      .confirmPasswordReset(oobCode, password)
+      .then(() => {
+        setResetState(ResetState.Done);
+      })
+      .catch(() => {
+        setError("Error resetting password. Please try again later");
+      });
   };
   return (
     <AuthLayout maxWidth={400}>
       <form noValidate className={classes.root}>
-        <Typography variant="h5" className={classes.title}>
+        <Typography variant="h5" className={classes.title} align="center">
           Reset your password
         </Typography>
         <Typography variant="body1" className={classes.body}>
@@ -115,7 +116,7 @@ const ResetInput: React.FC<ResetInputProps> = ({ oobCode, setResetState }) => {
         />
         <TextField
           id="confirm-password"
-          autoComplete="password"
+          autoComplete="new-password"
           label="Confirm Password"
           type="password"
           variant="outlined"

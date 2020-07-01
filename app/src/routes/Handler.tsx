@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 import { useFirebase } from "react-redux-firebase";
 
 import DialogLayout from "../components/DialogLayout";
-import ResetInput from "../components/handlers/ResetInput";
-import LoadingHandler from "../components/handlers/LoadingHandler";
+import ResetInput from "../components/ResetPassword";
+import LoadingHandler from "../components/LoadingHandler";
 import { getParams } from "../utils/stringUtils";
 
 export enum ParamState {

@@ -33,7 +33,7 @@ const DialogLayout: React.FC<DialogLayoutProps> = ({
 
   return (
     <AuthLayout maxWidth={400}>
-      <Typography variant="h5" className={classes.title}>
+      <Typography variant="h5" className={classes.title} align="center">
         {title}
       </Typography>
       <Typography variant="body1" className={classes.body}>
