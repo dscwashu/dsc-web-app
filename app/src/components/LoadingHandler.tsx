@@ -21,7 +21,12 @@ const LoadingHandler: React.FC = () => {
 
   return (
     <AuthLayout maxWidth={400}>
-      <Skeleton variant="text" animation="wave" className={classes.title} />
+      <Skeleton
+        variant="text"
+        data-testid="skeleton"
+        animation="wave"
+        className={classes.title}
+      />
       <Skeleton variant="text" animation="wave" />
       <Skeleton variant="text" animation="wave" />
       <Skeleton variant="text" animation="wave" className={classes.body} />

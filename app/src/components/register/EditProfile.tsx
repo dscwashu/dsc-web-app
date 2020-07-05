@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { useFirebase } from "react-redux-firebase";
+import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import firebase from "firebase/app";
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -11,8 +13,10 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import { validateUrl } from "../../utils/stringUtils";
+import { RootState } from "../../app/rootReducer";
 
-interface CreateAccountProps {
+interface EditProfileProps {
   role: string;
 }
 
@@ -63,22 +67,57 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
+const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
   const classes = useStyles();
 
+  const firestore = useFirestore();
   const history = useHistory();
+  const uid = useSelector((state: RootState) => state.firebase.auth.uid);
 
-  const firebase = useFirebase();
-
-  const [grade, setGrade] = useState("");
+  const [grade, setGrade] = useState(0);
   const [firstName, setFirstName] = useState("");
+  const [firstNameError, setFirstNameError] = useState("");
   const [lastName, setLastName] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
   const [website, setWebsite] = useState("");
+  const [websiteError, setWebsiteError] = useState("");
   const [bio, setBio] = useState("");
+  const [error, setError] = useState("");
   const CHARACTER_LIMIT = 500;
 
   const updateProfile = (): void => {
-    console.log("update");
+    if (firstName.length === 0 || lastName.length === 0) {
+      if (firstName.length === 0) {
+        setFirstNameError("This is a required field");
+      }
+      if (lastName.length === 0) {
+        setLastNameError("This is a required field");
+      }
+      return;
+    }
+    if (website && !validateUrl(website)) {
+      setWebsiteError("Invalid URL");
+      return;
+    }
+    firestore
+      .collection("users")
+      .doc(uid)
+      .update({
+        firstName: firstName,
+        lastName: lastName,
+        website: website,
+        bio: bio,
+        role: role,
+        grade: grade,
+      })
+      .then(() => {
+        firebase
+          .functions()
+          .httpsCallable("finishProfile")()
+          .then(() => history.push("/dashboard"))
+          .catch((error) => setError(error.message));
+      })
+      .catch((error) => setError(error.message));
   };
 
   return (
@@ -95,6 +134,8 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
           <Grid item xs={6}>
             <TextField
               required
+              error={!!firstNameError}
+              helperText={firstNameError}
               id="first-name"
               autoComplete="given-name"
               label="First Name"
@@ -104,6 +145,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
               value={firstName}
               className={classes.firstName}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
+                setFirstNameError("");
                 if (e.keyCode === 13) {
                   e.preventDefault();
                   updateProfile();
@@ -112,20 +154,27 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                 setFirstName(e.target.value);
               }}
+              onBlur={(): void => {
+                if (firstName.length === 0) {
+                  setFirstNameError("This is a required field");
+                }
+              }}
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
               required
+              error={!!lastNameError}
+              helperText={lastNameError}
               id="last-name"
               autoComplete="family-name"
               label="Last Name"
               type="text"
               variant="outlined"
-              autoFocus={true}
               value={lastName}
               className={classes.lastName}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
+                setLastNameError("");
                 if (e.keyCode === 13) {
                   e.preventDefault();
                   updateProfile();
@@ -134,19 +183,26 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                 setLastName(e.target.value);
               }}
+              onBlur={(): void => {
+                if (lastName.length === 0) {
+                  setLastNameError("This is a required field");
+                }
+              }}
             />
           </Grid>
           <Grid item xs>
             <TextField
               id="website"
+              error={!!websiteError}
+              helperText={websiteError}
               autoComplete="url"
               label="Website"
               type="text"
               variant="outlined"
-              autoFocus={true}
               value={website}
               className={classes.website}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
+                setWebsiteError("");
                 if (e.keyCode === 13) {
                   e.preventDefault();
                   updateProfile();
@@ -154,6 +210,11 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
               }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                 setWebsite(e.target.value);
+              }}
+              onBlur={(): void => {
+                if (website && !validateUrl(website)) {
+                  setWebsiteError("Invalid URL");
+                }
               }}
             />
           </Grid>
@@ -168,10 +229,11 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
                   id="demo-simple-select-outlined"
                   value={grade}
                   onChange={(e: React.ChangeEvent<{ value: unknown }>): void =>
-                    setGrade(e.target.value as string)
+                    setGrade(e.target.value as number)
                   }
                   label="Grade"
                 >
+                  <MenuItem value={0}>N/A</MenuItem>
                   <MenuItem value={1}>First-Year</MenuItem>
                   <MenuItem value={2}>Sophomore</MenuItem>
                   <MenuItem value={3}>Junior</MenuItem>
@@ -187,13 +249,12 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
               id="bio"
               label="Short Bio"
               inputProps={{
-                maxlength: CHARACTER_LIMIT,
+                maxLength: CHARACTER_LIMIT,
               }}
               helperText={`${bio.length}/${CHARACTER_LIMIT}`}
               type="text"
               variant="outlined"
               rows={4}
-              autoFocus={true}
               value={bio}
               className={classes.bio}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -208,6 +269,9 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
             />
           </Grid>
         </Grid>
+        <Typography variant="body1" color="error" align="center">
+          {error}
+        </Typography>
       </div>
       <Button
         onClick={updateProfile}
@@ -222,4 +286,4 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({ role }) {
   );
 };
 
-export default CreateAccount;
+export default EditProfile;

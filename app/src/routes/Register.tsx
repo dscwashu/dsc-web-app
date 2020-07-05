@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { isLoaded, isEmpty } from "react-redux-firebase";
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
@@ -25,11 +26,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+interface LocationState {
+  from: string;
+}
+
 const Register: React.FC = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [role, setRole] = useState("student");
   const [isCreated, setCreated] = useState(false);
+
+  const location = useLocation<LocationState>();
+  useEffect(() => {
+    if (location.state?.from === "dashboard") {
+      setActiveStep(2);
+    }
+  }, [location]);
 
   const auth = useSelector((state: RootState) => state.firebase.auth);
 

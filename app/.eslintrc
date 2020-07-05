@@ -15,7 +15,8 @@
   "env": {
     "browser": true,
     "node": true,
-    "jest": true
+    "jest": true,
+    "es6": true
   },
   "extends": [
     "eslint:recommended",
@@ -26,6 +27,7 @@
     "plugin:cypress/recommended"
   ],
   "rules": {
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

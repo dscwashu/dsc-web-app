@@ -78,7 +78,7 @@ const Login: React.FC = () => {
       password: password,
     };
     firebase.login(credentials).catch(() => {
-      setError("Invalid username or password");
+      setError("Invalid email or password");
     });
   };
 

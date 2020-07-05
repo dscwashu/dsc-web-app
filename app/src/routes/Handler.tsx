@@ -9,7 +9,7 @@ import { getParams } from "../utils/stringUtils";
 
 export enum ParamState {
   Invalid,
-  Done,
+  Valid,
 }
 
 export enum ResetState {
@@ -45,16 +45,19 @@ const Handler: React.FC = () => {
 
   useEffect(() => {
     const params = getParams(location.search);
-    if (
-      !params.mode ||
-      !params.oobCode ||
-      (params.mode !== Mode.Reset && params.mode !== Mode.VerifyEmail)
-    ) {
+    if (params === undefined) {
       setParamState(ParamState.Invalid);
     } else {
-      setMode(params.mode);
-      setOobCode(params.oobCode);
-      setParamState(ParamState.Done);
+      if (
+        !params.oobCode ||
+        (params.mode !== Mode.Reset && params.mode !== Mode.VerifyEmail)
+      ) {
+        setParamState(ParamState.Invalid);
+      } else {
+        setMode(params.mode);
+        setOobCode(params.oobCode);
+        setParamState(ParamState.Valid);
+      }
     }
   }, [location]);
 
@@ -66,7 +69,7 @@ const Handler: React.FC = () => {
           body="The link is invalid or broken."
         />
       );
-    case ParamState.Done:
+    case ParamState.Valid:
       switch (mode) {
         case Mode.Reset:
           switch (resetState) {

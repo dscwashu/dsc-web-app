@@ -80,7 +80,7 @@ const ResetInput: React.FC<ResetInputProps> = ({ oobCode, setResetState }) => {
     <AuthLayout maxWidth={400}>
       <form noValidate className={classes.root}>
         <Typography variant="h5" className={classes.title} align="center">
-          Reset your password
+          Reset Your Password
         </Typography>
         <Typography variant="body1" className={classes.body}>
           Please enter a new password with a minimum 6 characters.

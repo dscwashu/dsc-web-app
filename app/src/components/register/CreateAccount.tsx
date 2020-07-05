@@ -108,11 +108,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
         setCreated(true);
       })
       .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          setEmailError("Email is already in use.");
-        } else {
-          setError("Error creating account. Please try again later.");
-        }
+        setError(error.message);
       });
   };
 

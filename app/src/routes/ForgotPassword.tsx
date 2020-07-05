@@ -54,10 +54,14 @@ const ForgotPassword: React.FC = () => {
       setError("Invalid email");
       return;
     }
-    firebase.resetPassword(email).catch(() => {
-      setError("Email not found");
-    });
-    setReset(true);
+    firebase
+      .resetPassword(email)
+      .then(() => {
+        setReset(true);
+      })
+      .catch(() => {
+        setError("Email not found");
+      });
   };
 
   if (reset) {
