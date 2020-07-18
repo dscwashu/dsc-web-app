@@ -89,4 +89,21 @@ describe("ForgotPassword validation", () => {
       expect(getByText("Check Your Email")).toBeInTheDocument()
     );
   });
+  it("should not fire api if not formatted correctly", async () => {
+    const resetPasswordMock = jest.fn();
+    (useFirebase as any).mockReturnValue({
+      resetPassword: resetPasswordMock,
+    });
+    const { getByText, getByLabelText } = render(
+      <Router>
+        <ForgotPassword />
+      </Router>
+    );
+    fireEvent.click(getByText("Next"));
+    expect(getByText("Please enter an email")).toBeInTheDocument();
+    userEvent.type(getByLabelText("Email"), "asdf");
+    fireEvent.click(getByText("Next"));
+    expect(getByText("Invalid email")).toBeInTheDocument();
+    expect(resetPasswordMock).not.toHaveBeenCalled();
+  });
 });

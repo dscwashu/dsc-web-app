@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { isLoaded, isEmpty } from "react-redux-firebase";
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 
-import { RootState } from "../app/rootReducer";
 import AccountType from "../components/register/AccountType";
 import CreateAccount from "../components/register/CreateAccount";
 import EditProfile from "../components/register/EditProfile";
@@ -34,7 +31,6 @@ const Register: React.FC = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [role, setRole] = useState("student");
-  const [isCreated, setCreated] = useState(false);
 
   const location = useLocation<LocationState>();
   useEffect(() => {
@@ -43,8 +39,6 @@ const Register: React.FC = () => {
     }
   }, [location]);
 
-  const auth = useSelector((state: RootState) => state.firebase.auth);
-
   const handleNext = (): void => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -52,11 +46,6 @@ const Register: React.FC = () => {
   const handleBack = (): void => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  if (isLoaded(auth) && !isEmpty(auth) && isCreated) {
-    setCreated(false);
-    handleNext();
-  }
 
   return (
     <AuthLayout maxWidth={600}>
@@ -82,7 +71,7 @@ const Register: React.FC = () => {
         {activeStep === 1 ? (
           <CreateAccount
             handleBack={handleBack}
-            setCreated={setCreated}
+            handleNext={handleNext}
             role={role}
           />
         ) : null}

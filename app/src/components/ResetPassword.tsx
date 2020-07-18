@@ -64,7 +64,7 @@ const ResetInput: React.FC<ResetInputProps> = ({ oobCode, setResetState }) => {
       return;
     }
     if (password !== confirmPassword) {
-      setConfirmError("Passwords do not match");
+      setConfirmError("Passwords don't match");
       return;
     }
     firebase
@@ -73,7 +73,7 @@ const ResetInput: React.FC<ResetInputProps> = ({ oobCode, setResetState }) => {
         setResetState(ResetState.Done);
       })
       .catch(() => {
-        setError("Error resetting password. Please try again later");
+        setError("Error resetting password. Please try again later.");
       });
   };
   return (

@@ -10,7 +10,7 @@ import { validateEmail, validateEmailDomain } from "../../utils/stringUtils";
 
 interface CreateAccountProps {
   handleBack: () => void;
-  setCreated: (isCreated: boolean) => void;
+  handleNext: () => void;
   role: string;
 }
 
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CreateAccount: React.FC<CreateAccountProps> = function ({
   handleBack,
-  setCreated,
+  handleNext,
   role,
 }) {
   const validate =
@@ -78,6 +78,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
       }
       if (!password) {
         setPasswordError("Please enter a password");
+        return;
       }
       if (!confirmPassword) {
         setConfirmError("Please confirm your password");
@@ -95,7 +96,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
       return;
     }
     if (password !== confirmPassword) {
-      setConfirmError("Passwords do not match");
+      setConfirmError("Passwords don't match");
       return;
     }
     const credentials = {
@@ -105,7 +106,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
     firebase
       .createUser(credentials)
       .then(() => {
-        setCreated(true);
+        handleNext();
       })
       .catch((error) => {
         setError(error.message);

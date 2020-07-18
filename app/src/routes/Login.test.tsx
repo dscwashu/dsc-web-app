@@ -94,4 +94,23 @@ describe("Login validation", () => {
       expect(queryByText("Invalid email or password")).not.toBeInTheDocument()
     );
   });
+  it("should not fire api if not formatted correctly", async () => {
+    const loginMock = jest.fn();
+    (useFirebase as any).mockReturnValue({
+      login: loginMock,
+    });
+    const { getByText, getByLabelText } = render(
+      <Router>
+        <Login />
+      </Router>
+    );
+    fireEvent.click(getByText("Next"));
+    expect(getByText("Please enter an email")).toBeInTheDocument();
+    expect(getByText("Please enter a password")).toBeInTheDocument();
+    userEvent.type(getByLabelText("Email"), "asdf");
+    userEvent.type(getByLabelText("Password"), "password");
+    fireEvent.click(getByText("Next"));
+    expect(getByText("Invalid email")).toBeInTheDocument();
+    expect(loginMock).not.toHaveBeenCalled();
+  });
 });

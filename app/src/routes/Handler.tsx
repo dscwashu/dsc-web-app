@@ -90,7 +90,7 @@ const Handler: React.FC = () => {
             case ResetState.Done:
               return (
                 <DialogLayout
-                  title="Password Succesfully Reset"
+                  title="Password Successfully Reset"
                   body="You have successfuly reset your password. Please return to the login screen."
                 />
               );

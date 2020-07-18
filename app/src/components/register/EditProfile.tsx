@@ -20,7 +20,6 @@ interface EditProfileProps {
   role: string;
 }
 
-// update
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
