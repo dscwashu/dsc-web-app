@@ -31,7 +31,7 @@ export const seedData = (data?: Record<string, any>): Promise<any[]> => {
   const dataArray: Promise<any>[] = [];
   if (data) {
     for (const key in data) {
-      dataArray.push(adminDb.doc(key).set(Object.assign({}, data[key])));
+      dataArray.push(adminDb.doc(key).set(data[key]));
     }
   }
   return Promise.all(dataArray);
