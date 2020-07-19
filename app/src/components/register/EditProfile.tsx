@@ -101,10 +101,10 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
       .collection("users")
       .doc(uid)
       .update({
-        firstName: firstName,
-        lastName: lastName,
-        website: website,
-        bio: bio,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        website: website.trim(),
+        bio: bio.trim(),
         role: role,
         grade: grade,
         finishProfile: true,
