@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Disable read/write by default
+
+    match /{document=**} {
+    	allow read, write: if false;
+		}
+
+    // General Functions
+
+    function isTrimmedString(text) {
+      return text.matches('^\\S.*\\S?$')
+    }
+
+    function isUnmodified(key) {
+      return request.resource.data[key] == resource.data[key]
+    }
+
+    // Profile
+        
+    function hasName(firstName, lastName) {
+    	return isTrimmedString(firstName) && isTrimmedString(lastName) && firstName.size() <= 35 && lastName.size() <= 35;
+    }
+    
+    function hasRole(role) {
+    	let validStudent = role == "student" && resource.data.security == "internal";
+    	return validStudent || role == "org";
+    }
+    
+    function checkGrade(grade) {
+    	return grade == 0 || grade == 1 || grade == 2 || grade == 3 || grade == 4 || grade == 5;
+    }
+    
+    function checkWebsite(website) {
+    	return website.size() == 0 || (website.matches('^((https?|ftp|smtp):\\/\\/)?([a-z0-9]+.)?[a-z0-9]+\\.[a-z]+(\\/[a-zA-Z0-9#]*\\/?)*$') && website.size() < 2084);
+    }
+    
+    function checkBio(bio) {
+    	return bio.size() <= 500;
+    }
+
+    function checkProfileKeys(keys) {
+      return isUnmodified("security") && keys.hasOnly(["firstName", "lastName", "bio", "grade", "role", "website", "security", "finishProfile"]);
+    }
+
+    function validateProfile (data) {
+    	let hasName = hasName(data.firstName, data.lastName);
+      let hasRole = hasRole(data.role);
+      let validGrade = checkGrade(data.grade);
+      let validWebsite = checkWebsite(data.website);
+      let validBio = checkBio(data.bio);
+      let validKeys = checkProfileKeys(data.keys());
+      return hasName && hasRole && validGrade && validWebsite && validBio && validKeys && data.finishProfile == true;
+		}
+    match /users/{uid} {
+    	allow read: if request.auth.uid == uid;
+    	allow update: if request.auth.uid == uid && validateProfile(request.resource.data)
+    }
+  }
+}

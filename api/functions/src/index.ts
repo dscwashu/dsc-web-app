@@ -22,24 +22,6 @@ export const createProfile = functions.auth.user().onCreate((user) => {
     .catch((error) => functions.logger.error(error));
 });
 
-export const finishProfile = functions.https.onCall((data, context) => {
-  const uid = context.auth?.uid;
-  if (uid) {
-    return db
-      .collection("users")
-      .doc(uid)
-      .get()
-      .then(() => {
-        db.collection("users")
-          .doc(uid)
-          .update({ finishProfile: true })
-          .catch((error) => functions.logger.error(error));
-      })
-      .catch((error) => functions.logger.error(error));
-  }
-  return null;
-});
-
 export const deleteProfile = functions.auth.user().onDelete((user) => {
   const { uid } = user;
   return db.collection("users").doc(uid).delete();
