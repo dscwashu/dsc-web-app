@@ -10,7 +10,7 @@ service cloud.firestore {
     // General Functions
 
     function isTrimmedString(text) {
-      return text.matches('^\\S.*\\S?$')
+      return text == text.trim() && text.size() > 0;
     }
 
     function isUnmodified(key) {
@@ -37,7 +37,7 @@ service cloud.firestore {
     }
     
     function checkBio(bio) {
-    	return bio.size() <= 500;
+    	return bio.size() == 0 || (bio.size() <= 500 && isTrimmedString(bio));
     }
 
     function checkProfileKeys(keys) {

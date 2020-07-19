@@ -56,7 +56,7 @@ describe("Profile access", () => {
       })
     ).toAllow();
   });
-  it("should deny update without first and last name", async () => {
+  it("should deny update with invalid first and last name", async () => {
     await expect(
       db.collection("users").doc("testuser").update({
         firstName: "Zach",
@@ -83,6 +83,17 @@ describe("Profile access", () => {
       db.collection("users").doc("testuser").update({
         firstName: "",
         lastName: "",
+        website: "www.google.com",
+        bio: "I like food",
+        role: "org",
+        grade: 0,
+        finishProfile: true,
+      })
+    ).toDeny();
+    await expect(
+      db.collection("users").doc("testuser").update({
+        firstName: " Zach ",
+        lastName: "Young",
         website: "www.google.com",
         bio: "I like food",
         role: "org",
@@ -117,8 +128,19 @@ describe("Profile access", () => {
           finishProfile: true,
         })
     ).toDeny();
+    await expect(
+      db.collection("users").doc("testuser").update({
+        firstName: "Zach",
+        lastName: "Young",
+        website: " www.google.com",
+        bio: "I like food",
+        role: "org",
+        grade: 0,
+        finishProfile: true,
+      })
+    ).toDeny();
   });
-  it("should deny update with bio > 500 chars", async () => {
+  it("should deny update with invalid bio", async () => {
     await expect(
       db
         .collection("users")
@@ -132,6 +154,17 @@ describe("Profile access", () => {
           grade: 0,
           finishProfile: true,
         })
+    ).toDeny();
+    await expect(
+      db.collection("users").doc("testuser").update({
+        firstName: "Zach",
+        lastName: "Young",
+        website: "",
+        bio: " I like food",
+        role: "org",
+        grade: 0,
+        finishProfile: true,
+      })
     ).toDeny();
   });
   it("should verify role based on authentication email", async () => {
