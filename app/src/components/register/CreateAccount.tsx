@@ -5,6 +5,11 @@ import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import MaterialLink from "@material-ui/core/Link";
+import Checkbox from "@material-ui/core/Checkbox";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
 
 import { validateEmail, validateEmailDomain } from "../../utils/stringUtils";
 
@@ -13,6 +18,14 @@ interface CreateAccountProps {
   handleNext: () => void;
   role: string;
 }
+
+const useLabelStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    label: {
+      ...theme.typography.caption,
+    },
+  })
+);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,10 +51,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     confirm: {
-      marginBottom: theme.spacing(3),
-    },
-    caption: {
       marginBottom: theme.spacing(2),
+    },
+    agree: {
+      marginBottom: theme.spacing(3),
     },
     buttonWrapper: {
       display: "flex",
@@ -60,6 +73,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
       ? (email: string): boolean => validateEmailDomain(email, "wustl.edu")
       : validateEmail;
   const classes = useStyles();
+  const labelClasses = useLabelStyles();
 
   const firebase = useFirebase();
 
@@ -70,6 +84,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
   const [error, setError] = useState("");
   const [confirmError, setConfirmError] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [checked, setChecked] = useState(false);
 
   const signUp = (): void => {
     let match = true;
@@ -81,7 +96,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
       setPasswordError("Please enter a password");
       match = false;
     }
-    if (!confirmPassword) {
+    if (password && !confirmPassword) {
       setConfirmError("Please confirm your password");
       match = false;
     }
@@ -97,6 +112,10 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
     }
     if (password && confirmPassword && password !== confirmPassword) {
       setConfirmError("Passwords don't match");
+      match = false;
+    }
+    if (!checked) {
+      setError("Please agree to the privacy policy and terms and conditions");
       match = false;
     }
     if (match) {
@@ -152,7 +171,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
         />
         <TextField
           id="password"
-          autoComplete="current-password"
+          autoComplete="new-password"
           label="Password"
           type="password"
           variant="outlined"
@@ -182,7 +201,7 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
         />
         <TextField
           id="confirm-password"
-          autoComplete="current-password"
+          autoComplete="new-password"
           label="Confirm Password"
           type="password"
           variant="outlined"
@@ -205,9 +224,45 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
               setConfirmError("Passwords don't match");
           }}
         />
-        <Typography variant="caption" className={classes.caption}>
-          The password must be a minimum of 6 characters.
-        </Typography>
+        <FormControlLabel
+          classes={labelClasses}
+          className={classes.agree}
+          onChange={(): void => {
+            if (
+              error ===
+              "Please agree to the privacy policy and terms and conditions"
+            ) {
+              setError("");
+            }
+            setChecked(!checked);
+          }}
+          control={
+            <Checkbox
+              checked={checked}
+              icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+              checkedIcon={<CheckBoxIcon fontSize="small" />}
+            />
+          }
+          label={
+            <React.Fragment>
+              {"I agree to the "}
+              <MaterialLink
+                variant="caption"
+                href="https://www.dscwashu.com/privacy"
+              >
+                Privacy Policy
+              </MaterialLink>
+              {" and "}
+              <MaterialLink
+                variant="caption"
+                href="https://www.dscwashu.com/terms"
+              >
+                Terms and Conditions
+              </MaterialLink>
+              .
+            </React.Fragment>
+          }
+        />
         <Typography variant="body1" color="error" align="center">
           {error}
         </Typography>

@@ -84,6 +84,7 @@ describe("CreateAccount validation", () => {
     userEvent.type(getByLabelText("WUSTL Email"), "test@wustl.edu");
     userEvent.type(getByLabelText("Password"), "password");
     userEvent.type(getByLabelText("Confirm Password"), "password");
+    fireEvent.click(getByText("I agree to the", { exact: false }));
     fireEvent.click(getByText("Next"));
     await waitFor(() =>
       expect(getByText("Error placeholder")).toBeInTheDocument()
@@ -129,6 +130,23 @@ describe("CreateAccount validation", () => {
     expect(getByText("Password is less than 6 characters")).toBeInTheDocument();
     expect(createUserMock).not.toHaveBeenCalled();
   });
+  it("should remove agree error if checkbox is clicked", () => {
+    const { getByText, queryByText } = render(
+      <CreateAccount
+        handleBack={jest.fn()}
+        handleNext={jest.fn()}
+        role="student"
+      />
+    );
+    fireEvent.click(getByText("Next"));
+    expect(
+      getByText("Please agree to the privacy policy and terms and conditions")
+    ).toBeInTheDocument();
+    fireEvent.click(getByText("I agree to the", { exact: false }));
+    expect(
+      queryByText("Please agree to the privacy policy and terms and conditions")
+    ).not.toBeInTheDocument();
+  });
   it("should not fire api and show correct errors if not formatted correctly on submit", async () => {
     const createUserMock = jest.fn();
     (useFirebase as any).mockReturnValue({
@@ -140,6 +158,9 @@ describe("CreateAccount validation", () => {
     fireEvent.click(getByText("Next"));
     expect(getByText("Please enter an email")).toBeInTheDocument();
     expect(getByText("Please enter a password")).toBeInTheDocument();
+    expect(
+      getByText("Please agree to the privacy policy and terms and conditions")
+    ).toBeInTheDocument();
     userEvent.type(getByLabelText("Email"), "test");
     userEvent.type(getByLabelText("Password"), "password");
     fireEvent.click(getByText("Next"));
