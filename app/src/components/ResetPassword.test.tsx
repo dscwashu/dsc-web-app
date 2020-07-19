@@ -17,7 +17,7 @@ describe("ResetPassword validation", () => {
     fireEvent.blur(getByLabelText("New Password"));
     expect(getByText("Password is less than 6 characters")).toBeInTheDocument();
   });
-  it("should remove 'short password' errors on type", () => {
+  it("should remove short password errors on type", () => {
     const { getByLabelText, getByText, queryByText } = render(
       <Router>
         <ResetPassword oobCode="123" setResetState={jest.fn()} />
@@ -42,7 +42,7 @@ describe("ResetPassword validation", () => {
     fireEvent.blur(getByLabelText("Confirm Password"));
     expect(getByText("Passwords don't match")).toBeInTheDocument();
   });
-  it("should remove 'password mismatch' error on type", () => {
+  it("should remove password mismatch error on type", () => {
     const { getByLabelText, getByText, queryByText } = render(
       <Router>
         <ResetPassword oobCode="123" setResetState={jest.fn()} />
@@ -77,7 +77,7 @@ describe("ResetPassword validation", () => {
       ).toBeInTheDocument()
     );
   });
-  it("should not fire api if not formatted correctly", () => {
+  it("should not fire api and show correct errors if not formatted correctly on submit", async () => {
     const confirmPasswordResetMock = jest.fn();
     (useFirebase as any).mockReturnValue({
       confirmPasswordReset: confirmPasswordResetMock,

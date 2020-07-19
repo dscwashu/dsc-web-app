@@ -60,26 +60,28 @@ const Login: React.FC = () => {
   const [error, setError] = useState("");
 
   const authenticate = (): void => {
-    if (!email || !password) {
-      if (!email) {
-        setEmailError("Please enter an email");
-      }
-      if (!password) {
-        setPasswordError("Please enter a password");
-      }
-      return;
+    let match = true;
+    if (!email.trim()) {
+      setEmailError("Please enter an email");
+      match = false;
     }
-    if (!validateEmail(email)) {
+    if (!password.trim()) {
+      setPasswordError("Please enter a password");
+      match = false;
+    }
+    if (email.trim() && !validateEmail(email)) {
       setEmailError("Invalid email");
-      return;
+      match = false;
     }
     const credentials = {
       email: email,
       password: password,
     };
-    firebase.login(credentials).catch(() => {
-      setError("Invalid email or password");
-    });
+    if (match) {
+      firebase.login(credentials).catch(() => {
+        setError("Invalid email or password");
+      });
+    }
   };
 
   return (

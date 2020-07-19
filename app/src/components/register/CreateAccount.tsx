@@ -72,45 +72,47 @@ const CreateAccount: React.FC<CreateAccountProps> = function ({
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const signUp = (): void => {
-    if (!email || !password || !confirmPassword) {
-      if (!email) {
-        setEmailError("Please enter an email");
-      }
-      if (!password) {
-        setPasswordError("Please enter a password");
-        return;
-      }
-      if (!confirmPassword) {
-        setConfirmError("Please confirm your password");
-      }
-      return;
+    let match = true;
+    if (!email) {
+      setEmailError("Please enter an email");
+      match = false;
     }
-    if (!validate(email)) {
+    if (!password) {
+      setPasswordError("Please enter a password");
+      match = false;
+    }
+    if (!confirmPassword) {
+      setConfirmError("Please confirm your password");
+      match = false;
+    }
+    if (email && !validate(email)) {
       role === "student"
         ? setEmailError("Invalid @wustl.edu email")
         : setEmailError("Invalid email");
-      return;
+      match = false;
     }
-    if (password.length < 6) {
+    if (password && password.length < 6) {
       setPasswordError("Password is less than 6 characters");
-      return;
+      match = false;
     }
-    if (password !== confirmPassword) {
+    if (password && confirmPassword && password !== confirmPassword) {
       setConfirmError("Passwords don't match");
-      return;
+      match = false;
     }
-    const credentials = {
-      email: email,
-      password: password,
-    };
-    firebase
-      .createUser(credentials)
-      .then(() => {
-        handleNext();
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+    if (match) {
+      const credentials = {
+        email: email,
+        password: password,
+      };
+      firebase
+        .createUser(credentials)
+        .then(() => {
+          handleNext();
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
+    }
   };
 
   return (

@@ -35,8 +35,7 @@ describe("EditProfile validation", () => {
   });
   it("should respect bio character limit", () => {
     const { getByLabelText } = render(<EditProfile role="student" />);
-    const testString = "a".repeat(501);
-    userEvent.type(getByLabelText("Short Bio"), testString);
+    userEvent.type(getByLabelText("Short Bio"), "a".repeat(501));
     expect(getByLabelText("Short Bio").textContent?.length).toEqual(500);
   });
   it("should show error on bad response", async () => {
@@ -58,14 +57,20 @@ describe("EditProfile validation", () => {
       expect(getByText("Error placeholder")).toBeInTheDocument()
     );
   });
-  it("should not fire api if not formatted correctly", () => {
+  it("should not fire api and show correct errors if not formatted correctly on submit", async () => {
     const collectionMock = jest.fn();
     (useFirestore as any).mockReturnValue({
       collection: collectionMock,
     });
-    const { getAllByText, getByText } = render(<EditProfile role="student" />);
+    const { getAllByText, getByText, getByLabelText } = render(
+      <EditProfile role="student" />
+    );
     fireEvent.click(getByText("Next"));
     expect(getAllByText("This is a required field").length).toEqual(2);
+    userEvent.type(getByLabelText("Website"), "wwwgooglecom");
+    fireEvent.click(getByText("Next"));
+    expect(getAllByText("This is a required field").length).toEqual(2);
+    expect(getByText("Invalid URL")).toBeInTheDocument();
     expect(collectionMock).not.toHaveBeenCalled();
   });
 });

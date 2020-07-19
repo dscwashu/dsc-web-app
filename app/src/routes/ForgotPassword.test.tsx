@@ -17,7 +17,7 @@ describe("ForgotPassword validation", () => {
     fireEvent.blur(getByLabelText("Email"));
     expect(getByText("Invalid email")).toBeInTheDocument();
   });
-  it("should remove 'Invalid email' on type", () => {
+  it("should remove invalid email error on type", () => {
     const { getByLabelText, getByText, queryByText } = render(
       <Router>
         <ForgotPassword />
@@ -29,7 +29,7 @@ describe("ForgotPassword validation", () => {
     userEvent.type(getByLabelText("Email"), "typing");
     expect(queryByText("Invalid email")).not.toBeInTheDocument();
   });
-  it("should ask to enter  email on submit", () => {
+  it("should ask to enter email on submit", () => {
     const { getByText } = render(
       <Router>
         <ForgotPassword />
@@ -38,7 +38,7 @@ describe("ForgotPassword validation", () => {
     fireEvent.click(getByText("Next"));
     expect(getByText("Please enter an email")).toBeInTheDocument();
   });
-  it("should remove 'please enter' error on type", () => {
+  it("should remove please enter error on type", () => {
     const { getByText, getByLabelText, queryByText } = render(
       <Router>
         <ForgotPassword />
@@ -49,7 +49,7 @@ describe("ForgotPassword validation", () => {
     userEvent.type(getByLabelText("Email"), "typing");
     expect(queryByText("Please enter an email")).not.toBeInTheDocument();
   });
-  it("should show 'Invalid email' on invalid submit", () => {
+  it("should show invalid email error on invalid submit", () => {
     const { getByText, getByLabelText } = render(
       <Router>
         <ForgotPassword />
@@ -59,7 +59,7 @@ describe("ForgotPassword validation", () => {
     fireEvent.click(getByText("Next"));
     expect(getByText("Invalid email")).toBeInTheDocument();
   });
-  it("should show 'Invalid email or password' on bad request", async () => {
+  it("should show invalid email or password error on bad request", async () => {
     const { getByText, getByLabelText } = render(
       <Router>
         <ForgotPassword />
@@ -89,7 +89,7 @@ describe("ForgotPassword validation", () => {
       expect(getByText("Check Your Email")).toBeInTheDocument()
     );
   });
-  it("should not fire api if not formatted correctly", async () => {
+  it("should not fire api and show correct errors if not formatted correctly on submit", async () => {
     const resetPasswordMock = jest.fn();
     (useFirebase as any).mockReturnValue({
       resetPassword: resetPasswordMock,

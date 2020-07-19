@@ -17,7 +17,7 @@ describe("Login validation", () => {
     fireEvent.blur(getByLabelText("Email"));
     expect(getByText("Invalid email")).toBeInTheDocument();
   });
-  it("should remove 'Invalid email' on type", () => {
+  it("should remove invalid email on type", () => {
     const { getByLabelText, getByText, queryByText } = render(
       <Router>
         <Login />
@@ -39,7 +39,7 @@ describe("Login validation", () => {
     expect(getByText("Please enter an email")).toBeInTheDocument();
     expect(getByText("Please enter a password")).toBeInTheDocument();
   });
-  it("should remove 'please enter' errors on type", () => {
+  it("should remove please enter errors on type", () => {
     const { getByText, getByLabelText, queryByText } = render(
       <Router>
         <Login />
@@ -53,7 +53,7 @@ describe("Login validation", () => {
     expect(queryByText("Please enter an email")).not.toBeInTheDocument();
     expect(queryByText("Please enter a password")).not.toBeInTheDocument();
   });
-  it("should show 'Invalid email' on invalid submit", () => {
+  it("should show invalid email on invalid submit", () => {
     const { getByText, getByLabelText } = render(
       <Router>
         <Login />
@@ -64,7 +64,7 @@ describe("Login validation", () => {
     fireEvent.click(getByText("Next"));
     expect(getByText("Invalid email")).toBeInTheDocument();
   });
-  it("should show 'Invalid email or password' on bad request", async () => {
+  it("should show invalid email or password on bad request", async () => {
     const { getByText, getByLabelText } = render(
       <Router>
         <Login />
@@ -94,7 +94,7 @@ describe("Login validation", () => {
       expect(queryByText("Invalid email or password")).not.toBeInTheDocument()
     );
   });
-  it("should not fire api if not formatted correctly", async () => {
+  it("should not fire api and show correct errors if not formatted correctly on submit", async () => {
     const loginMock = jest.fn();
     (useFirebase as any).mockReturnValue({
       login: loginMock,
@@ -108,8 +108,8 @@ describe("Login validation", () => {
     expect(getByText("Please enter an email")).toBeInTheDocument();
     expect(getByText("Please enter a password")).toBeInTheDocument();
     userEvent.type(getByLabelText("Email"), "asdf");
-    userEvent.type(getByLabelText("Password"), "password");
     fireEvent.click(getByText("Next"));
+    expect(getByText("Please enter a password")).toBeInTheDocument();
     expect(getByText("Invalid email")).toBeInTheDocument();
     expect(loginMock).not.toHaveBeenCalled();
   });

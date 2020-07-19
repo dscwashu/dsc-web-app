@@ -129,7 +129,7 @@ describe("CreateAccount validation", () => {
     expect(getByText("Password is less than 6 characters")).toBeInTheDocument();
     expect(createUserMock).not.toHaveBeenCalled();
   });
-  it("should not fire api if not formatted correctly (Any Email)", () => {
+  it("should not fire api and show correct errors if not formatted correctly on submit", async () => {
     const createUserMock = jest.fn();
     (useFirebase as any).mockReturnValue({
       createUser: createUserMock,
@@ -143,13 +143,10 @@ describe("CreateAccount validation", () => {
     userEvent.type(getByLabelText("Email"), "test");
     userEvent.type(getByLabelText("Password"), "password");
     fireEvent.click(getByText("Next"));
-    expect(getByText("Please confirm your password")).toBeInTheDocument();
-    userEvent.type(getByLabelText("Confirm Password"), "password");
-    fireEvent.click(getByText("Next"));
     expect(getByText("Invalid email")).toBeInTheDocument();
+    expect(getByText("Please confirm your password")).toBeInTheDocument();
     userEvent.clear(getByLabelText("Email"));
     userEvent.clear(getByLabelText("Password"));
-    userEvent.clear(getByLabelText("Confirm Password"));
     userEvent.type(getByLabelText("Email"), "test@gmail.com");
     userEvent.type(getByLabelText("Password"), "password");
     userEvent.type(getByLabelText("Confirm Password"), "mismatch");

@@ -84,35 +84,45 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
   const CHARACTER_LIMIT = 500;
 
   const updateProfile = (): void => {
-    if (firstName.length === 0 || lastName.length === 0) {
-      if (firstName.length === 0) {
-        setFirstNameError("This is a required field");
-      }
-      if (lastName.length === 0) {
-        setLastNameError("This is a required field");
-      }
-      return;
+    let match = true;
+    if (!firstName) {
+      setFirstNameError("This is a required field");
+      match = false;
+    }
+    if (!lastName) {
+      setLastNameError("This is a required field");
+      match = false;
+    }
+    if (firstName && firstName.length > 35) {
+      setFirstNameError("First name must be less than 36 characters");
+      match = false;
+    }
+    if (lastName && lastName.length > 35) {
+      setFirstNameError("First name must be less than 36 characters");
+      match = false;
     }
     if (website && !validateUrl(website)) {
       setWebsiteError("Invalid URL");
-      return;
+      match = false;
     }
-    firestore
-      .collection("users")
-      .doc(uid)
-      .update({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        website: website.trim(),
-        bio: bio.trim(),
-        role: role,
-        grade: grade,
-        finishProfile: true,
-      })
-      .then(() => {
-        history.push("/dashboard");
-      })
-      .catch((error) => setError(error.message));
+    if (match) {
+      firestore
+        .collection("users")
+        .doc(uid)
+        .update({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          website: website.trim(),
+          bio: bio.trim(),
+          role: role,
+          grade: grade,
+          finishProfile: true,
+        })
+        .then(() => {
+          history.push("/dashboard");
+        })
+        .catch((error) => setError(error.message));
+    }
   };
 
   return (
