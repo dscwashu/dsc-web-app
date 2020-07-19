@@ -159,11 +159,6 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                 setFirstName(e.target.value);
               }}
-              onBlur={(): void => {
-                if (firstName.length === 0) {
-                  setFirstNameError("This is a required field");
-                }
-              }}
             />
           </Grid>
           <Grid item xs={6}>
@@ -187,11 +182,6 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
               }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                 setLastName(e.target.value);
-              }}
-              onBlur={(): void => {
-                if (lastName.length === 0) {
-                  setLastNameError("This is a required field");
-                }
               }}
             />
           </Grid>
