@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useFirestore } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import firebase from "firebase/app";
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -108,13 +107,10 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
         bio: bio,
         role: role,
         grade: grade,
+        finishProfile: true,
       })
       .then(() => {
-        firebase
-          .functions()
-          .httpsCallable("finishProfile")()
-          .then(() => history.push("/dashboard"))
-          .catch((error) => setError(error.message));
+        history.push("/dashboard");
       })
       .catch((error) => setError(error.message));
   };

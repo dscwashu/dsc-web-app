@@ -8,12 +8,6 @@ jest.mock("react-redux-firebase");
 jest.mock("react-redux");
 (useSelector as any).mockReturnValue(123);
 
-// URL validation
-// First Name Last Name Required
-// Character Limit on bio
-// Should not fire API if invalid
-// Error on bad request
-
 describe("EditProfile validation", () => {
   it("should hide grade field for orgs", () => {
     const { queryByLabelText } = render(<EditProfile role="orgs" />);
