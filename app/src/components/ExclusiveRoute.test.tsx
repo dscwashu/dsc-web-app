@@ -177,40 +177,59 @@ describe("Exclusive route handling", () => {
         uid: "testuser",
       },
     });
-    store.dispatch({
-      type: "@@reduxFirestore/SET_LISTENER",
-      meta: {
-        collection: "users",
-        doc: "testuser",
-      },
-      payload: {
-        name: "users/testuser",
-      },
-    });
-    store.dispatch({
-      type: "@@reduxFirestore/LISTENER_RESPONSE",
-      meta: {
-        collection: "users",
-        doc: "testuser",
-      },
-      payload: {
-        data: {
-          testuser: {
-            finishProfile: false,
-          },
+    const setListenerMock = (): void => {
+      store.dispatch({
+        type: "@@reduxFirestore/SET_LISTENER",
+        meta: {
+          collection: "users",
+          doc: "testuser",
         },
-        order: [
-          {
-            id: "testuser",
-            finishProfile: false,
+        payload: {
+          name: "users/testuser",
+        },
+      });
+    };
+    const unsetListenerMock = (): void => {
+      store.dispatch({
+        type: "@@reduxFirestore/UNSET_LISTENER",
+        meta: {
+          collection: "users",
+          doc: "testuser",
+        },
+        payload: {
+          name: "users/testuser",
+        },
+      });
+    };
+    const listenerResponseMock = (finishProfile: boolean): void => {
+      store.dispatch({
+        type: "@@reduxFirestore/LISTENER_RESPONSE",
+        meta: {
+          collection: "users",
+          doc: "testuser",
+        },
+        payload: {
+          data: {
+            testuser: {
+              finishProfile: finishProfile,
+            },
           },
-        ],
-      },
-      merge: {
-        docs: true,
-        collections: true,
-      },
-    });
+          order: [
+            {
+              id: "testuser",
+              finishProfile: finishProfile,
+            },
+          ],
+        },
+        merge: {
+          docs: true,
+          collections: true,
+        },
+      });
+    };
+    setListenerMock();
+    unsetListenerMock();
+    listenerResponseMock(false);
     const EditProfileMock: React.FC = () => {
       const [redirect, setRedirect] = useState(false);
       if (redirect) return <Redirect to="/dashboard" />;
@@ -251,97 +270,15 @@ describe("Exclusive route handling", () => {
       </Provider>
     );
     await waitFor(() => expect(getByText("Redirect")).toBeInTheDocument());
-    store.dispatch({
-      type: "@@reduxFirestore/UNSET_LISTENER",
-      meta: {
-        collection: "users",
-        doc: "testuser",
-      },
-      payload: {
-        name: "users/testuser",
-      },
-    });
+    unsetListenerMock();
     fireEvent.click(getByText("Redirect"));
-    store.dispatch({
-      type: "@@reduxFirestore/SET_LISTENER",
-      meta: {
-        collection: "users",
-        doc: "testuser",
-      },
-      payload: {
-        name: "users/testuser",
-      },
-    });
-    store.dispatch({
-      type: "@@reduxFirestore/LISTENER_RESPONSE",
-      meta: {
-        collection: "users",
-        doc: "testuser",
-      },
-      payload: {
-        data: {
-          testuser: {
-            finishProfile: false,
-          },
-        },
-        order: [
-          {
-            id: "testuser",
-            finishProfile: false,
-          },
-        ],
-      },
-      merge: {
-        docs: true,
-        collections: true,
-      },
-    });
+    setListenerMock();
+    listenerResponseMock(false);
     await waitFor(() => expect(queryByText("Hello")).not.toBeInTheDocument());
-    store.dispatch({
-      type: "@@reduxFirestore/UNSET_LISTENER",
-      meta: {
-        collection: "users",
-        doc: "testuser",
-      },
-      payload: {
-        name: "users/testuser",
-      },
-    });
+    unsetListenerMock();
     fireEvent.click(getByText("Redirect"));
-    store.dispatch({
-      type: "@@reduxFirestore/SET_LISTENER",
-      meta: {
-        collection: "users",
-        doc: "testuser",
-      },
-      payload: {
-        name: "users/testuser",
-      },
-    });
-    store.dispatch({
-      type: "@@reduxFirestore/LISTENER_RESPONSE",
-      meta: {
-        collection: "users",
-        doc: "testuser",
-      },
-      payload: {
-        data: {
-          testuser: {
-            finishProfile: true,
-          },
-        },
-        order: [
-          {
-            id: "testuser",
-            finishProfile: true,
-          },
-        ],
-      },
-      merge: {
-        docs: true,
-        collections: true,
-      },
-    });
+    setListenerMock();
+    listenerResponseMock(true);
     await waitFor(() => expect(getByText("Hello")).toBeInTheDocument());
   });
 });
