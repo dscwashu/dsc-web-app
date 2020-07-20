@@ -22,7 +22,7 @@ enum ProfileState {
   Valid,
 }
 
-const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
+export const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
   auth,
   children,
 }) => {
@@ -31,28 +31,21 @@ const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
     ProfileState.Loading
   );
   useFirestoreConnect([{ collection: "users", doc: auth.uid }]);
-  const { requesting, requested, finishProfile } = useSelector(
-    (state: RootState) => {
-      return {
-        requesting: state.firestore.status.requesting["users/" + auth.uid],
-        requested: state.firestore.status.requested["users/" + auth.uid],
-        finishProfile: state.firestore.data.users?.[auth.uid]?.finishProfile,
-      };
-    }
-  );
+  const { requested, finishProfile } = useSelector((state: RootState) => {
+    return {
+      requested: state.firestore.status.requested["users/" + auth.uid],
+      finishProfile: state.firestore.data.users?.[auth.uid]?.finishProfile,
+    };
+  });
   useEffect(() => {
-    if (requesting === true) {
-      setProfileState(ProfileState.Loading);
-    } else {
-      if (requested === true) {
-        if (finishProfile === true) {
-          setProfileState(ProfileState.Valid);
-        } else {
-          setProfileState(ProfileState.Redirect);
-        }
+    if (requested === true) {
+      if (finishProfile === true) {
+        setProfileState(ProfileState.Valid);
+      } else {
+        setProfileState(ProfileState.Redirect);
       }
     }
-  }, [requesting, requested, finishProfile]);
+  }, [requested, finishProfile]);
   useEffect(() => {
     if (profileState === ProfileState.Retry) {
       history.push("/register", { from: "dashboard" });

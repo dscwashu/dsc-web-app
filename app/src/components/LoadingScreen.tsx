@@ -23,7 +23,7 @@ const LoadingDashboard: React.FC = function (props) {
 
   return (
     <div className={classes.root}>
-      <LinearProgress className={classes.progress} />
+      <LinearProgress data-testid="progress" className={classes.progress} />
     </div>
   );
 };
