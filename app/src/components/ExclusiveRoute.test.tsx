@@ -157,7 +157,7 @@ describe("Exclusive route handling", () => {
     );
     await waitFor(() => expect(getByText("Hello")).toBeInTheDocument());
   });
-  it("should redirect to register edit profile if profile already loaded and retrying", async () => {
+  it("should be able to redirect back and forth if profile already loaded before", async () => {
     jest.restoreAllMocks();
     const store = configureStore({
       reducer: rootReducer,
