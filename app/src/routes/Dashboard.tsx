@@ -1,6 +1,8 @@
 import React from "react";
-
+import { useSelector } from "react-redux";
 import { useFirebase } from "react-redux-firebase";
+
+import { Route, Link, useLocation } from "react-router-dom";
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -13,8 +15,13 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Button from "@material-ui/core/Button";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import EventIcon from "@material-ui/icons/Event";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+
+import { RootState } from "../app/rootReducer";
+import horizontallockup from "../images/horizontallockup.png";
 
 const drawerWidth = 240;
 
@@ -38,28 +45,45 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
     },
     // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
+    toolbar: {
+      ...theme.mixins.toolbar,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
     content: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.default,
       padding: theme.spacing(3),
     },
+    logo: {
+      width: drawerWidth - 20,
+      height: "auto",
+    },
   })
 );
 
 const Dashboard: React.FC = function () {
+  const location = useLocation();
   const classes = useStyles();
   const firebase = useFirebase();
   const signOut = (): void => {
     firebase.logout();
   };
+  const auth = useSelector((state: RootState) => state.firebase.auth);
+  const { firstName } = useSelector((state: RootState) => {
+    return {
+      firstName: state.firestore.data.users?.[auth.uid]?.firstName,
+    };
+  });
 
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap className={classes.title}>
-            Permanent drawer
+            {location.pathname.split("/")[1].charAt(0).toUpperCase() +
+              location.pathname.split("/")[1].slice(1)}
           </Typography>
           <Button color="inherit" onClick={signOut}>
             Sign Out
@@ -74,61 +98,47 @@ const Dashboard: React.FC = function () {
         }}
         anchor="left"
       >
-        <div className={classes.toolbar} />
+        <div className={classes.toolbar}>
+          <img
+            src={horizontallockup}
+            alt="DSC WashU Logo"
+            className={classes.logo}
+          />
+        </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button component={Link} to="/dashboard">
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItem>
+          <ListItem button component={Link} to="/projects">
+            <ListItemIcon>
+              <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="Projects" />
+          </ListItem>
+          <ListItem button component={Link} to="/events">
+            <ListItemIcon>
+              <EventIcon />
+            </ListItemIcon>
+            <ListItemText primary="Events" />
+          </ListItem>
+          <ListItem button component={Link} to="/applications">
+            <ListItemIcon>
+              <AssignmentIndIcon />
+            </ListItemIcon>
+            <ListItemText primary="Applications" />
+          </ListItem>
         </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <Route path="/dashboard/">Welcome, {firstName}</Route>
+        <Route path="/projects">projects</Route>
+        <Route path="/events">events</Route>
+        <Route path="/applications">applications</Route>
       </main>
     </div>
   );

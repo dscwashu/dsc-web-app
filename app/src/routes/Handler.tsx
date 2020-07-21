@@ -61,6 +61,35 @@ const Handler: React.FC = () => {
     }
   }, [location]);
 
+  useEffect(() => {
+    if (verifyState === VerifyState.Loading && oobCode) {
+      firebase
+        .auth()
+        .applyActionCode(oobCode)
+        .then(() => {
+          firebase
+            .reloadAuth()
+            .then(() => setVerifyState(VerifyState.Done))
+            .catch(() => setVerifyState(VerifyState.Error));
+        })
+        .catch(() => {
+          setVerifyState(VerifyState.Error);
+        });
+    }
+  }, [verifyState, firebase, oobCode]);
+  useEffect(() => {
+    if (resetState === ResetState.Loading && oobCode) {
+      firebase
+        .verifyPasswordResetCode(oobCode)
+        .then(() => {
+          setResetState(ResetState.Input);
+        })
+        .catch(() => {
+          setResetState(ResetState.Error);
+        });
+    }
+  }, [resetState, firebase, oobCode]);
+
   switch (paramState) {
     case ParamState.Invalid:
       return (
@@ -74,14 +103,6 @@ const Handler: React.FC = () => {
         case Mode.Reset:
           switch (resetState) {
             case ResetState.Loading:
-              firebase
-                .verifyPasswordResetCode(oobCode)
-                .then(() => {
-                  setResetState(ResetState.Input);
-                })
-                .catch(() => {
-                  setResetState(ResetState.Error);
-                });
               break;
             case ResetState.Input:
               return (
@@ -106,21 +127,13 @@ const Handler: React.FC = () => {
         case Mode.VerifyEmail:
           switch (verifyState) {
             case VerifyState.Loading:
-              firebase
-                .auth()
-                .applyActionCode(oobCode)
-                .then(() => {
-                  setVerifyState(VerifyState.Done);
-                })
-                .catch(() => {
-                  setVerifyState(VerifyState.Error);
-                });
               break;
             case VerifyState.Done:
               return (
                 <DialogLayout
                   title="Verification Successful"
                   body="Your email has been verified. Please return to the application."
+                  buttonOptions={{ path: "/dashboard" }}
                 />
               );
             case VerifyState.Error:

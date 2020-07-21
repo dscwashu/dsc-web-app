@@ -25,8 +25,9 @@ const App: React.FC = function App() {
         <ExclusiveRoute type="public" path="/forgot">
           <ForgotPassword />
         </ExclusiveRoute>
-        <ExclusiveRoute type="private" path="/dashboard">
+        <ExclusiveRoute type="private" path="/">
           <Dashboard />
+          <Redirect to="/dashboard" />
         </ExclusiveRoute>
         <Route path="/handler">
           <Handler />

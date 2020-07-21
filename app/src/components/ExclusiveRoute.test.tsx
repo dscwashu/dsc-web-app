@@ -7,9 +7,13 @@ import * as redux from "react-redux";
 import { useSelector, Provider } from "react-redux";
 import rootReducer from "../app/rootReducer";
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import * as rrf from "react-redux-firebase";
+import { useFirebase, FirebaseReducer } from "react-redux-firebase";
 jest.spyOn(redux, "useSelector").mockImplementation(jest.fn());
-jest.spyOn(rrf, "useFirestoreConnect").mockImplementation(jest.fn());
+jest.mock("react-redux-firebase", () => ({
+  ...(jest.requireActual("react-redux-firebase") as Record<string, any>),
+  useFirestoreConnect: jest.fn(),
+  useFirebase: jest.fn(),
+}));
 
 describe("Exclusive route handling", () => {
   it("should show loading screen if auth is loading", () => {
@@ -95,9 +99,7 @@ describe("Exclusive route handling", () => {
           path="/dashboard"
           render={(): React.ReactNode => {
             return (
-              <FinishProfileChecker
-                auth={{} as rrf.FirebaseReducer.AuthState}
-              />
+              <FinishProfileChecker auth={{} as FirebaseReducer.AuthState} />
             );
           }}
         />
@@ -118,9 +120,7 @@ describe("Exclusive route handling", () => {
             path="/dashboard"
             render={(): React.ReactNode => {
               return (
-                <FinishProfileChecker
-                  auth={{} as rrf.FirebaseReducer.AuthState}
-                />
+                <FinishProfileChecker auth={{} as FirebaseReducer.AuthState} />
               );
             }}
           />
@@ -136,10 +136,19 @@ describe("Exclusive route handling", () => {
     );
     await waitFor(() => expect(redirectLocation.pathname).toEqual("/register"));
   });
-  it("should return children if profile loaded and finishProfile is true", async () => {
+  it("should return children if profile loaded and finishProfile is true and verified student/org", async () => {
     (useSelector as any).mockReturnValue({
       requested: true,
       finishProfile: true,
+      role: "student",
+      emailVerified: true,
+    });
+    (useFirebase as any).mockReturnValue({
+      auth: () => {
+        return {
+          currentUser: null,
+        };
+      },
     });
     const { getByText } = render(
       <MemoryRouter initialEntries={["/dashboard"]}>
@@ -147,7 +156,7 @@ describe("Exclusive route handling", () => {
           path="/dashboard"
           render={(): React.ReactNode => {
             return (
-              <FinishProfileChecker auth={{} as rrf.FirebaseReducer.AuthState}>
+              <FinishProfileChecker auth={{} as FirebaseReducer.AuthState}>
                 <div>Hello</div>
               </FinishProfileChecker>
             );
@@ -156,6 +165,44 @@ describe("Exclusive route handling", () => {
       </MemoryRouter>
     );
     await waitFor(() => expect(getByText("Hello")).toBeInTheDocument());
+    (useSelector as any).mockReturnValue({
+      requested: true,
+      finishProfile: true,
+      role: "org",
+      emailVerified: false,
+    });
+  });
+  it("should return 'verify email' dialog if profile loaded and finishProfile is true and unverified student", async () => {
+    (useSelector as any).mockReturnValue({
+      requested: true,
+      finishProfile: true,
+      role: "student",
+      emailVerified: false,
+    });
+    (useFirebase as any).mockReturnValue({
+      auth: () => {
+        return {
+          currentUser: null,
+        };
+      },
+    });
+    const { getByText } = render(
+      <MemoryRouter initialEntries={["/dashboard"]}>
+        <Route
+          path="/dashboard"
+          render={(): React.ReactNode => {
+            return (
+              <FinishProfileChecker auth={{} as FirebaseReducer.AuthState}>
+                <div>Hello</div>
+              </FinishProfileChecker>
+            );
+          }}
+        />
+      </MemoryRouter>
+    );
+    await waitFor(() =>
+      expect(getByText("Verify Your Email")).toBeInTheDocument()
+    );
   });
   it("should be able to redirect back and forth if profile already loaded before", async () => {
     jest.restoreAllMocks();
@@ -252,7 +299,7 @@ describe("Exclusive route handling", () => {
               render={(): React.ReactNode => {
                 return (
                   <FinishProfileChecker
-                    auth={{ uid: "testuser" } as rrf.FirebaseReducer.AuthState}
+                    auth={{ uid: "testuser" } as FirebaseReducer.AuthState}
                   >
                     <div>Hello</div>
                   </FinishProfileChecker>

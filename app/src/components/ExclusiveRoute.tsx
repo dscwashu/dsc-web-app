@@ -6,8 +6,12 @@ import {
   isEmpty,
   FirebaseReducer,
   useFirestoreConnect,
+  useFirebase,
 } from "react-redux-firebase";
 
+import MaterialLink from "@material-ui/core/Link";
+
+import DialogLayout from "./DialogLayout";
 import { RootState } from "../app/rootReducer";
 import LoadingScreen from "./LoadingScreen";
 
@@ -19,6 +23,7 @@ enum ProfileState {
   Loading,
   Retry,
   Redirect,
+  VerifyEmail,
   Valid,
 }
 
@@ -30,22 +35,34 @@ export const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
   const [profileState, setProfileState] = useState<ProfileState>(
     ProfileState.Loading
   );
+  const firebase = useFirebase();
   useFirestoreConnect([{ collection: "users", doc: auth.uid }]);
-  const { requested, finishProfile } = useSelector((state: RootState) => {
-    return {
-      requested: state.firestore.status.requested["users/" + auth.uid],
-      finishProfile: state.firestore.data.users?.[auth.uid]?.finishProfile,
-    };
-  });
+  const { emailVerified, requested, finishProfile, role } = useSelector(
+    (state: RootState) => {
+      return {
+        emailVerified: state.firebase.auth.emailVerified,
+        requested: state.firestore.status.requested["users/" + auth.uid],
+        finishProfile: state.firestore.data.users?.[auth.uid]?.finishProfile,
+        role: state.firestore.data.users?.[auth.uid]?.role,
+      };
+    }
+  );
   useEffect(() => {
     if (requested === true) {
       if (finishProfile === true) {
-        setProfileState(ProfileState.Valid);
+        if (role === "student" && !emailVerified) {
+          if (firebase) {
+            firebase.auth().currentUser?.sendEmailVerification();
+            setProfileState(ProfileState.VerifyEmail);
+          }
+        } else {
+          setProfileState(ProfileState.Valid);
+        }
       } else {
         setProfileState(ProfileState.Redirect);
       }
     }
-  }, [requested, finishProfile]);
+  }, [requested, finishProfile, emailVerified, role, firebase]);
   useEffect(() => {
     if (profileState === ProfileState.Retry) {
       history.push("/register", { from: "dashboard" });
@@ -54,6 +71,38 @@ export const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
   switch (profileState) {
     case ProfileState.Valid:
       return <React.Fragment>{children}</React.Fragment>;
+    case ProfileState.VerifyEmail:
+      return (
+        <DialogLayout
+          title="Verify Your Email"
+          body={
+            <>
+              {
+                "Check your email for a link to verify your status as a student. Click "
+              }
+              <MaterialLink
+                style={{ cursor: "pointer" }}
+                onClick={(e: React.MouseEvent<HTMLAnchorElement>): void => {
+                  e.preventDefault();
+                  firebase.auth().currentUser?.sendEmailVerification();
+                }}
+              >
+                here
+              </MaterialLink>
+              {
+                " to resend verification email. The email may take a while to arrive."
+              }
+            </>
+          }
+          buttonOptions={{
+            path: "/dashboard",
+            text: "Sign Out",
+            onClick: (): void => {
+              firebase.logout();
+            },
+          }}
+        />
+      );
     case ProfileState.Redirect:
       setProfileState(ProfileState.Retry);
       break;

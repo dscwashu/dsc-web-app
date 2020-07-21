@@ -34,12 +34,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface ResetInputProps {
+interface ResetPasswordProps {
   oobCode: string;
   setResetState: (state: ResetState) => void;
 }
 
-const ResetInput: React.FC<ResetInputProps> = ({ oobCode, setResetState }) => {
+const ResetPassword: React.FC<ResetPasswordProps> = ({
+  oobCode,
+  setResetState,
+}) => {
   const classes = useStyles();
 
   const firebase = useFirebase();
@@ -159,4 +162,4 @@ const ResetInput: React.FC<ResetInputProps> = ({ oobCode, setResetState }) => {
   );
 };
 
-export default ResetInput;
+export default ResetPassword;

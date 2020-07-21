@@ -20,15 +20,39 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface DialogLayoutProps {
   title: string;
-  body: string;
-  path?: string;
+  body: React.ReactNode;
+  buttonOptions?: {
+    link?: boolean;
+    path?: string;
+    text?: string;
+    variant?: "text" | "outlined" | "contained" | undefined;
+    onClick?: () => void;
+  };
+}
+
+interface Options {
+  link: boolean;
+  path: string;
+  text: string;
+  variant: "text" | "outlined" | "contained" | undefined;
+  onClick: undefined | (() => void);
 }
 
 const DialogLayout: React.FC<DialogLayoutProps> = ({
   title,
   body,
-  path = "/login",
+  buttonOptions,
 }) => {
+  const options: Options = Object.assign(
+    {
+      link: true,
+      path: "/login",
+      variant: "outlined",
+      onClick: undefined,
+      text: "Go Back",
+    },
+    buttonOptions
+  );
   const classes = useStyles();
 
   return (
@@ -40,13 +64,14 @@ const DialogLayout: React.FC<DialogLayoutProps> = ({
         {body}
       </Typography>
       <Button
-        component={Link}
-        to={path}
-        variant="outlined"
+        component={options.link ? Link : "button"}
+        to={options.link ? options.path : undefined}
+        variant={options.variant}
         color="primary"
         size="large"
+        onClick={options.onClick}
       >
-        Go Back
+        {options.text}
       </Button>
     </AuthLayout>
   );

@@ -26,6 +26,8 @@ describe("Handler", () => {
   });
   it("should go to 'Verification Succesful' dialog on valid verifyEmail link", async () => {
     (useFirebase as any).mockReturnValue({
+      reloadAuth: (): Promise<void> => Promise.resolve(),
+      verifyPasswordResetCode: (): Promise<void> => Promise.resolve(),
       auth: () => {
         return {
           applyActionCode: (): Promise<void> => Promise.resolve(),
@@ -43,6 +45,7 @@ describe("Handler", () => {
   });
   it("should show 'Expired Link' dialog on expired verifyEmail link", async () => {
     (useFirebase as any).mockReturnValue({
+      verifyPasswordResetCode: (): Promise<void> => Promise.resolve(),
       auth: () => {
         return {
           applyActionCode: (): Promise<void> => Promise.reject(),
@@ -59,6 +62,11 @@ describe("Handler", () => {
   it("should go to 'Password Succesful' dialog on valid verifyEmail link", async () => {
     (useFirebase as any).mockReturnValue({
       verifyPasswordResetCode: (): Promise<void> => Promise.resolve(),
+      auth: () => {
+        return {
+          applyActionCode: (): Promise<void> => Promise.resolve(),
+        };
+      },
     });
     const { getByText } = render(
       <MemoryRouter initialEntries={["?oobCode=123&mode=resetPassword"]}>
@@ -73,6 +81,11 @@ describe("Handler", () => {
     (useFirebase as any).mockReturnValue({
       verifyPasswordResetCode: (): Promise<void> => Promise.resolve(),
       confirmPasswordReset: () => Promise.resolve(),
+      auth: () => {
+        return {
+          applyActionCode: (): Promise<void> => Promise.resolve(),
+        };
+      },
     });
     const { getByText, getByLabelText } = render(
       <MemoryRouter initialEntries={["?oobCode=123&mode=resetPassword"]}>
@@ -92,6 +105,11 @@ describe("Handler", () => {
   it("should show 'Expired Link' dialog on expired resetPassword link", async () => {
     (useFirebase as any).mockReturnValue({
       verifyPasswordResetCode: (): Promise<void> => Promise.reject(),
+      auth: () => {
+        return {
+          applyActionCode: (): Promise<void> => Promise.resolve(),
+        };
+      },
     });
     const { getByText } = render(
       <MemoryRouter initialEntries={["?oobCode=123&mode=resetPassword"]}>
@@ -103,6 +121,11 @@ describe("Handler", () => {
   it("should show loading screen for async events", async () => {
     (useFirebase as any).mockReturnValue({
       verifyPasswordResetCode: (): Promise<void> => Promise.reject(),
+      auth: () => {
+        return {
+          applyActionCode: (): Promise<void> => Promise.resolve(),
+        };
+      },
     });
     const { getByTestId } = render(
       <MemoryRouter initialEntries={["?oobCode=123&mode=resetPassword"]}>
