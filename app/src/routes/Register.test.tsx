@@ -10,14 +10,14 @@ jest.mock("react-router-dom", () => ({
 
 jest.mock("react-redux");
 describe("Register redirect", () => {
-  it("should go to edit profile when coming from dashboard push", () => {
+  it("should go to edit profile when coming from main push", () => {
     (useSelector as any).mockReturnValue({
       isLoaded: true,
       isEmpty: true,
     });
     (useLocation as any).mockReturnValue({
       state: {
-        from: "dashboard",
+        from: "main",
       },
     });
     const { getByText } = render(

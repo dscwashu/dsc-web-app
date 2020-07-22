@@ -51,10 +51,8 @@ export const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
     if (requested === true) {
       if (finishProfile === true) {
         if (role === "student" && !emailVerified) {
-          if (firebase) {
-            firebase.auth().currentUser?.sendEmailVerification();
-            setProfileState(ProfileState.VerifyEmail);
-          }
+          firebase.auth().currentUser?.sendEmailVerification();
+          setProfileState(ProfileState.VerifyEmail);
         } else {
           setProfileState(ProfileState.Valid);
         }
@@ -65,7 +63,7 @@ export const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
   }, [requested, finishProfile, emailVerified, role, firebase]);
   useEffect(() => {
     if (profileState === ProfileState.Retry) {
-      history.push("/register", { from: "dashboard" });
+      history.push("/register", { from: "main" });
     }
   }, [profileState, history]);
   switch (profileState) {
@@ -95,7 +93,7 @@ export const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
             </>
           }
           buttonOptions={{
-            path: "/dashboard",
+            path: "/main",
             text: "Sign Out",
             onClick: (): void => {
               firebase.logout();
@@ -127,13 +125,16 @@ const ExclusiveRoute: React.FC<ExclusiveRouteProps> = ({
       {...rest}
       render={(): React.ReactNode => {
         if (type === "public") {
-          return isEmpty(auth) ? children : <Redirect to="/dashboard" />;
+          return isEmpty(auth) ? children : <Redirect to="/main" />;
         }
         if (isEmpty(auth)) {
           return <Redirect to="/login" />;
         }
         return (
-          <FinishProfileChecker auth={auth}>{children}</FinishProfileChecker>
+          <React.Fragment>
+            <FinishProfileChecker auth={auth}>{children}</FinishProfileChecker>
+            <Redirect to="/main/dashboard" />
+          </React.Fragment>
         );
       }}
     />

@@ -3,8 +3,17 @@ import { MemoryRouter } from "react-router-dom";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import Handler from "./Handler";
 import userEvent from "@testing-library/user-event";
-import { useFirebase } from "react-redux-firebase";
+import { useFirebase, isLoaded } from "react-redux-firebase";
+import { useSelector } from "react-redux";
 jest.mock("react-redux-firebase");
+jest.mock("react-redux");
+
+(useSelector as any).mockReturnValue({
+  isLoaded: true,
+  isEmpty: false,
+});
+
+(isLoaded as any).mockReturnValue(true);
 
 describe("Handler", () => {
   const testSearches = [
@@ -43,7 +52,7 @@ describe("Handler", () => {
       expect(getByText("Verification Successful")).toBeInTheDocument()
     );
   });
-  it("should show 'Expired Link' dialog on expired verifyEmail link", async () => {
+  it.only("should show 'Expired Link' dialog on expired verifyEmail link", async () => {
     (useFirebase as any).mockReturnValue({
       verifyPasswordResetCode: (): Promise<void> => Promise.resolve(),
       auth: () => {

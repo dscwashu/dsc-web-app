@@ -34,7 +34,7 @@ const Register: React.FC = () => {
 
   const location = useLocation<LocationState>();
   useEffect(() => {
-    if (location.state?.from === "dashboard") {
+    if (location.state?.from === "main") {
       setActiveStep(2);
     }
   }, [location]);

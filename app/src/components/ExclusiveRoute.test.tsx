@@ -22,8 +22,8 @@ describe("Exclusive route handling", () => {
       isEmpty: false,
     });
     const { getByTestId } = render(
-      <MemoryRouter initialEntries={["/dashboard"]}>
-        <ExclusiveRoute path="/dashboard" type="private" />
+      <MemoryRouter initialEntries={["/main"]}>
+        <ExclusiveRoute path="/main" type="private" />
       </MemoryRouter>
     );
     expect(getByTestId("progress")).toBeInTheDocument();
@@ -35,9 +35,9 @@ describe("Exclusive route handling", () => {
     });
     let redirectLocation: Location;
     render(
-      <MemoryRouter initialEntries={["/dashboard"]}>
+      <MemoryRouter initialEntries={["/main"]}>
         <Switch>
-          <ExclusiveRoute path="/dashboard" type="private" />
+          <ExclusiveRoute path="/main" type="private" />
           <Route
             path="*"
             render={({ location }): null => {
@@ -50,7 +50,7 @@ describe("Exclusive route handling", () => {
     );
     await waitFor(() => expect(redirectLocation.pathname).toEqual("/login"));
   });
-  it("should redirect to dashboard if auth is not empty and route is public", async () => {
+  it("should redirect to main if auth is not empty and route is public", async () => {
     (useSelector as any).mockReturnValue({
       isLoaded: true,
       isEmpty: false,
@@ -70,9 +70,7 @@ describe("Exclusive route handling", () => {
         </Switch>
       </MemoryRouter>
     );
-    await waitFor(() =>
-      expect(redirectLocation.pathname).toEqual("/dashboard")
-    );
+    await waitFor(() => expect(redirectLocation.pathname).toEqual("/main"));
   });
   it("should return children if auth is empty and route is public", async () => {
     (useSelector as any).mockReturnValue({
@@ -94,9 +92,9 @@ describe("Exclusive route handling", () => {
       finishProfile: undefined,
     });
     const { getByTestId } = render(
-      <MemoryRouter initialEntries={["/dashboard"]}>
+      <MemoryRouter initialEntries={["/main"]}>
         <Route
-          path="/dashboard"
+          path="/main"
           render={(): React.ReactNode => {
             return (
               <FinishProfileChecker auth={{} as FirebaseReducer.AuthState} />
@@ -114,10 +112,10 @@ describe("Exclusive route handling", () => {
     });
     let redirectLocation: Location;
     render(
-      <MemoryRouter initialEntries={["/dashboard"]}>
+      <MemoryRouter initialEntries={["/main"]}>
         <Switch>
           <Route
-            path="/dashboard"
+            path="/main"
             render={(): React.ReactNode => {
               return (
                 <FinishProfileChecker auth={{} as FirebaseReducer.AuthState} />
@@ -151,9 +149,9 @@ describe("Exclusive route handling", () => {
       },
     });
     const { getByText } = render(
-      <MemoryRouter initialEntries={["/dashboard"]}>
+      <MemoryRouter initialEntries={["/main"]}>
         <Route
-          path="/dashboard"
+          path="/main"
           render={(): React.ReactNode => {
             return (
               <FinishProfileChecker auth={{} as FirebaseReducer.AuthState}>
@@ -187,9 +185,9 @@ describe("Exclusive route handling", () => {
       },
     });
     const { getByText } = render(
-      <MemoryRouter initialEntries={["/dashboard"]}>
+      <MemoryRouter initialEntries={["/main"]}>
         <Route
-          path="/dashboard"
+          path="/main"
           render={(): React.ReactNode => {
             return (
               <FinishProfileChecker auth={{} as FirebaseReducer.AuthState}>
@@ -279,7 +277,7 @@ describe("Exclusive route handling", () => {
     listenerResponseMock(false);
     const EditProfileMock: React.FC = () => {
       const [redirect, setRedirect] = useState(false);
-      if (redirect) return <Redirect to="/dashboard" />;
+      if (redirect) return <Redirect to="/main" />;
       return (
         <button
           onClick={(): void => {
@@ -292,10 +290,10 @@ describe("Exclusive route handling", () => {
     };
     const { getByText, queryByText } = render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/dashboard"]}>
+        <MemoryRouter initialEntries={["/main"]}>
           <Switch>
             <Route
-              path="/dashboard"
+              path="/main"
               render={(): React.ReactNode => {
                 return (
                   <FinishProfileChecker

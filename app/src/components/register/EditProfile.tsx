@@ -119,7 +119,7 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
           finishProfile: true,
         })
         .then(() => {
-          history.push("/dashboard");
+          history.push("/main");
         })
         .catch((error) => setError(error.message));
     }

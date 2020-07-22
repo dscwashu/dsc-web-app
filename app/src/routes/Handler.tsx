@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useFirebase } from "react-redux-firebase";
+import { useSelector } from "react-redux";
+import { useFirebase, isLoaded } from "react-redux-firebase";
 
 import DialogLayout from "../components/DialogLayout";
 import ResetInput from "../components/ResetPassword";
 import LoadingHandler from "../components/LoadingHandler";
 import { getParams } from "../utils/stringUtils";
+import { RootState } from "../app/rootReducer";
 
 export enum ParamState {
   Invalid,
@@ -35,6 +37,8 @@ const Handler: React.FC = () => {
 
   const firebase = useFirebase();
 
+  const auth = useSelector((state: RootState) => state.firebase.auth);
+
   const [mode, setMode] = useState("");
   const [oobCode, setOobCode] = useState("");
   const [paramState, setParamState] = useState<ParamState>();
@@ -42,6 +46,11 @@ const Handler: React.FC = () => {
   const [verifyState, setVerifyState] = useState<VerifyState>(
     VerifyState.Loading
   );
+  const [authLoadedOnce, setAuthLoadedOnce] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded(auth)) setAuthLoadedOnce(true);
+  }, [auth]);
 
   useEffect(() => {
     const params = getParams(location.search);
@@ -62,23 +71,32 @@ const Handler: React.FC = () => {
   }, [location]);
 
   useEffect(() => {
-    if (verifyState === VerifyState.Loading && oobCode) {
+    if (
+      mode === Mode.VerifyEmail &&
+      verifyState === VerifyState.Loading &&
+      oobCode &&
+      authLoadedOnce
+    ) {
       firebase
         .auth()
         .applyActionCode(oobCode)
         .then(() => {
           firebase
             .reloadAuth()
-            .then(() => setVerifyState(VerifyState.Done))
-            .catch(() => setVerifyState(VerifyState.Error));
+            .then(() => {
+              setVerifyState(VerifyState.Done);
+            })
+            .catch(() => {
+              setVerifyState(VerifyState.Error);
+            });
         })
         .catch(() => {
           setVerifyState(VerifyState.Error);
         });
     }
-  }, [verifyState, firebase, oobCode]);
+  }, [verifyState, oobCode, firebase, authLoadedOnce, mode]);
   useEffect(() => {
-    if (resetState === ResetState.Loading && oobCode) {
+    if (mode === Mode.Reset && resetState === ResetState.Loading && oobCode) {
       firebase
         .verifyPasswordResetCode(oobCode)
         .then(() => {
@@ -88,7 +106,7 @@ const Handler: React.FC = () => {
           setResetState(ResetState.Error);
         });
     }
-  }, [resetState, firebase, oobCode]);
+  }, [resetState, firebase, oobCode, mode]);
 
   switch (paramState) {
     case ParamState.Invalid:

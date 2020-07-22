@@ -82,8 +82,8 @@ const Dashboard: React.FC = function () {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap className={classes.title}>
-            {location.pathname.split("/")[1].charAt(0).toUpperCase() +
-              location.pathname.split("/")[1].slice(1)}
+            {location.pathname.split("/")[2].charAt(0).toUpperCase() +
+              location.pathname.split("/")[2].slice(1)}
           </Typography>
           <Button color="inherit" onClick={signOut}>
             Sign Out
@@ -107,25 +107,25 @@ const Dashboard: React.FC = function () {
         </div>
         <Divider />
         <List>
-          <ListItem button component={Link} to="/dashboard">
+          <ListItem button component={Link} to="/main/dashboard">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem button component={Link} to="/projects">
+          <ListItem button component={Link} to="/main/projects">
             <ListItemIcon>
               <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Projects" />
           </ListItem>
-          <ListItem button component={Link} to="/events">
+          <ListItem button component={Link} to="/main/events">
             <ListItemIcon>
               <EventIcon />
             </ListItemIcon>
             <ListItemText primary="Events" />
           </ListItem>
-          <ListItem button component={Link} to="/applications">
+          <ListItem button component={Link} to="/main/applications">
             <ListItemIcon>
               <AssignmentIndIcon />
             </ListItemIcon>
@@ -135,10 +135,10 @@ const Dashboard: React.FC = function () {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Route path="/dashboard/">Welcome, {firstName}</Route>
-        <Route path="/projects">projects</Route>
-        <Route path="/events">events</Route>
-        <Route path="/applications">applications</Route>
+        <Route path="/main/dashboard/">Welcome, {firstName}</Route>
+        <Route path="/main/projects">projects</Route>
+        <Route path="/main/events">events</Route>
+        <Route path="/main/applications">applications</Route>
       </main>
     </div>
   );
