@@ -1,61 +1,318 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    
     // Disable read/write by default
-
     match /{document=**} {
     	allow read, write: if false;
 		}
 
-    // General Functions
+    // ******GENERAL FUNCTIONS******
 
-    function isTrimmedString(text) {
-      return text == text.trim() && text.size() > 0;
+    // IMPORTANT: For dev purposes only, comment out in production
+    match /validateTrimmedString {
+      match /allowEmpty {
+        allow create: if validateTrimmedString(request.resource.data.field, 10, true);
+      }
+      match /dontAllowEmpty {
+        allow create: if validateTrimmedString(request.resource.data.field, 10, false);
+      }
+    }
+    match /isUnmodified {
+      match /general {
+        allow update: if isUnmodified("field");
+      }
+    }
+    match /isAdmin {
+      match /general {
+        allow create: if isAdmin();
+      }
+    }
+    match /isStudent {
+      match /general {
+        allow create: if isStudent();
+      }
+    }
+    match /isProjectMember {
+      match /general {
+        allow create: if isProjectMember("123");
+      }
+    }
+    match /isProjectManager {
+      match /general {
+        allow create: if isProjectManager("123");
+      }
+    }
+    match /validateCreatedAt {
+      match /general {
+        allow create: if validateCreatedAt(request.resource.data.field);
+      }
+    }
+    match /validateUrl {
+      match /allowEmpty {
+        allow create: if validateUrl(request.resource.data.field, true);
+      }
+      match /dontAllowEmpty {
+        allow create: if validateUrl(request.resource.data.field, false);
+      }
+    }
+
+    match /hasValidTags {
+      match /general {
+        allow create: if hasValidTags("skills", request.resource.data.field);
+      }
+    }
+
+    function validateTrimmedString(text, size, allowEmpty) {
+      return text == text.trim() && text.size() <= size && (allowEmpty == true ? true : text.size() > 0);
     }
 
     function isUnmodified(key) {
       return request.resource.data[key] == resource.data[key]
     }
 
-    // Profile
-        
-    function hasName(firstName, lastName) {
-    	return isTrimmedString(firstName) && isTrimmedString(lastName) && firstName.size() <= 35 && lastName.size() <= 35;
-    }
-    
-    function hasRole(role) {
-    	let validStudent = role == "student" && resource.data.security == "internal";
-    	return validStudent || role == "org";
-    }
-    
-    function checkGrade(grade) {
-    	return grade == 0 || grade == 1 || grade == 2 || grade == 3 || grade == 4 || grade == 5;
-    }
-    
-    function checkWebsite(website) {
-    	return website.size() == 0 || (website.matches('^((https?|ftp|smtp):\\/\\/)?([a-z0-9]+.)?[a-z0-9]+\\.[a-z]+(\\/[a-zA-Z0-9#]*\\/?)*$') && website.size() < 2084);
-    }
-    
-    function checkBio(bio) {
-    	return bio.size() == 0 || (bio.size() <= 500 && isTrimmedString(bio));
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
-    function checkProfileKeys(keys) {
-      return isUnmodified("security") && keys.hasOnly(["firstName", "lastName", "bio", "grade", "role", "website", "security", "finishProfile"]);
+    function isStudent() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.profile.role == "student" && request.auth.token.email_verified == true;
+    }
+    
+    function isProjectMember(project) {
+      return get(/databases/$(database)/documents/projects/$(project)).data.users.hasAll([request.auth.uid]);
     }
 
-    function validateProfile (data) {
-    	let hasName = hasName(data.firstName, data.lastName);
-      let hasRole = hasRole(data.role);
-      let validGrade = checkGrade(data.grade);
-      let validWebsite = checkWebsite(data.website);
-      let validBio = checkBio(data.bio);
-      let validKeys = checkProfileKeys(data.keys());
-      return hasName && hasRole && validGrade && validWebsite && validBio && validKeys && data.finishProfile == true;
-		}
+    function isProjectManager(project) {
+      return get(/databases/$(database)/documents/projects/$(project)).data.projectManagerInfo.projectManager == request.auth.uid;
+    }
+
+    function validateCreatedAt(createdAt) {
+      return createdAt == request.time;
+    }
+
+    function validateUrl(url, allowEmpty) {
+      return (url.matches('^((https?|ftp|smtp):\\/\\/)?([a-z0-9]+.)?[a-z0-9]+\\.[a-z]+(\\/[a-zA-Z0-9#]*\\/?)*$') && url.size() < 2084) || (allowEmpty == true ? url == "" : url.size() > 0);
+    }
+
+    function hasValidTags(name, tags) {
+      return tags == [] || get(/databases/$(database)/documents/lists/$(name)).data.tags.hasAll(tags);
+    }
+
+    // ****** USERS ******
+
     match /users/{uid} {
-    	allow read: if request.auth.uid == uid;
-    	allow update: if request.auth.uid == uid && validateProfile(request.resource.data)
+    	allow get: if request.auth != null;
+      allow list: if request.auth != null && request.query.limit <= 10;
+    }
+
+    match /users/{uid} {
+      allow create: if request.auth.uid == uid && validateUserCreate(request.resource.data);
+      allow update: if (request.auth.uid == uid && validateUserProfileUpdate(request.resource.data)) || (isAdmin() && validateUserAdminUpdate(request.resource.data));
+      allow delete: if request.auth.uid == uid;
+    }
+
+    function validateUserCreate(data) {
+      return data.size() == 3 && validateUserCreate__account(data.account) && data.isAdmin == false && data.profile == {};
+    }
+
+    function validateUserCreate__account(account) {
+      return account.size() == 2 && validateCreatedAt(account.createdAt) && account.email == request.auth.token.email;
+    }
+
+    function validateUserAdminUpdate(data) {
+      return data.size() == 3 && isUnmodified("account") && isUnmodified("profile") && data.isAdmin is bool;
+    }
+
+    function validateUserProfileUpdate(data) {
+      return data.size() == 3 && isUnmodified("account") && isUnmodified("isAdmin") && validateUserProfileUpdate__profile(data.profile);
+		}
+
+    function validateUserProfileUpdate__profile(profile) {
+      return profile.size() == 9 && validateTrimmedString(profile.firstName, 35, false) && validateTrimmedString(profile.lastName, 35, false) && hasUserRole(profile.role) && checkUserGrade(profile.grade) && validateUrl(profile.website, true) && checkUserAttributes(profile.skills, profile.courses) && validateTrimmedString(profile.bio, 500, true) && profile.isFinishedProfile == true;
+    }
+
+    function checkUserAttributes(skills, courses) {
+      return (skills == [] && courses == []) || (request.resource.data.profile.role == "student" && hasValidTags("skills", skills) && hasValidTags("courses", courses));
+    }
+    
+    function hasUserRole(role) {
+    	return (role == "student" && request.auth.token.email.split('@')[1] == "wustl.edu") || role == "org";
+    }
+    
+    function checkUserGrade(grade) {
+    	return grade == 0 || ((grade == 1 || grade == 2 || grade == 3 || grade == 4 || grade == 5) && request.resource.data.profile.role == "student");
+    }
+
+    // ****** LISTS ******
+
+    match /lists/{type} {
+    	allow get: if request.auth != null;
+      allow list: if false;
+    }
+
+    match /lists/{type} {
+    	allow write: if false;
+      allow update: if isAdmin() && validateListUpdate(type, request.resource.data);
+      allow delete: if false;
+    }
+
+    function validateListUpdate(type, data) {
+      return isValidTagUpdate(type, data) || isValidOrgCoreUpdate(type, data) || isValidManagerUpdate(type, data);
+    }
+
+    function isValidTagUpdate(type, data) {
+      return [type].hasAny(["courses", "skills", "industries"]) && data.size() == 1 && data.tags is list;
+    }
+
+    function isValidOrgCoreUpdate(type, data) {
+      return [type].hasAny(["orgQuestions", "coreTeamQuestions"]) && data.size() == 2 && data.isAcceptingApplications is bool && data.questions is list;
+    }
+
+    function isValidManagerUpdate(type, data) {
+      return type == "projectManagerQuestions" && data.size() == 1 && data.questions is list;
+    }
+
+    // ****** EVENTS ******
+
+    match /events/{event} {
+    	allow get: if request.auth != null;
+      allow list: if request.auth != null && request.query.limit <= 10;
+    }
+
+    match /events/{event} {
+    	allow write: if isAdmin() && validateEventCreate(request.resource.data);
+      allow update: if isStudent() && validateEventUpdate(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    function validateEventCreate(data) {
+      return data.size() == 2 && validateEventCreate__info(data.info) && data.users == [];
+    }
+
+    function validateEventCreate__info(info) {
+      return info.size() == 5 && validateTrimmedString(info.title, 100, false) && validateTrimmedString(info.description, 500, false) && hasEventTimes(info.startTime, info.endTime) && validateTrimmedString(info.location, 100, false);
+    }
+
+    function hasEventTimes(startTime, endTime) {
+      return startTime is timestamp && endTime is timestamp && endTime.toMillis() > startTime.toMillis();
+    }
+
+    function validateEventUpdate(data) {
+      return data.size() == 2 && isUnmodified("info") && ((data.users.hasAll(resource.data.users.concat([request.auth.uid])) && data.users.size() == resource.data.size() + 1) || (data.users.hasAll(resource.data.users.removeAll([request.auth.uid])) && data.users.size() == resource.data.size() - 1));
+    }
+    
+    // ****** APPLICATION ******
+
+    match /application/{application} {
+    	allow get: if validateApplicationRead(resource.data.info);
+      allow list: if validateApplicationRead(resource.data) && request.query.limit <= 10;
+    }
+
+    match /applications/{application} {
+    	allow write: if validateApplicationCreate(request.resource.data);
+      allow update: if validateApplicationUpdate(request.resource.data);
+      allow delete: if resource.data.info.user == request.auth.uid;
+    }
+
+    function validateApplicationRead(info) {
+      return info.user == request.auth.uid || isAdmin() || (info.type == "projectMember" && isProjectManager(info.project));
+    }
+
+    function validateApplicationCreate(data) {
+      return data.size() == 3 && validateApplicationCreate__info(data.info) && data.accepted == false && data.pending == true;
+    }
+
+    function validateApplicationCreate__info(info) {
+      return info.size() == 5 && validateCreatedAt(info.createdAt) && request.auth.uid == info.user && hasApplicationType(info.type, info.project) && info.answers is list
+    }
+
+    function hasApplicationType(type, project) {
+      let isStudent = isStudent();
+      return [type].hasAny(["projectManager", "projectMember"]) ?  isValidProjectType(isStudent, type, project) : isValidNonprojectType(isStudent, type, project);
+    }
+
+    function isValidProjectType(isStudent, type, project) {
+      let data = get(/databases/$(database)/documents/projects/$(project)).data;
+      return isStudent && ((type == "projectManager" && data.projectManagerInfo.isAcceptingApplications == true) || (type == "projectMember" && data.info.isAcceptingApplications == true));
+    }
+
+    function isValidNonprojectType(isStudent, type, project) {
+      return project == "" && ((type == "coreTeam" && get(/databases/$(database)/documents/applications/coreTeamQuestions).data.isAcceptingApplications == true) || (type == "studentProject" && isStudent) || (type == "orgProject" && !isStudent))
+    }
+
+    function validateApplicationUpdate(data) {
+      return data.size() == 3 && isUnmodified("data") && data.accepted is bool && data.pending == false;
+    }
+
+    // ****** PROJECTS ******
+
+    match /projects/{project} {
+    	allow get: if request.auth != null;
+      allow list: if request.auth != null && request.query.limit <= 10;
+    }
+
+    match /projects/{project} {
+    	allow write: if isAdmin() && validateProjectCreate(project, request.resource.data);
+      allow update: if (isAdmin() && validateProjectManagerUpdate(request.resource.data)) || validateProjectInfoUpdate(request.resource.data) || validateProjectUsersUpdate(request.resource.data);
+      allow delete: if isAdmin();
+    }
+    
+    function validateProjectCreate(project, data) {
+      return data.size() == 5 && existsAfter(/databases/$(database)/documents/projects/$(project)/private/resources) && data.finished == false && validateProjectCreate__info(data.info) && validateProjectCreate__orgInfo(data.orgInfo) && validateProjectCreate__projectManagerInfo(data.projectManagerInfo) && data.users == [];
+    }
+
+    function validateProjectCreate__info(info) {
+      return info.size() == 8 && validateTrimmedString(info.description, 500, true) && validateUrl(info.github, true) && validateTrimmedString(info.title, 100, false) && hasValidTags("industries", info.industries) && hasValidTags("skills", info.skills) && info.isAcceptingApplications == false && info.platforms.hasOnly(["web", "mobile", "desktop", "hardware"]) && info.projectMemberQuestions == [];
+    }
+
+    function validateProjectCreate__orgInfo(orgInfo) {
+      return orgInfo.size() == 3 && validateCreatedAt(orgInfo.createdAt) && [orgInfo.type].hasOnly(["nonprofit", "business", "student"]) && get(/databases/$(database)/documents/users/$(orgInfo.org)).data.profile.role == "org";
+    }
+
+    function validateProjectCreate__projectManagerInfo(projectManagerInfo) {
+      return projectManagerInfo.size() == 2 && projectManagerInfo.isAcceptingApplications == true && projectManagerInfo.projectManager == "";
+    }
+
+    function validateProjectManagerUpdate(data) {
+      return data.size() == 5 && isUnmodified("finished") && isUnmodified("info") && isUnmodified("orgInfo") && isUnmodified("users") && validateProjectManagerUpdate__projectManagerInfo(data.projectManagerInfo);
+    }
+
+    function validateProjectManagerUpdate__projectManagerInfo(projectManagerInfo) {
+      return (projectManagerInfo.isAcceptingApplications == false && get(/databases/$(database)/documents/users/$(projectManagerInfo.projectManager)).data.profile.role == "student") || (projectManagerInfo.isAcceptingApplications == true && projectManagerInfo.projectManager == "");
+    }
+
+    function validateProjectInfoUpdate(data) {
+      return data.size() == 5 && isUnmodified("finished") && isUnmodified("projectManagerInfo") && isUnmodified("orgInfo") && isUnmodified("users") && validateProjectInfoUpdate__info(data.info);
+    }
+
+    function validateProjectInfoUpdate__info(info) {
+      return info.size() == 8 && validateTrimmedString(info.description, 500, true) && validateUrl(info.github, true) && validateTrimmedString(info.title, 100, false) && hasValidTags("industries", info.industries) && hasValidTags("skills", info.skills) && info.isAcceptingApplications is bool && info.platforms.hasOnly(["web", "mobile", "desktop", "hardware"]) && info.projectMemberQuestions is list;
+    }
+
+    function validateProjectUsersUpdate(data) {
+      return data.size() == 5 && isUnmodified("finished") && isUnmodified("info") && isUnmodified("orgInfo") && isUnmodified("projectManagerInfo") && ((data.users.hasAll(resource.data.users) && data.users.size() == resource.data.size() + 1) || (data.users.hasAll(resource.data.users) && data.users.size() == resource.data.size() - 1));
+    }
+
+    // ****** PRIVATE PROJECT RESOURCES ******
+
+    match /projects/{project}/private/resources {
+      allow get: if isProjectMember(project);
+      allow list: if false;
+    }
+
+    match /projects/{project}/private/resources {
+    	allow write: if isAdmin() && validateResourceCreate(request.resource.data);
+      allow update: if isProjectManager(project) && validateResourceUpdate(request.resource.data);
+      allow delete: if false;
+    }
+
+    function validateResourceCreate(data) {
+      return data.size() == 1 && data.resources == [];
+    }
+
+    function validateResourceUpdate(data) {
+      return data.size() == 1 && data.resources is list;
     }
   }
 }

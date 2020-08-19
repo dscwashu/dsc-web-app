@@ -11,6 +11,7 @@ firebase.loadFirestoreRules({
 export interface Auth {
   uid: string;
   email: string;
+  email_verified?: boolean;
 }
 
 export const getFirestoreInstance = (
@@ -46,3 +47,5 @@ export const clearFirestore = (): Promise<void> => {
 export const clearApps = (): Promise<any[]> => {
   return Promise.all(firebase.apps().map((app) => app.delete()));
 };
+
+export default firebase;
