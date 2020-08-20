@@ -149,6 +149,13 @@ describe("Update list", () => {
         })
     ).toDeny();
   });
+  it("should deny update list with invalid information", async () => {
+    await expect(
+      db.collection("lists").doc("skills").update({
+        tags: "whatever",
+      })
+    ).toDeny();
+  });
 });
 
 describe("Delete list", () => {

@@ -25,7 +25,8 @@ expect.extend({
       return {
         pass: false,
         message: () =>
-          "Expected Firebase operation to be allowed, but it was denied",
+          "Expected Firebase operation to be allowed, but it was denied.\n\n" +
+          error,
       };
     }
   },
@@ -44,7 +45,8 @@ expect.extend({
       return {
         pass: false,
         message: () =>
-          "Expected Firebase operation to be denied, but it was allowed",
+          "Expected Firebase operation to be denied, but it was allowed.\n\n" +
+          error,
       };
     }
   },

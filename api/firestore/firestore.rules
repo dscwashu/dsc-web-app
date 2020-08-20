@@ -152,7 +152,7 @@ service cloud.firestore {
     }
 
     match /lists/{type} {
-    	allow write: if false;
+    	allow create: if false;
       allow update: if isAdmin() && validateListUpdate(type, request.resource.data);
       allow delete: if false;
     }
@@ -181,7 +181,7 @@ service cloud.firestore {
     }
 
     match /events/{event} {
-    	allow write: if isAdmin() && validateEventCreate(request.resource.data);
+    	allow create: if isAdmin() && validateEventCreate(request.resource.data);
       allow update: if isStudent() && validateEventUpdate(request.resource.data);
       allow delete: if isAdmin();
     }
@@ -204,13 +204,13 @@ service cloud.firestore {
     
     // ****** APPLICATION ******
 
-    match /application/{application} {
+    match /applications/{application} {
     	allow get: if validateApplicationRead(resource.data.info);
-      allow list: if validateApplicationRead(resource.data) && request.query.limit <= 10;
+      allow list: if validateApplicationRead(resource.data.info) && request.query.limit <= 10;
     }
 
     match /applications/{application} {
-    	allow write: if validateApplicationCreate(request.resource.data);
+    	allow create: if validateApplicationCreate(request.resource.data);
       allow update: if validateApplicationUpdate(request.resource.data);
       allow delete: if resource.data.info.user == request.auth.uid;
     }
@@ -238,11 +238,15 @@ service cloud.firestore {
     }
 
     function isValidNonprojectType(isStudent, type, project) {
-      return project == "" && ((type == "coreTeam" && get(/databases/$(database)/documents/applications/coreTeamQuestions).data.isAcceptingApplications == true) || (type == "studentProject" && isStudent) || (type == "orgProject" && !isStudent))
+      return project == "" && ((type == "coreTeam" && get(/databases/$(database)/documents/lists/coreTeamQuestions).data.isAcceptingApplications == true) || (type == "studentProject" && isStudent) || (type == "orgProject" && !isStudent))
     }
 
     function validateApplicationUpdate(data) {
-      return data.size() == 3 && isUnmodified("data") && data.accepted is bool && data.pending == false;
+      return data.size() == 3 && isUnmodified("info") && validateApplicationUpdate__info(data.info) && data.accepted is bool && data.pending == false;
+    }
+
+    function validateApplicationUpdate__info(info)  {
+      return (info.type == "projectMember" && isProjectManager(info.project)) || ([info.type].hasAny(["coreTeam", "studentProject", "orgProject", "projectManager"]) && isAdmin());
     }
 
     // ****** PROJECTS ******
@@ -253,8 +257,8 @@ service cloud.firestore {
     }
 
     match /projects/{project} {
-    	allow write: if isAdmin() && validateProjectCreate(project, request.resource.data);
-      allow update: if (isAdmin() && validateProjectManagerUpdate(request.resource.data)) || validateProjectInfoUpdate(request.resource.data) || validateProjectUsersUpdate(request.resource.data);
+    	allow create: if isAdmin() && validateProjectCreate(project, request.resource.data);
+      allow update: if (resource.data.projectManagerInfo.projectManager == request.auth.uid && (validateProjectInfoUpdate(request.resource.data) || validateProjectUsersUpdate(request.resource.data))) || (isAdmin() && (validateProjectManagerUpdate(request.resource.data) || validateProjectFinishedUpdate(request.resource.data)));
       allow delete: if isAdmin();
     }
     
@@ -263,7 +267,15 @@ service cloud.firestore {
     }
 
     function validateProjectCreate__info(info) {
-      return info.size() == 8 && validateTrimmedString(info.description, 500, true) && validateUrl(info.github, true) && validateTrimmedString(info.title, 100, false) && hasValidTags("industries", info.industries) && hasValidTags("skills", info.skills) && info.isAcceptingApplications == false && info.platforms.hasOnly(["web", "mobile", "desktop", "hardware"]) && info.projectMemberQuestions == [];
+      return info.size() == 8 && validateTrimmedString(info.description, 500, true) && checkGithubUrlExt(info.github) && validateTrimmedString(info.title, 100, false) && checkProjectAttributes(info.skills, info.industries) && info.isAcceptingApplications == false && info.platforms.hasOnly(["web", "mobile", "desktop", "hardware"]) && info.projectMemberQuestions == [];
+    }
+
+    function checkGithubUrlExt(ext) {
+      return validateTrimmedString(ext, 100, true) && (ext.split(' ').size() == 0 || ext.split(' ').size() == 1);
+    }
+
+    function checkProjectAttributes(skills, industries) {
+      return (skills == [] && industries == []) || (hasValidTags("skills", skills) && hasValidTags("industries", industries));
     }
 
     function validateProjectCreate__orgInfo(orgInfo) {
@@ -275,11 +287,15 @@ service cloud.firestore {
     }
 
     function validateProjectManagerUpdate(data) {
-      return data.size() == 5 && isUnmodified("finished") && isUnmodified("info") && isUnmodified("orgInfo") && isUnmodified("users") && validateProjectManagerUpdate__projectManagerInfo(data.projectManagerInfo);
+      return data.size() == 5 && isUnmodified("finished") && isUnmodified("info") && isUnmodified("orgInfo")  && validateProjectManagerUpdate__projectManagerInfo__users(data.projectManagerInfo, data.users);
     }
 
-    function validateProjectManagerUpdate__projectManagerInfo(projectManagerInfo) {
-      return (projectManagerInfo.isAcceptingApplications == false && get(/databases/$(database)/documents/users/$(projectManagerInfo.projectManager)).data.profile.role == "student") || (projectManagerInfo.isAcceptingApplications == true && projectManagerInfo.projectManager == "");
+    function validateProjectManagerUpdate__projectManagerInfo__users(projectManagerInfo, users) {
+      return projectManagerInfo.size() == 2 && (users == [projectManagerInfo.projectManager] && projectManagerInfo.isAcceptingApplications == false && get(/databases/$(database)/documents/users/$(projectManagerInfo.projectManager)).data.profile.role == "student") || (!users.hasAny([resource.data.projectManagerInfo.projectManager]) && projectManagerInfo.isAcceptingApplications == true && projectManagerInfo.projectManager == "");
+    }
+
+    function validateProjectFinishedUpdate(data) {
+      return data.size() == 5 && isUnmodified("projectManagerInfo") && isUnmodified("orgInfo") && isUnmodified("users") && isUnmodified("info") && data.finished is bool;
     }
 
     function validateProjectInfoUpdate(data) {
@@ -287,11 +303,11 @@ service cloud.firestore {
     }
 
     function validateProjectInfoUpdate__info(info) {
-      return info.size() == 8 && validateTrimmedString(info.description, 500, true) && validateUrl(info.github, true) && validateTrimmedString(info.title, 100, false) && hasValidTags("industries", info.industries) && hasValidTags("skills", info.skills) && info.isAcceptingApplications is bool && info.platforms.hasOnly(["web", "mobile", "desktop", "hardware"]) && info.projectMemberQuestions is list;
+      return info.size() == 8 && validateTrimmedString(info.description, 500, true) && checkGithubUrlExt(info.github) && validateTrimmedString(info.title, 100, false) && checkProjectAttributes(info.skills, info.industries) && info.isAcceptingApplications is bool && info.platforms.hasOnly(["web", "mobile", "desktop", "hardware"]) && info.projectMemberQuestions is list;
     }
 
     function validateProjectUsersUpdate(data) {
-      return data.size() == 5 && isUnmodified("finished") && isUnmodified("info") && isUnmodified("orgInfo") && isUnmodified("projectManagerInfo") && ((data.users.hasAll(resource.data.users) && data.users.size() == resource.data.size() + 1) || (data.users.hasAll(resource.data.users) && data.users.size() == resource.data.size() - 1));
+      return data.size() == 5 && isUnmodified("finished") && isUnmodified("info") && isUnmodified("orgInfo") && isUnmodified("projectManagerInfo") && (data.users.hasAll(resource.data.users) && data.users.size() == resource.data.users.size() + 1) || (resource.data.users.hasAll(data.users) && data.users.size() == resource.data.users.size() - 1);
     }
 
     // ****** PRIVATE PROJECT RESOURCES ******
@@ -302,7 +318,7 @@ service cloud.firestore {
     }
 
     match /projects/{project}/private/resources {
-    	allow write: if isAdmin() && validateResourceCreate(request.resource.data);
+    	allow create: if isAdmin() && validateResourceCreate(request.resource.data);
       allow update: if isProjectManager(project) && validateResourceUpdate(request.resource.data);
       allow delete: if false;
     }
