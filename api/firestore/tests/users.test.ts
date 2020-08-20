@@ -84,6 +84,102 @@ describe("Create user", () => {
           isAdmin: true,
         })
     ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
+            firstName: "a".repeat(36),
+          },
+        })
+    ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
+            lastName: "a".repeat(36),
+          },
+        })
+    ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
+            role: "student",
+          },
+        })
+    ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
+            grade: 1,
+          },
+        })
+    ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
+            website: "google",
+          },
+        })
+    ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
+            bio: "a".repeat(501),
+          },
+        })
+    ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
+            skills: ["React.js"],
+          },
+        })
+    ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
+            courses: ["CSE 330"],
+          },
+        })
+    ).toDeny();
   });
   it("should deny create user withe extraneous fields", async () => {
     await expect(
@@ -94,6 +190,18 @@ describe("Create user", () => {
           ...mockNewUser,
           account: {
             ...mockNewUser.account,
+            otherField: "malicious",
+          },
+        })
+    ).toDeny();
+    await expect(
+      db
+        .collection("users")
+        .doc("testUser")
+        .set({
+          ...mockNewUser,
+          profile: {
+            ...mockNewUser.profile,
             otherField: "malicious",
           },
         })
@@ -253,17 +361,6 @@ describe("Update user", () => {
             profile: {
               ...mockOrgUserProfile,
               bio: "a".repeat(501),
-            },
-          })
-      ).toDeny();
-      await expect(
-        db
-          .collection("users")
-          .doc("testUser")
-          .update({
-            profile: {
-              ...mockOrgUserProfile,
-              isFinishedProfile: false,
             },
           })
       ).toDeny();

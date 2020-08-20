@@ -113,11 +113,15 @@ service cloud.firestore {
     }
 
     function validateUserCreate(data) {
-      return data.size() == 3 && validateUserCreate__account(data.account) && data.isAdmin == false && data.profile == {};
+      return data.size() == 3 && validateUserCreate__account(data.account) && validateUserCreate__profile(data.profile) && data.isAdmin == false;
     }
 
     function validateUserCreate__account(account) {
       return account.size() == 2 && validateCreatedAt(account.createdAt) && account.email == request.auth.token.email;
+    }
+
+    function validateUserCreate__profile(profile) {
+      return profile.size() == 8 && validateTrimmedString(profile.firstName, 35, false) && validateTrimmedString(profile.lastName, 35, false) && hasUserRole(profile.role) && checkUserGrade(profile.grade) && validateUrl(profile.website, true) && profile.skills == [] && profile.courses == [] && validateTrimmedString(profile.bio, 500, true);
     }
 
     function validateUserAdminUpdate(data) {
@@ -129,7 +133,7 @@ service cloud.firestore {
 		}
 
     function validateUserProfileUpdate__profile(profile) {
-      return profile.size() == 9 && validateTrimmedString(profile.firstName, 35, false) && validateTrimmedString(profile.lastName, 35, false) && hasUserRole(profile.role) && checkUserGrade(profile.grade) && validateUrl(profile.website, true) && checkUserAttributes(profile.skills, profile.courses) && validateTrimmedString(profile.bio, 500, true) && profile.isFinishedProfile == true;
+      return profile.size() == 8 && validateTrimmedString(profile.firstName, 35, false) && validateTrimmedString(profile.lastName, 35, false) && hasUserRole(profile.role) && checkUserGrade(profile.grade) && validateUrl(profile.website, true) && checkUserAttributes(profile.skills, profile.courses) && validateTrimmedString(profile.bio, 500, true);
     }
 
     function checkUserAttributes(skills, courses) {
