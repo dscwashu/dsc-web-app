@@ -10,58 +10,58 @@ service cloud.firestore {
     // ******GENERAL FUNCTIONS******
 
     // IMPORTANT: For dev purposes only, comment out in production
-    match /validateTrimmedString {
-      match /allowEmpty {
-        allow create: if validateTrimmedString(request.resource.data.field, 10, true);
-      }
-      match /dontAllowEmpty {
-        allow create: if validateTrimmedString(request.resource.data.field, 10, false);
-      }
-    }
-    match /isUnmodified {
-      match /general {
-        allow update: if isUnmodified("field");
-      }
-    }
-    match /isAdmin {
-      match /general {
-        allow create: if isAdmin();
-      }
-    }
-    match /isStudent {
-      match /general {
-        allow create: if isStudent();
-      }
-    }
-    match /isProjectMember {
-      match /general {
-        allow create: if isProjectMember("123");
-      }
-    }
-    match /isProjectManager {
-      match /general {
-        allow create: if isProjectManager("123");
-      }
-    }
-    match /validateCreatedAt {
-      match /general {
-        allow create: if validateCreatedAt(request.resource.data.field);
-      }
-    }
-    match /validateUrl {
-      match /allowEmpty {
-        allow create: if validateUrl(request.resource.data.field, true);
-      }
-      match /dontAllowEmpty {
-        allow create: if validateUrl(request.resource.data.field, false);
-      }
-    }
+    // match /validateTrimmedString {
+    //   match /allowEmpty {
+    //     allow create: if validateTrimmedString(request.resource.data.field, 10, true);
+    //   }
+    //   match /dontAllowEmpty {
+    //     allow create: if validateTrimmedString(request.resource.data.field, 10, false);
+    //   }
+    // }
+    // match /isUnmodified {
+    //   match /general {
+    //     allow update: if isUnmodified("field");
+    //   }
+    // }
+    // match /isAdmin {
+    //   match /general {
+    //     allow create: if isAdmin();
+    //   }
+    // }
+    // match /isStudent {
+    //   match /general {
+    //     allow create: if isStudent();
+    //   }
+    // }
+    // match /isProjectMember {
+    //   match /general {
+    //     allow create: if isProjectMember("123");
+    //   }
+    // }
+    // match /isProjectManager {
+    //   match /general {
+    //     allow create: if isProjectManager("123");
+    //   }
+    // }
+    // match /validateCreatedAt {
+    //   match /general {
+    //     allow create: if validateCreatedAt(request.resource.data.field);
+    //   }
+    // }
+    // match /validateUrl {
+    //   match /allowEmpty {
+    //     allow create: if validateUrl(request.resource.data.field, true);
+    //   }
+    //   match /dontAllowEmpty {
+    //     allow create: if validateUrl(request.resource.data.field, false);
+    //   }
+    // }
 
-    match /hasValidTags {
-      match /general {
-        allow create: if hasValidTags("skills", request.resource.data.field);
-      }
-    }
+    // match /hasValidTags {
+    //   match /general {
+    //     allow create: if hasValidTags("skills", request.resource.data.field);
+    //   }
+    // }
 
     function validateTrimmedString(text, size, allowEmpty) {
       return text == text.trim() && text.size() <= size && (allowEmpty == true ? true : text.size() > 0);
