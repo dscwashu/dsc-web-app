@@ -42,10 +42,13 @@ describe("EditProfile validation", () => {
     (useFirestore as any).mockReturnValue({
       collection: () => ({
         doc: (): Record<string, any> => ({
-          update: (): Promise<never> =>
+          set: (): Promise<never> =>
             Promise.reject({ message: "Error placeholder" }),
         }),
       }),
+      FieldValue: {
+        serverTimestamp: jest.fn(),
+      },
     });
     const { getByText, getByLabelText } = render(
       <EditProfile role="student" />

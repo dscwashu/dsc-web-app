@@ -52,7 +52,7 @@ describe("Handler", () => {
       expect(getByText("Verification Successful")).toBeInTheDocument()
     );
   });
-  it.only("should show 'Expired Link' dialog on expired verifyEmail link", async () => {
+  it("should show 'Expired Link' dialog on expired verifyEmail link", async () => {
     (useFirebase as any).mockReturnValue({
       verifyPasswordResetCode: (): Promise<void> => Promise.resolve(),
       auth: () => {

@@ -89,7 +89,7 @@ describe("Exclusive route handling", () => {
   it("should show loading screen if profile is loading", async () => {
     (useSelector as any).mockReturnValue({
       requested: false,
-      finishProfile: undefined,
+      role: undefined,
     });
     const { getByTestId } = render(
       <MemoryRouter initialEntries={["/main"]}>
@@ -105,10 +105,10 @@ describe("Exclusive route handling", () => {
     );
     expect(getByTestId("progress")).toBeInTheDocument();
   });
-  it("should redirect to register edit profile if profile loaded and finishProfile is false", async () => {
+  it("should redirect to register edit profile if profile loaded and role is undefined", async () => {
     (useSelector as any).mockReturnValue({
       requested: true,
-      finishProfile: false,
+      role: undefined,
     });
     let redirectLocation: Location;
     render(
@@ -134,10 +134,9 @@ describe("Exclusive route handling", () => {
     );
     await waitFor(() => expect(redirectLocation.pathname).toEqual("/register"));
   });
-  it("should return children if profile loaded and finishProfile is true and verified student/org", async () => {
+  it("should return children if profile loaded and verified student/org", async () => {
     (useSelector as any).mockReturnValue({
       requested: true,
-      finishProfile: true,
       role: "student",
       emailVerified: true,
     });
@@ -165,15 +164,13 @@ describe("Exclusive route handling", () => {
     await waitFor(() => expect(getByText("Hello")).toBeInTheDocument());
     (useSelector as any).mockReturnValue({
       requested: true,
-      finishProfile: true,
       role: "org",
       emailVerified: false,
     });
   });
-  it("should return 'verify email' dialog if profile loaded and finishProfile is true and unverified student", async () => {
+  it("should return 'verify email' dialog if profile loaded and unverified student", async () => {
     (useSelector as any).mockReturnValue({
       requested: true,
-      finishProfile: true,
       role: "student",
       emailVerified: false,
     });
@@ -246,7 +243,7 @@ describe("Exclusive route handling", () => {
         },
       });
     };
-    const listenerResponseMock = (finishProfile: boolean): void => {
+    const listenerResponseMock = (isFinishedProfile: boolean): void => {
       store.dispatch({
         type: "@@reduxFirestore/LISTENER_RESPONSE",
         meta: {
@@ -256,13 +253,17 @@ describe("Exclusive route handling", () => {
         payload: {
           data: {
             testuser: {
-              finishProfile: finishProfile,
+              profile: {
+                role: isFinishedProfile ? "org" : undefined,
+              },
             },
           },
           order: [
             {
               id: "testuser",
-              finishProfile: finishProfile,
+              profile: {
+                role: isFinishedProfile ? "org" : undefined,
+              },
             },
           ],
         },

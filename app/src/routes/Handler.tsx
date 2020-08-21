@@ -49,10 +49,12 @@ const Handler: React.FC = () => {
   const [authLoadedOnce, setAuthLoadedOnce] = useState(false);
 
   useEffect(() => {
+    // Check to see if auth has loaded
     if (isLoaded(auth)) setAuthLoadedOnce(true);
   }, [auth]);
 
   useEffect(() => {
+    // Get url params to determine mode and oobCode
     const params = getParams(location.search);
     if (params === undefined) {
       setParamState(ParamState.Invalid);
@@ -71,6 +73,7 @@ const Handler: React.FC = () => {
   }, [location]);
 
   useEffect(() => {
+    // If the mode is verifying email, apply action code only when auth has loaded to prevent redirect
     if (
       mode === Mode.VerifyEmail &&
       verifyState === VerifyState.Loading &&
@@ -166,6 +169,7 @@ const Handler: React.FC = () => {
       }
       break;
   }
+  // Show loading handler as promises resolve
   return <LoadingHandler />;
 };
 

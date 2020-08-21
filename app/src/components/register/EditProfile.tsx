@@ -70,7 +70,10 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
 
   const firestore = useFirestore();
   const history = useHistory();
-  const uid = useSelector((state: RootState) => state.firebase.auth.uid);
+  const { uid, email } = useSelector((state: RootState) => ({
+    uid: state.firebase.auth.uid,
+    email: state.firebase.auth.email,
+  }));
 
   const [grade, setGrade] = useState(0);
   const [firstName, setFirstName] = useState("");
@@ -109,14 +112,22 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
       firestore
         .collection("users")
         .doc(uid)
-        .update({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          website: website.trim(),
-          bio: bio.trim(),
-          role: role,
-          grade: grade,
-          finishProfile: true,
+        .set({
+          account: {
+            createdAt: firestore.FieldValue.serverTimestamp(),
+            email: email,
+          },
+          profile: {
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            website: website.trim(),
+            bio: bio.trim(),
+            role: role,
+            grade: grade,
+            skills: [],
+            courses: [],
+          },
+          isAdmin: false,
         })
         .then(() => {
           history.push("/main");
