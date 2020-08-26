@@ -6,10 +6,10 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 
-import AccountType from "../components/register/AccountType";
-import CreateAccount from "../components/register/CreateAccount";
-import EditProfile from "../components/register/EditProfile";
-import AuthLayout from "../components/AuthLayout";
+import AccountType from "../components/auth/register/AccountType";
+import CreateAccount from "../components/auth/register/CreateAccount";
+import EditProfile from "../components/auth/register/EditProfile";
+import AuthLayout from "../components/auth/AuthLayout";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

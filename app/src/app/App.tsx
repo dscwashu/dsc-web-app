@@ -5,33 +5,33 @@ import {
   Redirect,
   Route,
 } from "react-router-dom";
-import Dashboard from "../routes/Dashboard";
+import Main from "../routes/Main";
 import Login from "../routes/Login";
 import Register from "../routes/Register";
 import ForgotPassword from "../routes/ForgotPassword";
 import Handler from "../routes/Handler";
-import ExclusiveRoute from "../components/ExclusiveRoute";
+import AuthRoute from "../components/auth/AuthRoute";
 
 const App: React.FC = function App() {
   return (
     <Router>
       <Switch>
-        <ExclusiveRoute type="public" path="/login">
+        <AuthRoute type="public" path="/login" exact>
           <Login />
-        </ExclusiveRoute>
-        <Route path="/register">
+        </AuthRoute>
+        <Route path="/register" exact>
           <Register />
         </Route>
-        <ExclusiveRoute type="public" path="/forgot">
+        <AuthRoute type="public" path="/forgot" exact>
           <ForgotPassword />
-        </ExclusiveRoute>
-        <ExclusiveRoute type="private" path="/main">
-          <Dashboard />
-        </ExclusiveRoute>
+        </AuthRoute>
+        <AuthRoute type="private" path="/main/:section">
+          <Main />
+        </AuthRoute>
         <Route path="/handler">
           <Handler />
         </Route>
-        <Redirect to="/main" />
+        <Redirect to="/main/dashboard" />
       </Switch>
     </Router>
   );

@@ -5,8 +5,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
-import AuthLayout from "./AuthLayout";
-import { ResetState } from "../routes/Handler";
+import AuthLayout from "../AuthLayout";
+import { ResetState } from "../../../routes/Handler";
 import { useFirebase } from "react-redux-firebase";
 
 const useStyles = makeStyles((theme: Theme) =>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Redirect, useHistory } from "react-router-dom";
+import { Route, Redirect, useHistory, RouteProps } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   isLoaded,
@@ -12,8 +12,8 @@ import {
 import MaterialLink from "@material-ui/core/Link";
 
 import DialogLayout from "./DialogLayout";
-import { RootState } from "../app/rootReducer";
-import LoadingScreen from "./LoadingScreen";
+import { RootState } from "../../app/rootReducer";
+import LoadingScreen from "../main/LoadingScreen";
 
 interface FinishProfileCheckerProps {
   auth: FirebaseReducer.AuthState;
@@ -112,12 +112,11 @@ export const FinishProfileChecker: React.FC<FinishProfileCheckerProps> = ({
   return <LoadingScreen />;
 };
 
-interface ExclusiveRouteProps {
-  path: string;
+interface AuthRouteProps {
   type: "public" | "private";
 }
 
-const ExclusiveRoute: React.FC<ExclusiveRouteProps> = ({
+const AuthRoute: React.FC<AuthRouteProps & RouteProps> = ({
   children,
   type,
   ...rest
@@ -141,7 +140,6 @@ const ExclusiveRoute: React.FC<ExclusiveRouteProps> = ({
         return (
           <React.Fragment>
             <FinishProfileChecker auth={auth}>{children}</FinishProfileChecker>
-            <Redirect to="/main/dashboard" />
           </React.Fragment>
         );
       }}
@@ -149,4 +147,4 @@ const ExclusiveRoute: React.FC<ExclusiveRouteProps> = ({
   );
 };
 
-export default ExclusiveRoute;
+export default AuthRoute;

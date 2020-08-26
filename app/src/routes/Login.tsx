@@ -8,7 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import MaterialLink from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 
-import AuthLayout from "../components/AuthLayout";
+import AuthLayout from "../components/auth/AuthLayout";
 import { validateEmail } from "../utils/stringUtils";
 
 import verticallockup from "../images/verticallockup.png";

@@ -11,7 +11,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 
-import { validateEmail, validateEmailDomain } from "../../utils/stringUtils";
+import { validateEmail, validateEmailDomain } from "../../../utils/stringUtils";
 
 interface CreateAccountProps {
   handleBack: () => void;

@@ -6,7 +6,7 @@ import Paper from "@material-ui/core/Paper";
 import MaterialLink from "@material-ui/core/Link";
 import clsx from "clsx";
 
-import horizontallockup from "../images/horizontallockup.png";
+import horizontallockup from "../../images/horizontallockup.png";
 
 interface AuthLayoutProps {
   maxWidth: number;

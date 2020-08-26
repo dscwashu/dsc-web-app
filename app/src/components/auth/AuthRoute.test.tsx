@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Switch, Redirect } from "react-router-dom";
 import { Location } from "history";
-import ExclusiveRoute, { FinishProfileChecker } from "./ExclusiveRoute";
+import AuthRoute, { FinishProfileChecker } from "./AuthRoute";
 import * as redux from "react-redux";
 import { useSelector, Provider } from "react-redux";
-import rootReducer from "../app/rootReducer";
+import rootReducer from "../../app/rootReducer";
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { useFirebase, FirebaseReducer } from "react-redux-firebase";
 jest.spyOn(redux, "useSelector").mockImplementation(jest.fn());
@@ -23,7 +23,7 @@ describe("Exclusive route handling", () => {
     });
     const { getByTestId } = render(
       <MemoryRouter initialEntries={["/main"]}>
-        <ExclusiveRoute path="/main" type="private" />
+        <AuthRoute path="/main" type="private" />
       </MemoryRouter>
     );
     expect(getByTestId("progress")).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("Exclusive route handling", () => {
     render(
       <MemoryRouter initialEntries={["/main"]}>
         <Switch>
-          <ExclusiveRoute path="/main" type="private" />
+          <AuthRoute path="/main" type="private" />
           <Route
             path="*"
             render={({ location }): null => {
@@ -59,7 +59,7 @@ describe("Exclusive route handling", () => {
     render(
       <MemoryRouter initialEntries={["/login"]}>
         <Switch>
-          <ExclusiveRoute path="/login" type="public" />
+          <AuthRoute path="/login" type="public" />
           <Route
             path="*"
             render={({ location }): null => {
@@ -79,9 +79,9 @@ describe("Exclusive route handling", () => {
     });
     const { getByText } = render(
       <MemoryRouter initialEntries={["/login"]}>
-        <ExclusiveRoute path="/login" type="public">
+        <AuthRoute path="/login" type="public">
           <div>Hello</div>
-        </ExclusiveRoute>
+        </AuthRoute>
       </MemoryRouter>
     );
     await waitFor(() => expect(getByText("Hello")).toBeInTheDocument());

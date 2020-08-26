@@ -12,8 +12,8 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { validateUrl } from "../../utils/stringUtils";
-import { RootState } from "../../app/rootReducer";
+import { validateUrl } from "../../../utils/stringUtils";
+import { RootState } from "../../../app/rootReducer";
 
 interface EditProfileProps {
   role: string;
@@ -110,25 +110,26 @@ const EditProfile: React.FC<EditProfileProps> = function ({ role }) {
     }
     if (match) {
       firestore
-        .collection("users")
-        .doc(uid)
-        .set({
-          account: {
-            createdAt: firestore.FieldValue.serverTimestamp(),
-            email: email,
-          },
-          profile: {
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
-            website: website.trim(),
-            bio: bio.trim(),
-            role: role,
-            grade: grade,
-            skills: [],
-            courses: [],
-          },
-          isAdmin: false,
-        })
+        .set(
+          { collection: "users", doc: uid },
+          {
+            account: {
+              createdAt: firestore.FieldValue.serverTimestamp(),
+              email: email,
+            },
+            profile: {
+              firstName: firstName.trim(),
+              lastName: lastName.trim(),
+              website: website.trim(),
+              bio: bio.trim(),
+              role: role,
+              grade: grade,
+              skills: [],
+              courses: [],
+            },
+            isAdmin: false,
+          }
+        )
         .then(() => {
           history.push("/main");
         })

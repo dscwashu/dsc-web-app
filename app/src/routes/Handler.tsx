@@ -3,9 +3,9 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useFirebase, isLoaded } from "react-redux-firebase";
 
-import DialogLayout from "../components/DialogLayout";
-import ResetInput from "../components/ResetPassword";
-import LoadingHandler from "../components/LoadingHandler";
+import DialogLayout from "../components/auth/DialogLayout";
+import ResetInput from "../components/auth/handler/ResetPassword";
+import LoadingHandler from "../components/auth/handler/LoadingHandler";
 import { getParams } from "../utils/stringUtils";
 import { RootState } from "../app/rootReducer";
 

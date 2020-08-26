@@ -9,6 +9,7 @@ import rootReducer, { RootState } from "./rootReducer";
 const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware({
+    immutableCheck: false,
     serializableCheck: false,
   }),
 });

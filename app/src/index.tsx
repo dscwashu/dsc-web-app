@@ -8,7 +8,7 @@ import { createFirestoreInstance } from "redux-firestore";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {
   ThemeProvider,
-  createMuiTheme,
+  unstable_createMuiStrictModeTheme as createMuiTheme,
   responsiveFontSizes,
 } from "@material-ui/core/styles";
 

@@ -7,8 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import DialogLayout from "../components/DialogLayout";
-import AuthLayout from "../components/AuthLayout";
+import DialogLayout from "../components/auth/DialogLayout";
+import AuthLayout from "../components/auth/AuthLayout";
 import { validateEmail } from "../utils/stringUtils";
 
 const useStyles = makeStyles((theme: Theme) =>
