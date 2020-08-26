@@ -518,9 +518,7 @@ function IndexPage({
         <Typography variant="body1">
           &copy;2020 DSC WashU. All rights reserved.
         </Typography>
-        <Typography variant="body1">
-          Made with ❤️ by Zach Young.&nbsp;
-        </Typography>
+        <Typography variant="body1">Made by Zach Young.&nbsp;</Typography>
         <Typography variant="body1">
           <InternalLink to="/privacy" className={classes.whiteLink}>
             Privacy
