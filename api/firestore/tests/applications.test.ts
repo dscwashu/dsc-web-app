@@ -281,6 +281,27 @@ describe("Create application", () => {
         })
     ).toAllow();
   });
+  it("should deny create application for projects if not signed in", async () => {
+    db = getFirestoreInstance();
+    await seedData({
+      "lists/coreTeamQuestions": {
+        isAcceptingApplications: true,
+      },
+    });
+    await expect(
+      db
+        .collection("applications")
+        .doc("123")
+        .set({
+          ...mockNewApplication,
+          info: {
+            ...mockNewApplication.info,
+            type: "coreTeam",
+            project: "",
+          },
+        })
+    ).toDeny();
+  });
   it("should deny create list with extraneous fields", async () => {
     await seedData({
       "lists/coreTeamQuestions": {

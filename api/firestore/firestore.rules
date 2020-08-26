@@ -170,7 +170,7 @@ service cloud.firestore {
     }
 
     function isValidOrgCoreUpdate(type, data) {
-      return [type].hasAny(["orgQuestions", "coreTeamQuestions"]) && data.size() == 2 && data.isAcceptingApplications is bool && data.questions is list;
+      return [type].hasAny(["projectQuestions", "coreTeamQuestions"]) && data.size() == 2 && data.isAcceptingApplications is bool && data.questions is list;
     }
 
     function isValidManagerUpdate(type, data) {
@@ -214,7 +214,7 @@ service cloud.firestore {
     }
 
     match /applications/{application} {
-    	allow create: if validateApplicationCreate(request.resource.data);
+    	allow create: if request.auth != null && validateApplicationCreate(request.resource.data);
       allow update: if validateApplicationUpdate(request.resource.data);
       allow delete: if resource.data.info.user == request.auth.uid;
     }

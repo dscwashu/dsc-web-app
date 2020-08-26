@@ -60,7 +60,7 @@ describe("Update list", () => {
       "lists/industries": {
         tags: [],
       },
-      "lists/orgQuestions": {
+      "lists/projectQuestions": {
         isAcceptingApplications: false,
         questions: [],
       },
@@ -112,7 +112,7 @@ describe("Update list", () => {
     await expect(
       db
         .collection("lists")
-        .doc("orgQuestions")
+        .doc("projectQuestions")
         .update({
           isAcceptingApplications: false,
           questions: ["React.js", "Python", "Machine Learning"],
