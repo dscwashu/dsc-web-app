@@ -5,8 +5,8 @@ import Navbar from "../components/navbar"
 import Jumbotron from "../components/jumbotron"
 import Section from "../components/section"
 import Gallery from "../components/gallery"
-import Events from "../components/events"
-import Projects from "../components/projects"
+// import Events from "../components/events"
+// import Projects from "../components/projects"
 import FAQ from "../components/faq"
 import Team from "../components/team"
 import Lottie from "../components/lottie"
@@ -18,7 +18,6 @@ import {
   Grid,
   Box,
   IconButton,
-  SvgIcon,
 } from "@material-ui/core"
 import { createStyles, makeStyles } from "@material-ui/core/styles"
 import PeopleIcon from "@material-ui/icons/People"
@@ -408,7 +407,7 @@ function IndexPage({
               >
                 {renderAst(content.businessText.childMarkdownRemark.htmlAst)}
               </Typography>
-              <a
+              {/* <a
                 target="_blank"
                 rel="noopener noreferrer"
                 href="https://docs.google.com/forms/d/e/1FAIpQLSc2m18B19BnRsEEioH64hekNmdRL-0BDqsneRxOpPAuyp64aQ/viewform"
@@ -417,7 +416,7 @@ function IndexPage({
                 <Button color="primary" variant="outlined" size="large">
                   Submit Your Project
                 </Button>
-              </a>
+              </a> */}
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -454,7 +453,7 @@ function IndexPage({
                 <MailIcon fontSize="inherit" />
               </IconButton>
             </a>
-            <a
+            {/* <a
               target="_blank"
               rel="noopener noreferrer"
               href={content.slack}
@@ -471,7 +470,7 @@ function IndexPage({
                   ></path>
                 </SvgIcon>
               </IconButton>
-            </a>
+            </a> */}
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -655,7 +654,6 @@ export const query = graphql`
         }
       }
       email
-      slack
       instagram
       facebook
       linkedIn
