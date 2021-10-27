@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { useFirebase } from "react-redux-firebase";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../features/authSlice";
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -12,6 +13,7 @@ import AuthLayout from "../components/auth/AuthLayout";
 import { validateEmail } from "../utils/stringUtils";
 
 import verticallockup from "../images/verticallockup.png";
+import { FirebaseContext } from "../firebase/FirebaseProvider";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const Login: React.FC = () => {
   const classes = useStyles();
 
-  const firebase = useFirebase();
+  const { login } = useContext(FirebaseContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -78,7 +80,7 @@ const Login: React.FC = () => {
       password: password,
     };
     if (match) {
-      firebase.login(credentials).catch(() => {
+      login(credentials).catch(() => {
         setError("Invalid email or password");
       });
     }

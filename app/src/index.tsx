@@ -2,15 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import store from "./app/store";
 import { Provider } from "react-redux";
-import { ReactReduxFirebaseProvider } from "react-redux-firebase";
-import { createFirestoreInstance } from "redux-firestore";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {
-  ThemeProvider,
-  unstable_createMuiStrictModeTheme as createMuiTheme,
-  responsiveFontSizes,
-} from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "./theme";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -19,6 +14,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/analytics";
 import "firebase/functions";
+import FirebaseProvider from "./firebase/FirebaseProvider";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC8lgfrx1-YWQoXRjY_6vZw2nJk3Ow1coM",
@@ -33,19 +29,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
-firebase.firestore();
-
-const rrfConfig = {};
-
-const rrfProps = {
-  firebase,
-  config: rrfConfig,
-  dispatch: store.dispatch,
-  createFirestoreInstance,
-};
-
-let theme = createMuiTheme();
-theme = responsiveFontSizes(theme);
 
 const render = (): void => {
   const App = require("./app/App").default;
@@ -53,12 +36,12 @@ const render = (): void => {
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
-        <ReactReduxFirebaseProvider {...rrfProps}>
+        <FirebaseProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <App />
           </ThemeProvider>
-        </ReactReduxFirebaseProvider>
+        </FirebaseProvider>
       </Provider>
     </React.StrictMode>,
     document.getElementById("root")
