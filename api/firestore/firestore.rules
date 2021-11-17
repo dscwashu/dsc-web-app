@@ -295,7 +295,7 @@ service cloud.firestore {
     }
 
     function validateProjectManagerUpdate__projectManagerInfo__users(projectManagerInfo, users) {
-      return projectManagerInfo.size() == 2 && (users == [projectManagerInfo.projectManager] && projectManagerInfo.isAcceptingApplications == false && get(/databases/$(database)/documents/users/$(projectManagerInfo.projectManager)).data.profile.role == "student") || (!users.hasAny([resource.data.projectManagerInfo.projectManager]) && projectManagerInfo.isAcceptingApplications == true && projectManagerInfo.projectManager == "");
+      return projectManagerInfo.size() == 2 && (users.hasAll([projectManagerInfo.projectManager]) && projectManagerInfo.isAcceptingApplications == false && get(/databases/$(database)/documents/users/$(projectManagerInfo.projectManager)).data.profile.role == "student") || (!users.hasAny([resource.data.projectManagerInfo.projectManager]) && projectManagerInfo.isAcceptingApplications == true && projectManagerInfo.projectManager == "");
     }
 
     function validateProjectFinishedUpdate(data) {

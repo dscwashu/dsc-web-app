@@ -1,17 +1,26 @@
-# marketing
+# Marketing ([dscwashu.com](https://www.dscwashu.com))
 
-## Demo
+## Getting Started
 
-[Here is a website hosted on netlify](https://www.dscwashu.com)
+1. Run `npm install` to install relevant npm modules
+2. Create a `.env` file within this directory which contains the Contentful access key
 
-## How to Run Website
+```
+CONTENTFUL_ACCESS_TOKEN=...
+```
 
-1.  Clone this repo
-2.  `cd` into this `marketing` directory
-3.  Run `npm install` to install relevant npm modules
-4.  Use `gatsby develop` to host website at `localhost:8000`
+3. For local development, run `gatsby develop` to host website at `localhost:8000`
 
-## TODO
+## Testing
 
-- Improve accesibility of buttons via focus
-- Integrate firebase into gastby-source for projects and events
+### For unit and integration tests:
+
+1. Run `npm test`
+
+### For unit and integration tests:
+
+1. Run `npm run cypress:open`
+
+## Deployment
+
+1. Push code to github. That's it! Netlify will automatically rebuild website from github repository.

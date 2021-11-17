@@ -637,6 +637,18 @@ describe("Update project", () => {
           .doc("123")
           .update({
             projectManagerInfo: {
+              projectManager: "diffUser",
+              isAcceptingApplications: false,
+            },
+            users: ["diffUser", "anotherUser"],
+          })
+      ).toAllow();
+      await expect(
+        db
+          .collection("projects")
+          .doc("123")
+          .update({
+            projectManagerInfo: {
               projectManager: "",
               isAcceptingApplications: true,
             },
