@@ -40,7 +40,7 @@
     "react-swipeable-views": "^0.13.9",
     "react-three-fiber": "^4.1.1",
     "rehype-react": "^6.0.0",
-    "three": "^0.125.0"
+    "three": "^0.137.0"
   },
   "devDependencies": {
     "@types/react-helmet": "^6.0.0",
